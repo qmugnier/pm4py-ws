@@ -4,5 +4,14 @@
   <div *ngIf="router.url === '/'">
     <app-process-model></app-process-model>
   </div>
+  <div *ngIf="router.url === '/sna'">
+    <app-sna></app-sna>
+  </div>
+  <div *ngIf="router.url === '/statistics'">
+    <app-statistics></app-statistics>
+  </div>
+  <div *ngIf="router.url == '/cases'">
+    <app-cases></app-cases>
+  </div>
   <app-footer></app-footer>
 </div>

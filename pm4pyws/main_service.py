@@ -26,6 +26,26 @@ def get_process_schema():
     return ret
 
 
+@app.route("/getCaseDurationGraph", methods=["GET"])
+def get_case_duration():
+    # reads the requested process name
+    process = request.args.get('process', default='roadtraffic', type=str)
+    base64 = LogsHandlers.handlers[process].get_case_duration_svg()
+    dictio = {"base64": base64.decode('utf-8')}
+    ret = jsonify(dictio)
+    return ret
+
+
+@app.route("/getEventsPerTimeGraph", methods=["GET"])
+def get_events_per_time():
+    # reads the requested process name
+    process = request.args.get('process', default='roadtraffic', type=str)
+    base64 = LogsHandlers.handlers[process].get_events_per_time_svg()
+    dictio = {"base64": base64.decode('utf-8')}
+    ret = jsonify(dictio)
+    return ret
+
+
 def load_log(log_name, file_path):
     if ".parque" in file_path:
         LogsHandlers.handlers[log_name] = ParquetHandler(file_path)

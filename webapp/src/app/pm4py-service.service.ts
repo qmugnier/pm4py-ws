@@ -14,11 +14,24 @@ export class Pm4pyService {
 
   getProcessSchema(parameters: HttpParams) {
     var completeUrl : string = this.webservicePath + "getProcessSchema";
-    //return this.http.get(completeUrl);
     const  params = parameters;
 
-    console.log(parameters);
+    return this.http.get(completeUrl,{params});
+  }
+
+  getEventsPerTime(parameters: HttpParams) {
+    var completeUrl : string = this.webservicePath + "getEventsPerTimeGraph";
+
+    const  params = parameters;
 
     return this.http.get(completeUrl,{params});
+  }
+
+  getCaseDurationGraph(parameters: HttpParams) {
+    var completeUrl : string = this.webservicePath + "getCaseDurationGraph";
+
+    const params = parameters;
+
+    return this.http.get(completeUrl, {params});
   }
 }
