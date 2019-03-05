@@ -10,6 +10,13 @@ import { HeaderComponent } from './header/header.component';
 import { FiltersComponent } from './filters/filters.component';
 import { FooterComponent } from './footer/footer.component';
 import { MatSliderModule } from '@angular/material';
+import { MatToolbarModule } from '@angular/material';
+import { RouterModule, Routes } from '@angular/router';
+
+const appRoutes: Routes = [
+  { path: '', component: AppComponent },
+  { path: 'sna', component: AppComponent }
+];
 
 
 
@@ -26,8 +33,12 @@ import { MatSliderModule } from '@angular/material';
     AppRoutingModule,
     BrowserAnimationsModule,
     HttpClientModule,
-    MatSliderModule
-  ],
+    MatSliderModule,
+    MatToolbarModule,
+    RouterModule.forRoot(
+      appRoutes,
+      { enableTracing: true } // <-- debugging purposes only
+    )  ],
   providers: [],
   bootstrap: [AppComponent]
 })

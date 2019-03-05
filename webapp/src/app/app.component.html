@@ -1,6 +1,8 @@
 <div style="overflow: hidden">
   <app-header></app-header>
   <app-filters></app-filters>
-  <app-process-model></app-process-model>
+  <div *ngIf="router.url === '/'">
+    <app-process-model></app-process-model>
+  </div>
   <app-footer></app-footer>
 </div>
