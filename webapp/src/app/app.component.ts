@@ -9,7 +9,7 @@ import {Router} from "@angular/router";
 export class AppComponent {
   title = 'webapp';
 
-  constructor(private router: Router) {
+  constructor(public router: Router) {
     console.log("ROUTER URL");
     console.log(router.url);
   }
