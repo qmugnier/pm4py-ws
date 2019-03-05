@@ -26,7 +26,7 @@ export class ProcessModelComponent implements OnInit {
     let params: HttpParams = new HttpParams();
     params.set("simplicity", this.simplicity.toString());
 
-    this.pm4pyService.getProcessSchema(params).subscribe(data => { this.pm4pyJson = data as JSON; this.processModelBase64Original = this.pm4pyJson["base64"]; this.processModelBase64Sanitized = this.sanitizer.bypassSecurityTrustResourceUrl('data:image/svg+xml;base64,' + this.processModelBase64Original); console.log(this.processModelBase64Sanitized); });
+    this.pm4pyService.getProcessSchema(params).subscribe(data => { this.pm4pyJson = data as JSON; this.processModelBase64Original = this.pm4pyJson["base64"]; this.processModelBase64Sanitized = this.sanitizer.bypassSecurityTrustResourceUrl('data:image/svg+xml;base64,' + this.processModelBase64Original); });
   }
 
   ngOnInit() {

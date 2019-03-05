@@ -9,6 +9,6 @@ def get_events_per_time_svg(dataframe, parameters=None):
 
     x, y = attributes_filter.get_kde_date_attribute(dataframe, parameters=parameters)
 
-    gviz = graphs_factory.apply_plot(x, y, variant="cases")
+    gviz = graphs_factory.apply_plot(x, y, variant="dates", parameters={"format": "svg"})
 
-    return get_base64_from_file(gviz.name)
+    return get_base64_from_file(gviz)
