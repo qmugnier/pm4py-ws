@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import {HttpClient, HttpParams} from '@angular/common/http';
 
 
 @Injectable({
@@ -12,9 +12,13 @@ export class Pm4pyService {
     this.webservicePath = "http://localhost:5000/";
   }
 
-  getProcessSchema(parameters={}) {
+  getProcessSchema(parameters: HttpParams) {
     var completeUrl : string = this.webservicePath + "getProcessSchema";
     //return this.http.get(completeUrl);
-    return this.http.request("GET",completeUrl,{responseType:"json"});
+    const  params = parameters;
+
+    console.log(parameters);
+
+    return this.http.get(completeUrl,{params});
   }
 }

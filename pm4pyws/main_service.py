@@ -17,7 +17,10 @@ def get_process_schema():
     process = request.args.get('process', default='roadtraffic', type=str)
     # reads the variant
     variant = request.args.get('variant', default='dfg_freq', type=str)
-    base64 = LogsHandlers.handlers[process].get_schema(variant=variant)
+    # reads the simplicity
+    simplicity = request.args.get('simplicity', default=0.6, type=float)
+    parameters = {"decreasingFactor": simplicity}
+    base64 = LogsHandlers.handlers[process].get_schema(variant=variant, parameters=parameters)
     dictio = {"base64": base64.decode('utf-8')}
     ret = jsonify(dictio)
     return ret
