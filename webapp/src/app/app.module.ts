@@ -12,10 +12,15 @@ import { FooterComponent } from './footer/footer.component';
 import { MatSliderModule } from '@angular/material';
 import { MatToolbarModule } from '@angular/material';
 import { RouterModule, Routes } from '@angular/router';
+import { StatisticsComponent } from './statistics/statistics.component';
+import { CasesComponent } from './cases/cases.component';
+import { SnaComponent } from './sna/sna.component';
 
 const appRoutes: Routes = [
   { path: '', component: AppComponent },
-  { path: 'sna', component: AppComponent }
+  { path: 'sna', component: AppComponent },
+  { path: 'cases', component: AppComponent },
+  { path: 'statistics', component: AppComponent },
 ];
 
 
@@ -26,7 +31,10 @@ const appRoutes: Routes = [
     ProcessModelComponent,
     HeaderComponent,
     FiltersComponent,
-    FooterComponent
+    FooterComponent,
+    StatisticsComponent,
+    CasesComponent,
+    SnaComponent
   ],
   imports: [
     BrowserModule,
