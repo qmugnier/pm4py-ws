@@ -1,4 +1,4 @@
-from flask import Flask, request
+from flask import Flask, request, jsonify
 from flask_cors import CORS
 
 from pm4pyws.handlers.parquet.parquet import ParquetHandler
@@ -17,8 +17,10 @@ def get_process_schema():
     process = request.args.get('process', default='roadtraffic', type=str)
     # reads the variant
     variant = request.args.get('variant', default='dfg_freq', type=str)
-
-    return LogsHandlers.handlers[process].get_schema(variant=variant)
+    base64 = LogsHandlers.handlers[process].get_schema(variant=variant)
+    dictio = {"base64": base64.decode('utf-8')}
+    ret = jsonify(dictio)
+    return ret
 
 
 def load_log(log_name, file_path):
