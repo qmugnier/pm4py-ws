@@ -2,7 +2,7 @@ from pm4pyws import main_service
 
 
 def load_logs():
-    main_service.load_log("roadtraffic", "C:\\roadtraffic.parquet")
+    main_service.load_log("roadtraffic", "C:\\receipt.parquet")
 
 
 if __name__ == "__main__":
