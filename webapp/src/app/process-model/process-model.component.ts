@@ -17,6 +17,8 @@ export class ProcessModelComponent implements OnInit {
   pm4pyJson: JSON;
   simplicity = 0.6;
   selectedSimplicity = 0.6;
+  decoration = 'frequency';
+  typeOfModel = 'dfg';
   sanitizer: DomSanitizer;
   pm4pyService: Pm4pyService;
 
@@ -29,6 +31,8 @@ export class ProcessModelComponent implements OnInit {
   public populateProcessSchema() {
     let params: HttpParams = new HttpParams();
     params = params.set("simplicity", this.selectedSimplicity.toString());
+    params = params.set("decoration", this.decoration);
+    params = params.set("typeOfModel", this.typeOfModel);
 
     this.pm4pyService.getProcessSchema(params).subscribe(data => {
       this.pm4pyJson = data as JSON;
@@ -40,8 +44,20 @@ export class ProcessModelComponent implements OnInit {
 
   setImageCorrectSize() {
     let targetHeight : number = (document.getElementById("container0").offsetHeight * 0.74);
+    let targetWidth : number = (document.getElementById("container0").offsetWidth * 0.55);
 
     (<HTMLImageElement>document.getElementById("imageProcessModelImage")).height = targetHeight;
+
+    let actualWidth : number = (<HTMLImageElement>document.getElementById("imageProcessModelImage")).width;
+    console.log("ACTUALWIDTH");
+    console.log(actualWidth);
+    console.log("TARGETWIDTH");
+    console.log(targetWidth);
+
+    if (actualWidth > targetWidth) {
+      console.log("SIII");
+      (<HTMLImageElement>document.getElementById("imageProcessModelImage")).width = targetWidth;
+    }
   }
 
   ngOnInit() {
@@ -53,8 +69,16 @@ export class ProcessModelComponent implements OnInit {
     this.setImageCorrectSize();
   }
 
-  sthingChanged(event: any) {
+  sliderIsChanged(event: any) {
     this.selectedSimplicity = event.value;
+  }
+
+  decorationIsChanged(event: any) {
+    this.decoration = event.value;
+  }
+
+  typeOfModelIsChanged(event: any) {
+    this.typeOfModel = event.value;
   }
 
 }

@@ -14,6 +14,11 @@ import { MatSliderModule } from '@angular/material';
 import { MatToolbarModule } from '@angular/material';
 import { MatProgressBarModule } from '@angular/material';
 import { MatButtonModule } from '@angular/material';
+import { MatFormFieldModule } from '@angular/material';
+import { MatOptionModule } from '@angular/material';
+import { MatSelectModule } from '@angular/material';
+import { MatRadioModule } from '@angular/material';
+
 
 
 import { RouterModule, Routes } from '@angular/router';
@@ -50,6 +55,10 @@ const appRoutes: Routes = [
     MatToolbarModule,
     MatProgressBarModule,
     MatButtonModule,
+    MatFormFieldModule,
+    MatOptionModule,
+    MatSelectModule,
+    MatRadioModule,
     FlexLayoutModule,
     RouterModule.forRoot(
       appRoutes,
