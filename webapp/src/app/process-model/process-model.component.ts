@@ -17,7 +17,7 @@ export class ProcessModelComponent implements OnInit {
   pm4pyJson: JSON;
   simplicity = 0.6;
   selectedSimplicity = 0.6;
-  decoration = 'frequency';
+  decoration = 'freq';
   typeOfModel = 'dfg';
   sanitizer: DomSanitizer;
   pm4pyService: Pm4pyService;
@@ -43,28 +43,19 @@ export class ProcessModelComponent implements OnInit {
   }
 
   setImageCorrectSize() {
-    let targetHeight : number = (document.getElementById("container0").offsetHeight * 0.74);
-    let targetWidth : number = (document.getElementById("container0").offsetWidth * 0.55);
+
+    let targetHeight: number = (document.getElementById("container0").offsetHeight * 0.74);
+    let targetWidth: number = (document.getElementById("container0").offsetWidth * 0.72);
 
     (<HTMLImageElement>document.getElementById("imageProcessModelImage")).height = targetHeight;
-
-    let actualWidth : number = (<HTMLImageElement>document.getElementById("imageProcessModelImage")).width;
-    console.log("ACTUALWIDTH");
-    console.log(actualWidth);
-    console.log("TARGETWIDTH");
-    console.log(targetWidth);
-
-    if (actualWidth > targetWidth) {
-      console.log("SIII");
-      (<HTMLImageElement>document.getElementById("imageProcessModelImage")).width = targetWidth;
-    }
+    (<HTMLImageElement>document.getElementById("imageProcessModelImage")).width = targetWidth;
   }
 
   ngOnInit() {
 
   }
 
-  onResize(event){
+  onResize(event) {
     event.target.innerWidth; // window width
     this.setImageCorrectSize();
   }
@@ -78,6 +69,7 @@ export class ProcessModelComponent implements OnInit {
   }
 
   typeOfModelIsChanged(event: any) {
+    console.log(event);
     this.typeOfModel = event.value;
   }
 
