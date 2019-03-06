@@ -1,9 +1,11 @@
 from pm4py.objects.log.importer.parquet import factory as parquet_importer
+from pm4py.statistics.traces.pandas import case_statistics
 
 from pm4pyws.handlers.parquet.cases import variants
 from pm4pyws.handlers.parquet.process_schema import factory as process_schema_factory
+from pm4pyws.handlers.parquet.sna import get_sna as sna_obtainer
 from pm4pyws.handlers.parquet.statistics import case_duration, events_per_time
-from pm4py.statistics.traces.pandas import case_statistics
+
 
 class ParquetHandler(object):
     def __init__(self):
@@ -34,3 +36,6 @@ class ParquetHandler(object):
         parameters["variants_df"] = self.variants_df
 
         return variants.get_statistics(self.dataframe, parameters=parameters)
+
+    def get_sna(self, variant="handover", parameters=None):
+        return sna_obtainer.apply(self.dataframe, variant=variant, parameters=parameters)

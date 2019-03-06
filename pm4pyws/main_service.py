@@ -51,6 +51,14 @@ def get_events_per_time():
     return ret
 
 
+@app.route("/getSNA", methods=["GET"])
+def get_sna():
+    # reads the requested process name
+    process = request.args.get('process', default='receipt', type=str)
+    sna = LogsHandlers.handlers[process].get_sna()
+    return sna
+
+
 @app.route("/getAllVariants", methods=["GET"])
 def get_all_variants():
     # reads the requested process name
