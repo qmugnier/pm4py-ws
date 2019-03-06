@@ -15,7 +15,8 @@ export class ProcessModelComponent implements OnInit {
   processModelBase64Original: string;
   processModelBase64Sanitized: SafeResourceUrl;
   pm4pyJson: JSON;
-  public simplicity: number = 0.6;
+  simplicity = 0.6;
+  selectedSimplicity = 0.6;
   sanitizer: DomSanitizer;
   pm4pyService: Pm4pyService;
 
@@ -27,7 +28,7 @@ export class ProcessModelComponent implements OnInit {
 
   public populateProcessSchema() {
     let params: HttpParams = new HttpParams();
-    params.set("simplicity", this.simplicity.toString());
+    params = params.set("simplicity", this.selectedSimplicity.toString());
 
     this.pm4pyService.getProcessSchema(params).subscribe(data => {
       this.pm4pyJson = data as JSON;
@@ -40,7 +41,7 @@ export class ProcessModelComponent implements OnInit {
   setImageCorrectSize() {
     let targetHeight : number = (document.getElementById("container0").offsetHeight * 0.74);
 
-    document.getElementById("imageProcessModelImage").height = targetHeight;
+    (<HTMLImageElement>document.getElementById("imageProcessModelImage")).height = targetHeight;
   }
 
   ngOnInit() {
@@ -50,6 +51,10 @@ export class ProcessModelComponent implements OnInit {
   onResize(event){
     event.target.innerWidth; // window width
     this.setImageCorrectSize();
+  }
+
+  sthingChanged(event: any) {
+    this.selectedSimplicity = event.value;
   }
 
 }

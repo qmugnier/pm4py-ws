@@ -1,11 +1,16 @@
 <div fxLayout="row">
   <div fxFlex="25%">
     <div class="p-3">
-      ciao
+      % Variants: <mat-progress-bar mode="determinate" value="100"></mat-progress-bar>
+      % Cases: <mat-progress-bar mode="determinate" value="100"></mat-progress-bar>
+      % Events: <mat-progress-bar mode="determinate" value="100"></mat-progress-bar>
     </div>
     <div class="p-3">
       Simplicity:
-      <mat-slider min="0.01" max="1.00" step="0.005" [value]="simplicity"></mat-slider>
+      <mat-slider min="0.01" max="1.00" step="0.005" [value]="simplicity" (change)="sthingChanged($event)"></mat-slider>
+    </div>
+    <div class="p-1">
+      <button mat-button (click)="populateProcessSchema()">Update Process Model</button>
     </div>
   </div>
   <div id="imageProcessModelDiv" fxFlex="75%" style="overflow: hidden">
