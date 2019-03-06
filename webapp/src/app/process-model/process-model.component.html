@@ -11,7 +11,7 @@
     </div>
     <div class="p-1">
         Type of model:<br />
-        <mat-select placeholder="Type of model" (ngModel)="typeOfModel" (change)="typeOfModelIsChanged($event)">
+        <mat-select placeholder="Type of model" (ngModel)="typeOfModel" [value]="typeOfModel" (selectionChange)="typeOfModelIsChanged($event)">
           <mat-option value="dfg">DFG</mat-option>
           <mat-option value="tree">Process Tree</mat-option>
           <mat-option value="petri">Petri net</mat-option>
@@ -19,7 +19,7 @@
     </div>
     <div class="p-2">
       Decoration:<br />
-      <mat-radio-group (ngModel)="decoration">
+      <mat-radio-group (ngModel)="decoration" (change)="decorationIsChanged($event)" [value]="decoration">
         <mat-radio-button value="freq">Frequency</mat-radio-button>
         <mat-radio-button value="perf">Performance</mat-radio-button>
       </mat-radio-group>
