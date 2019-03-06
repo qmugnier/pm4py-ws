@@ -1,6 +1,6 @@
-<div class="container" fxLayout="column" fxLayoutGap="0.5%" fxLayoutAlign="center" fxFlexFill>
-  <app-header fxFlex="11%"></app-header>
-  <app-filters fxFlex="7%"></app-filters>
+<div class="container" fxLayout="column" fxLayoutAlign="center" fxFlexFill>
+  <app-header fxFlex="11%" style="background-color: #FF4081"></app-header>
+  <app-filters fxFlex="7%" style="background-color: #FFC0D5"></app-filters>
   <div fxFlex="77%">
     <div *ngIf="router.url === '/'">
       <app-process-model></app-process-model>
@@ -15,7 +15,7 @@
       <app-cases></app-cases>
     </div>
   </div>
-  <div fxFlex="5%" style="background-color: #FF0000">
+  <div fxFlex="5%" style="background-color: #FF4081">
     <app-footer></app-footer>
   </div>
 </div>
