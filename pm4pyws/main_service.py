@@ -16,11 +16,14 @@ class LogsHandlers:
 def get_process_schema():
     # reads the requested process name
     process = request.args.get('process', default='receipt', type=str)
-    # reads the variant
-    variant = request.args.get('variant', default='dfg_freq', type=str)
+    # reads the decoration
+    decoration = request.args.get('decoration', default='freq', type=str)
+    # reads the typeOfModel
+    type_of_model = request.args.get('typeOfModel', default='dfg', type=str)
     # reads the simplicity
     simplicity = request.args.get('simplicity', default=0.6, type=float)
     print(request.args)
+    variant = type_of_model + "_" + decoration
     parameters = {"decreasingFactor": simplicity}
     base64 = LogsHandlers.handlers[process].get_schema(variant=variant, parameters=parameters)
     dictio = {"base64": base64.decode('utf-8')}

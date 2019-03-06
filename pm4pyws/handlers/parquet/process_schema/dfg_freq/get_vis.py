@@ -9,7 +9,6 @@ from pm4py.algo.filtering.pandas.auto_filter import auto_filter
 def apply(dataframe, parameters=None):
     if parameters is None:
         parameters = {}
-    print(parameters)
     dataframe = auto_filter.apply_auto_filter(dataframe, parameters=parameters)
     dfg = df_statistics.get_dfg_graph(dataframe)
     activities_count = attributes_filter.get_attribute_values(dataframe, xes.DEFAULT_NAME_KEY)
