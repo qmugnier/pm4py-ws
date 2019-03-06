@@ -4,6 +4,12 @@ npm install
 
 
 
+On Linux machines, also the following could be necessary:
+
+sudo npm install --save-dev  --unsafe-perm node-sass
+
+
+
 To compile the web interface, enter the webapp/ folder and use the following command
 (it requires Node.JS 10, and Angular CLI):
 
