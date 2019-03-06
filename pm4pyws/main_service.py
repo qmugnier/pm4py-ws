@@ -45,6 +45,7 @@ def get_case_duration():
 def get_events_per_time():
     # reads the requested process name
     process = request.args.get('process', default='receipt', type=str)
+
     base64 = LogsHandlers.handlers[process].get_events_per_time_svg()
     dictio = {"base64": base64.decode('utf-8')}
     ret = jsonify(dictio)
@@ -55,7 +56,12 @@ def get_events_per_time():
 def get_sna():
     # reads the requested process name
     process = request.args.get('process', default='receipt', type=str)
-    sna = LogsHandlers.handlers[process].get_sna()
+    metric = request.args.get('metric', default='handover', type=str)
+    threshold = request.args.get('threshold', default=0.0, type=float)
+
+    print(request.args)
+
+    sna = LogsHandlers.handlers[process].get_sna(variant=metric, parameters={"weight_threshold": threshold})
     return sna
 
 
