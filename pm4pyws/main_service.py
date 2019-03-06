@@ -47,6 +47,17 @@ def get_events_per_time():
     return ret
 
 
+@app.route("/getAllVariants", methods=["GET"])
+def get_all_variants():
+    # reads the requested process name
+    process = request.args.get('process', default='receipt', type=str)
+    variants = LogsHandlers.handlers[process].get_variants()
+    dictio = {"variants": variants}
+    ret = jsonify(dictio)
+    return ret
+
+
 def load_log(log_name, file_path):
     if ".parque" in file_path:
-        LogsHandlers.handlers[log_name] = ParquetHandler(file_path)
+        LogsHandlers.handlers[log_name] = ParquetHandler()
+        LogsHandlers.handlers[log_name].build_from_path(file_path)
