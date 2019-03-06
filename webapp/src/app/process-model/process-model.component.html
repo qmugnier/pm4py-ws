@@ -1,13 +1,28 @@
 <div fxLayout="row">
   <div fxFlex="25%">
-    <div class="p-3">
+    <div class="p-2">
       % Variants: <mat-progress-bar mode="determinate" value="100"></mat-progress-bar>
       % Cases: <mat-progress-bar mode="determinate" value="100"></mat-progress-bar>
       % Events: <mat-progress-bar mode="determinate" value="100"></mat-progress-bar>
     </div>
-    <div class="p-3">
+    <div class="p-1">
       Simplicity:
-      <mat-slider min="0.01" max="1.00" step="0.005" [value]="simplicity" (change)="sthingChanged($event)"></mat-slider>
+      <mat-slider min="0.01" max="1.00" step="0.005" [value]="simplicity" (change)="sliderIsChanged($event)"></mat-slider>
+    </div>
+    <div class="p-1">
+        Type of model:<br />
+        <mat-select placeholder="Type of model" (ngModel)="typeOfModel" (change)="typeOfModelIsChanged($event)">
+          <mat-option value="dfg">DFG</mat-option>
+          <mat-option value="tree">Process Tree</mat-option>
+          <mat-option value="petri">Petri net</mat-option>
+        </mat-select>
+    </div>
+    <div class="p-2">
+      Decoration:<br />
+      <mat-radio-group (ngModel)="decoration" (change)="decorationIsChanged($event)">
+        <mat-radio-button value="frequency">Frequency</mat-radio-button>
+        <mat-radio-button value="performance">Performance</mat-radio-button>
+      </mat-radio-group>
     </div>
     <div class="p-1">
       <button mat-button (click)="populateProcessSchema()">Update Process Model</button>
