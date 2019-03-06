@@ -1,6 +1,7 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 
+import { FlexLayoutModule } from '@angular/flex-layout';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { ProcessModelComponent } from './process-model/process-model.component';
@@ -43,6 +44,7 @@ const appRoutes: Routes = [
     HttpClientModule,
     MatSliderModule,
     MatToolbarModule,
+    FlexLayoutModule,
     RouterModule.forRoot(
       appRoutes,
       { enableTracing: true } // <-- debugging purposes only
