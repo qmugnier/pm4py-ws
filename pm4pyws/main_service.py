@@ -3,7 +3,8 @@ from flask_cors import CORS
 
 from pm4pyws.handlers.parquet.parquet import ParquetHandler
 
-app = Flask(__name__)
+app = Flask(__name__, static_url_path='', static_folder='../webapp/dist/webapp')
+app.add_url_rule(app.static_url_path + '/<path:filename>', endpoint='static', view_func=app.send_static_file)
 CORS(app)
 
 
@@ -14,7 +15,7 @@ class LogsHandlers:
 @app.route("/getProcessSchema", methods=["GET"])
 def get_process_schema():
     # reads the requested process name
-    process = request.args.get('process', default='roadtraffic', type=str)
+    process = request.args.get('process', default='receipt', type=str)
     # reads the variant
     variant = request.args.get('variant', default='dfg_freq', type=str)
     # reads the simplicity
@@ -29,7 +30,7 @@ def get_process_schema():
 @app.route("/getCaseDurationGraph", methods=["GET"])
 def get_case_duration():
     # reads the requested process name
-    process = request.args.get('process', default='roadtraffic', type=str)
+    process = request.args.get('process', default='receipt', type=str)
     base64 = LogsHandlers.handlers[process].get_case_duration_svg()
     dictio = {"base64": base64.decode('utf-8')}
     ret = jsonify(dictio)
@@ -39,7 +40,7 @@ def get_case_duration():
 @app.route("/getEventsPerTimeGraph", methods=["GET"])
 def get_events_per_time():
     # reads the requested process name
-    process = request.args.get('process', default='roadtraffic', type=str)
+    process = request.args.get('process', default='receipt', type=str)
     base64 = LogsHandlers.handlers[process].get_events_per_time_svg()
     dictio = {"base64": base64.decode('utf-8')}
     ret = jsonify(dictio)
