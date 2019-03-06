@@ -1,5 +1,6 @@
 PM4Py Web Services along with an Angular7 web interface
 
+A (almost) last build could be found on http://194.32.77.109:5000/index.html
 
 
 To install the required NPM dependencies (also for building) enter the webapp/ folder and use the following command:
