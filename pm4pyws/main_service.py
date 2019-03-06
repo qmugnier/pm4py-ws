@@ -20,6 +20,7 @@ def get_process_schema():
     variant = request.args.get('variant', default='dfg_freq', type=str)
     # reads the simplicity
     simplicity = request.args.get('simplicity', default=0.6, type=float)
+    print(request.args)
     parameters = {"decreasingFactor": simplicity}
     base64 = LogsHandlers.handlers[process].get_schema(variant=variant, parameters=parameters)
     dictio = {"base64": base64.decode('utf-8')}

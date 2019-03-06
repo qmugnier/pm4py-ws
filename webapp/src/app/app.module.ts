@@ -12,6 +12,10 @@ import { FiltersComponent } from './filters/filters.component';
 import { FooterComponent } from './footer/footer.component';
 import { MatSliderModule } from '@angular/material';
 import { MatToolbarModule } from '@angular/material';
+import { MatProgressBarModule } from '@angular/material';
+import { MatButtonModule } from '@angular/material';
+
+
 import { RouterModule, Routes } from '@angular/router';
 import { StatisticsComponent } from './statistics/statistics.component';
 import { CasesComponent } from './cases/cases.component';
@@ -44,6 +48,8 @@ const appRoutes: Routes = [
     HttpClientModule,
     MatSliderModule,
     MatToolbarModule,
+    MatProgressBarModule,
+    MatButtonModule,
     FlexLayoutModule,
     RouterModule.forRoot(
       appRoutes,
