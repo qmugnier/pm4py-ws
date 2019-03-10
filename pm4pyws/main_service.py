@@ -75,7 +75,10 @@ def get_all_variants():
     return ret
 
 
-def load_log(log_name, file_path):
-    if ".parque" in file_path:
+def load_log(log_name, file_path, parameters=None):
+    if file_path.endswith(".parquet"):
         LogsHandlers.handlers[log_name] = ParquetHandler()
-        LogsHandlers.handlers[log_name].build_from_path(file_path)
+        LogsHandlers.handlers[log_name].build_from_path(file_path, parameters=parameters)
+    elif file_path.endswith(".csv"):
+        LogsHandlers.handlers[log_name] = ParquetHandler()
+        LogsHandlers.handlers[log_name].build_from_csv(file_path, parameters=parameters)
