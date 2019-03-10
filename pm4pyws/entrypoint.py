@@ -73,14 +73,18 @@ def get_events_per_time():
 
 @PM4PyServices.app.route("/getSNA", methods=["GET"])
 def get_sna():
-    # reads the requested process name
-    process = request.args.get('process', default='receipt', type=str)
-    metric = request.args.get('metric', default='handover', type=str)
-    threshold = request.args.get('threshold', default=0.0, type=float)
+    try:
+        # reads the requested process name
+        process = request.args.get('process', default='receipt', type=str)
+        metric = request.args.get('metric', default='handover', type=str)
+        threshold = request.args.get('threshold', default=0.0, type=float)
 
-    print(request.args)
+        print(request.args)
 
-    sna = LogsHandlers.handlers[process].get_sna(variant=metric, parameters={"weight_threshold": threshold})
+        sna = LogsHandlers.handlers[process].get_sna(variant=metric, parameters={"weight_threshold": threshold})
+    except:
+        sna = ""
+
     return sna
 
 
