@@ -3,16 +3,31 @@ from flask_cors import CORS
 
 from pm4pyws.handlers.parquet.parquet import ParquetHandler
 
-app = Flask(__name__, static_url_path='', static_folder='../webapp/dist/webapp')
-app.add_url_rule(app.static_url_path + '/<path:filename>', endpoint='static', view_func=app.send_static_file)
-CORS(app)
-
 
 class LogsHandlers:
     handlers = {}
 
 
-@app.route("/getProcessSchema", methods=["GET"])
+class PM4PyServices:
+    app = Flask(__name__, static_url_path='', static_folder='../webapp/dist/webapp')
+    app.add_url_rule(app.static_url_path + '/<path:filename>', endpoint='static',
+                          view_func=app.send_static_file)
+    CORS(app)
+
+    def load_log(self, log_name, file_path, parameters=None):
+        if log_name not in LogsHandlers.handlers:
+            if file_path.endswith(".parquet"):
+                LogsHandlers.handlers[log_name] = ParquetHandler()
+                LogsHandlers.handlers[log_name].build_from_path(file_path, parameters=parameters)
+            elif file_path.endswith(".csv"):
+                LogsHandlers.handlers[log_name] = ParquetHandler()
+                LogsHandlers.handlers[log_name].build_from_csv(file_path, parameters=parameters)
+
+    def serve(self, host="0.0.0.0", port="5000", threaded=True):
+        self.app.run(host=host, port=port, threaded=threaded)
+
+
+@PM4PyServices.app.route("/getProcessSchema", methods=["GET"])
 def get_process_schema():
     # reads the requested process name
     process = request.args.get('process', default='receipt', type=str)
@@ -31,7 +46,7 @@ def get_process_schema():
     return ret
 
 
-@app.route("/getCaseDurationGraph", methods=["GET"])
+@PM4PyServices.app.route("/getCaseDurationGraph", methods=["GET"])
 def get_case_duration():
     # reads the requested process name
     process = request.args.get('process', default='receipt', type=str)
@@ -41,7 +56,7 @@ def get_case_duration():
     return ret
 
 
-@app.route("/getEventsPerTimeGraph", methods=["GET"])
+@PM4PyServices.app.route("/getEventsPerTimeGraph", methods=["GET"])
 def get_events_per_time():
     # reads the requested process name
     process = request.args.get('process', default='receipt', type=str)
@@ -52,7 +67,7 @@ def get_events_per_time():
     return ret
 
 
-@app.route("/getSNA", methods=["GET"])
+@PM4PyServices.app.route("/getSNA", methods=["GET"])
 def get_sna():
     # reads the requested process name
     process = request.args.get('process', default='receipt', type=str)
@@ -65,7 +80,7 @@ def get_sna():
     return sna
 
 
-@app.route("/getAllVariants", methods=["GET"])
+@PM4PyServices.app.route("/getAllVariants", methods=["GET"])
 def get_all_variants():
     # reads the requested process name
     process = request.args.get('process', default='receipt', type=str)
@@ -73,12 +88,3 @@ def get_all_variants():
     dictio = {"variants": variants}
     ret = jsonify(dictio)
     return ret
-
-
-def load_log(log_name, file_path, parameters=None):
-    if file_path.endswith(".parquet"):
-        LogsHandlers.handlers[log_name] = ParquetHandler()
-        LogsHandlers.handlers[log_name].build_from_path(file_path, parameters=parameters)
-    elif file_path.endswith(".csv"):
-        LogsHandlers.handlers[log_name] = ParquetHandler()
-        LogsHandlers.handlers[log_name].build_from_csv(file_path, parameters=parameters)
