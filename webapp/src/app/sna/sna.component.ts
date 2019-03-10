@@ -26,7 +26,8 @@ export class SnaComponent implements OnInit {
   }
 
   public populateSNA() {
-    let snaPlainUrl : string = this.pm4pyService.getServicePath() + "getSNA?metric="+this.metric+"&threshold="+this.selectedArcsThreshold;
+    let process : string = localStorage.getItem("process");
+    let snaPlainUrl : string = this.pm4pyService.getServicePath() + "getSNA?process="+process+"&metric="+this.metric+"&threshold="+this.selectedArcsThreshold;
 
     this.snaContent = this.sanitizer.bypassSecurityTrustResourceUrl(snaPlainUrl);
 

@@ -15,4 +15,5 @@ if __name__ == "__main__":
         print("service not listening, booting it up")
         S = PM4PyServices()
         S.load_log("receipt", "receipt.parquet")
+        #S.load_log("roadtraffic", "roadtraffic.parquet")
         S.serve(host=LISTENING_HOST, port=LISTENING_PORT)
