@@ -3,8 +3,7 @@ from setuptools import setup
 setup(
     name='pm4py-ws',
     version='',
-    packages=['webapp.node_modules.node-gyp.gyp.pylib.gyp', 'webapp.node_modules.node-gyp.gyp.pylib.gyp.generator',
-              'pm4pyws', 'pm4pyws.handlers', 'pm4pyws.handlers.xes', 'pm4pyws.handlers.parquet',
+    packages=['pm4pyws', 'pm4pyws.handlers', 'pm4pyws.handlers.xes', 'pm4pyws.handlers.parquet',
               'pm4pyws.handlers.parquet.sna', 'pm4pyws.handlers.parquet.cases', 'pm4pyws.handlers.parquet.statistics',
               'pm4pyws.handlers.parquet.process_schema', 'pm4pyws.handlers.parquet.process_schema.tree',
               'pm4pyws.handlers.parquet.process_schema.dfg_freq', 'pm4pyws.handlers.parquet.process_schema.dfg_perf',
