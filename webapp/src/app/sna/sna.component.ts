@@ -58,9 +58,11 @@ export class SnaComponent implements OnInit {
 
   changeSelectedArcValue(event) {
     this.selectedArcsThreshold = event.value;
+    this.populateSNA();
   }
 
   metricChanged(event) {
     this.metric = event.value;
+    this.populateSNA();
   }
 }
