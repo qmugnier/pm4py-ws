@@ -27,10 +27,11 @@ import { CasesComponent } from './cases/cases.component';
 import { SnaComponent } from './sna/sna.component';
 
 const appRoutes: Routes = [
-  { path: '', component: AppComponent },
+  { path: 'process', component: AppComponent },
   { path: 'sna', component: AppComponent },
   { path: 'cases', component: AppComponent },
   { path: 'statistics', component: AppComponent },
+  { path: '**', redirectTo: 'process' }
 ];
 
 
