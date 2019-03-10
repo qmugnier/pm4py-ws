@@ -12,9 +12,7 @@ setup(
               'pm4pyws.handlers.parquet.process_schema.inductive_freq',
               'pm4pyws.handlers.parquet.process_schema.inductive_perf',
               'pm4pyws.handlers.parquet.process_schema.alpha_performance'],
-    package_data={
-        'webapp': ['*']
-    },
+    include_package_data=True,
     url='',
     license='',
     author='PADS',
