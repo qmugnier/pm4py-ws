@@ -2,16 +2,16 @@
   <app-header fxFlex="11%" style="background-color: #FF4081"></app-header>
   <app-filters fxFlex="7%" style="background-color: #FFC0D5"></app-filters>
   <div fxFlex="77%">
-    <div *ngIf="router.url === '/'">
+    <div *ngIf="router.url.startsWith('/process')">
       <app-process-model></app-process-model>
     </div>
-    <div *ngIf="router.url === '/sna'">
+    <div *ngIf="router.url.startsWith('/sna')">
       <app-sna></app-sna>
     </div>
-    <div *ngIf="router.url === '/statistics'">
+    <div *ngIf="router.url.startsWith('/statistics')">
       <app-statistics></app-statistics>
     </div>
-    <div *ngIf="router.url == '/cases'">
+    <div *ngIf="router.url.startsWith('/cases')">
       <app-cases></app-cases>
     </div>
   </div>
