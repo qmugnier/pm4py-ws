@@ -13,8 +13,8 @@
         Type of model:<br />
         <mat-select placeholder="Type of model" (ngModel)="typeOfModel" [value]="typeOfModel" (selectionChange)="typeOfModelIsChanged($event)">
           <mat-option value="dfg">DFG</mat-option>
-          <mat-option value="tree">Process Tree</mat-option>
-          <mat-option value="petri">Petri net</mat-option>
+          <mat-option value="tree">Process Tree (Inductive)</mat-option>
+          <mat-option value="inductive">Petri (Inductive)</mat-option>
         </mat-select>
     </div>
     <div class="p-2">
