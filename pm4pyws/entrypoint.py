@@ -8,20 +8,24 @@ class LogsHandlers:
     handlers = {}
 
 
+def load_log_static(log_name, file_path, parameters=None):
+    if log_name not in LogsHandlers.handlers:
+        if file_path.endswith(".parquet"):
+            LogsHandlers.handlers[log_name] = ParquetHandler()
+            LogsHandlers.handlers[log_name].build_from_path(file_path, parameters=parameters)
+        elif file_path.endswith(".csv"):
+            LogsHandlers.handlers[log_name] = ParquetHandler()
+            LogsHandlers.handlers[log_name].build_from_csv(file_path, parameters=parameters)
+
+
 class PM4PyServices:
     app = Flask(__name__, static_url_path='', static_folder='../webapp/dist/webapp')
     app.add_url_rule(app.static_url_path + '/<path:filename>', endpoint='static',
-                          view_func=app.send_static_file)
+                     view_func=app.send_static_file)
     CORS(app)
 
     def load_log(self, log_name, file_path, parameters=None):
-        if log_name not in LogsHandlers.handlers:
-            if file_path.endswith(".parquet"):
-                LogsHandlers.handlers[log_name] = ParquetHandler()
-                LogsHandlers.handlers[log_name].build_from_path(file_path, parameters=parameters)
-            elif file_path.endswith(".csv"):
-                LogsHandlers.handlers[log_name] = ParquetHandler()
-                LogsHandlers.handlers[log_name].build_from_csv(file_path, parameters=parameters)
+        load_log_static(log_name, file_path, parameters=parameters)
 
     def serve(self, host="0.0.0.0", port="5000", threaded=True):
         self.app.run(host=host, port=port, threaded=threaded)
@@ -88,3 +92,15 @@ def get_all_variants():
     dictio = {"variants": variants}
     ret = jsonify(dictio)
     return ret
+
+
+@PM4PyServices.app.route("/loadLogFromPath", methods=["POST"])
+def load_log_from_path():
+    try:
+        log_name = request.json["log_name"]
+        log_path = request.json["log_path"]
+        print("log_name = ", log_name, "log_path = ", log_path)
+        load_log_static(log_name, log_path)
+    except:
+        return "FAIL"
+    return "OK"
