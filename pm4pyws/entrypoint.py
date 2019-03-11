@@ -4,7 +4,7 @@ from flask import Flask, request, jsonify
 from flask_cors import CORS
 
 from pm4pyws.handlers.parquet.parquet import ParquetHandler
-
+from pm4pyws.handlers.xes.xes import XesHandler
 
 class LogsHandlers:
     handlers = {}
@@ -31,6 +31,9 @@ def load_log_static(log_name, file_path, parameters=None):
         elif file_path.endswith(".csv"):
             LogsHandlers.handlers[log_name] = ParquetHandler()
             LogsHandlers.handlers[log_name].build_from_csv(file_path, parameters=parameters)
+        elif file_path.endswith(".xes") or file_path.endswith(".xes.gz"):
+            LogsHandlers.handlers[log_name] = XesHandler()
+            LogsHandlers.handlers[log_name].build_from_path(file_path, parameters=parameters)
 
 
 class PM4PyServices:
