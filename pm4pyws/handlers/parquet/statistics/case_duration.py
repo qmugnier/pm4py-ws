@@ -4,6 +4,21 @@ from pm4py.visualization.graphs import factory as graphs_factory
 
 
 def get_case_duration_svg(dataframe, parameters=None):
+    """
+    Gets the SVG of the case duration graph
+
+    Parameters
+    -------------
+    dataframe
+        Dataframe
+    parameters
+        Possible parameters of the algorithm
+
+    Returns
+    -------------
+    graph
+        Case duration graph
+    """
     if parameters is None:
         parameters = {}
 

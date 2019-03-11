@@ -4,6 +4,23 @@ from pm4py.visualization.sna import factory as sna_vis_factory
 
 
 def apply(dataframe, variant="handover", parameters=None):
+    """
+    Gets the Social Network according to the specified metric and arc threshold
+
+    Parameters
+    -------------
+    dataframe
+        Dataframe
+    variant
+        Variant of the algorithm to use
+    parameters
+        Possible parameters of the algorithm (arc threshold)
+
+    Returns
+    -------------
+    sna
+        Social Network representation
+    """
     if parameters is None:
         parameters = {}
 
