@@ -192,8 +192,9 @@ def load_log_from_path():
         log_name = request.json["log_name"]
         # reads the log_path entry from the request JSON
         log_path = request.json["log_path"]
+        parameters = request.json["parameters"]
         print("log_name = ", log_name, "log_path = ", log_path)
-        load_log_static(log_name, log_path)
+        load_log_static(log_name, log_path, parameters=parameters)
     except:
         return "FAIL"
     return "OK"
