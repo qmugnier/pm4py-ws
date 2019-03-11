@@ -8,27 +8,29 @@ import {ActivatedRoute, Router} from "@angular/router";
 })
 export class AppComponent implements OnInit {
   title = 'webapp';
-  process_provided : boolean = false;
+  public process_provided : boolean = false;
+  public process_name : string;
   router : Router;
   route : ActivatedRoute;
 
   constructor(private _router: Router, private _route : ActivatedRoute) {
     this.router = _router;
     this.route = _route;
-    console.log("ROUTER URL");
-    console.log(_router.url);
   }
 
   ngOnInit() {
     let url : string = window.location.href;
     if (url.split("process=").length > 1) {
       this.process_provided = true;
-      let process : string = url.split("process=")[1].split("&")[0];
-      localStorage.setItem("process", process);
+      this.process_name = url.split("process=")[1].split("&")[0];
+      localStorage.setItem("process", this.process_name);
+    }
+    else if (localStorage.getItem("process") != null) {
+      this.process_provided = true;
+      this.process_name = localStorage.getItem("process");
     }
     else {
       this.process_provided = false;
-      localStorage.setItem("process", "receipt");
     }
   }
 }

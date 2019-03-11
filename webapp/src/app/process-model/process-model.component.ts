@@ -66,15 +66,11 @@ export class ProcessModelComponent implements OnInit {
   }
 
   decorationIsChanged(event: any) {
-    console.log("DECORATION IS CHANGED");
-    console.log(event);
     this.decoration = event.value;
     this.populateProcessSchema();
   }
 
   typeOfModelIsChanged(event: any) {
-    console.log("TYPE OF MODEL IS CHANGED");
-    console.log(event);
     this.typeOfModel = event.value;
     this.populateProcessSchema();
   }

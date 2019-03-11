@@ -39,6 +39,12 @@ export class Pm4pyService {
     return this.http.get(completeUrl, {params: parameters});
   }
 
+  getLogsList(parameters : HttpParams) {
+    var completeUrl : string = this.webservicePath + "getLogsList";
+
+    return this.http.get(completeUrl, {params: parameters});
+  }
+
   getServicePath() {
     return this.webservicePath;
   }

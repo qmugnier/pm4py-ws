@@ -6,10 +6,17 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./header.component.scss']
 })
 export class HeaderComponent implements OnInit {
+  public processProvided : boolean;
+
 
   constructor() { }
 
   ngOnInit() {
+    this.processProvided = false;
+    let process_name : string = localStorage.getItem("process");
+    if (process_name != null) {
+      this.processProvided = true;
+    }
   }
 
 }
