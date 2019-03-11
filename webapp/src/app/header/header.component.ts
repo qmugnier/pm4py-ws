@@ -15,6 +15,9 @@ export class HeaderComponent implements OnInit {
 
 
   constructor(private _route: Router) {
+    /**
+     * Constructor (initialize the title and the help of the single page)
+     */
     this.title = "PM4Py WI";
     this.router = _route;
     this.router.events.subscribe((val) => {
@@ -58,6 +61,9 @@ export class HeaderComponent implements OnInit {
   }
 
   ngOnInit() {
+    /**
+     * Manages the initialization of the component
+     */
     this.processProvided = false;
     let process_name: string = localStorage.getItem("process");
     if (process_name != null) {
@@ -67,10 +73,6 @@ export class HeaderComponent implements OnInit {
     } else {
       this.processProvided = false;
     }
-  }
-
-  public resetProcessProvided(value: boolean) {
-    this.processProvided = value;
   }
 
 }

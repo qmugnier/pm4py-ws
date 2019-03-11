@@ -7,9 +7,16 @@ import { Component, OnInit } from '@angular/core';
 })
 export class FiltersComponent implements OnInit {
 
-  constructor() { }
+  constructor() {
+    /**
+     * Constructor
+     */
+  }
 
   ngOnInit() {
+    /**
+     * Manages the initialization of the component
+     */
   }
 
 }
