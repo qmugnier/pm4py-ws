@@ -1,4 +1,7 @@
-<div fxLayout="row">
+<div *ngIf="isLoading == true">
+  <mat-spinner></mat-spinner>
+</div>
+<div fxLayout="row" [hidden]="isLoading == true">
   <div fxFlex="25%">
     <div class="p-2">
       % Variants: <mat-progress-bar mode="determinate" value="100"></mat-progress-bar>

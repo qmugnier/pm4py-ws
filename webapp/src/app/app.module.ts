@@ -19,6 +19,7 @@ import { MatOptionModule } from '@angular/material';
 import { MatSelectModule } from '@angular/material';
 import { MatRadioModule } from '@angular/material';
 import { MatListModule } from '@angular/material';
+import { MatProgressSpinnerModule } from '@angular/material';
 
 
 import { RouterModule, Routes } from '@angular/router';
@@ -33,7 +34,7 @@ const appRoutes: Routes = [
   { path: 'cases', component: AppComponent },
   { path: 'statistics', component: AppComponent },
   { path: 'logsList', component: AppComponent },
-  { path: '**', redirectTo: 'process' }
+  { path: '**', redirectTo: 'logsList' }
 ];
 
 
@@ -41,14 +42,14 @@ const appRoutes: Routes = [
 @NgModule({
   declarations: [
     AppComponent,
-    ProcessModelComponent,
+    ProcessListComponent,
     HeaderComponent,
     FiltersComponent,
     FooterComponent,
     StatisticsComponent,
     CasesComponent,
-    SnaComponent,
-    ProcessListComponent
+    ProcessModelComponent,
+    SnaComponent
   ],
   imports: [
     BrowserModule,
@@ -65,6 +66,7 @@ const appRoutes: Routes = [
     MatRadioModule,
     MatListModule,
     FlexLayoutModule,
+    MatProgressSpinnerModule,
     RouterModule.forRoot(
       appRoutes,
       { enableTracing: true, onSameUrlNavigation: 'reload' } // <-- debugging purposes only

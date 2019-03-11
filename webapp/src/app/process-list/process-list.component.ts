@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {Pm4pyService} from "../pm4py-service.service";
 import {HttpParams} from "@angular/common/http";
-import {ActivatedRoute, Router} from "@angular/router";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-process-list',
@@ -24,7 +24,6 @@ export class ProcessListComponent implements OnInit {
     let params: HttpParams = new HttpParams();
 
     this.pm4pyService.getLogsList(params).subscribe(data => {
-      console.log("CIAOO");
       this.logsListJson = data as JSON;
       this.logsList = this.logsListJson["logs"];
       console.log(this.logsList);
@@ -39,9 +38,7 @@ export class ProcessListComponent implements OnInit {
     localStorage.setItem("process", log);
     let currentUrl = this.router.url;
     this.router.navigate(["/process"]);
-    if (currentUrl === "/process") {
-      window.location.reload();
-    }
+    window.location.reload();
   }
 
 }

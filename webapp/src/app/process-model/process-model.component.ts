@@ -21,6 +21,7 @@ export class ProcessModelComponent implements OnInit {
   typeOfModel = 'dfg';
   sanitizer: DomSanitizer;
   pm4pyService: Pm4pyService;
+  public isLoading : boolean;
 
   constructor(private _sanitizer: DomSanitizer, private pm4pyServ: Pm4pyService) {
     this.sanitizer = _sanitizer;
@@ -29,6 +30,7 @@ export class ProcessModelComponent implements OnInit {
   }
 
   public populateProcessSchema() {
+    this.isLoading = true;
     let params: HttpParams = new HttpParams();
     params = params.set("simplicity", this.selectedSimplicity.toString());
     params = params.set("decoration", this.decoration);
@@ -39,6 +41,7 @@ export class ProcessModelComponent implements OnInit {
       this.processModelBase64Original = this.pm4pyJson["base64"];
       this.processModelBase64Sanitized = this.sanitizer.bypassSecurityTrustResourceUrl('data:image/svg+xml;base64,' + this.processModelBase64Original);
       this.setImageCorrectSize();
+      this.isLoading = false;
     });
   }
 
