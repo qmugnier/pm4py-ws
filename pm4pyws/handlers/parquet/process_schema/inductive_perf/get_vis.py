@@ -11,6 +11,25 @@ from pm4py.objects.petri.exporter.pnml import export_petri_as_string
 
 
 def apply(dataframe, parameters=None):
+    """
+    Gets the Petri net through Inductive Miner, decorated by performance metric
+
+    Parameters
+    ------------
+    dataframe
+        Dataframe
+    parameters
+        Parameters of the algorithm
+
+    Returns
+    ------------
+    base64
+        Base64 of an SVG representing the model
+    model
+        Text representation of the model
+    format
+        Format of the model
+    """
     if parameters is None:
         parameters = {}
     dataframe = auto_filter.apply_auto_filter(dataframe, parameters=parameters)

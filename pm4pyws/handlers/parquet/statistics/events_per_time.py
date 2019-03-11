@@ -4,6 +4,21 @@ from pm4py.visualization.graphs import factory as graphs_factory
 
 
 def get_events_per_time_svg(dataframe, parameters=None):
+    """
+    Gets the SVG of the events per time graph
+
+    Parameters
+    -------------
+    dataframe
+        Dataframe
+    parameters
+        Possible parameters of the algorithm
+
+    Returns
+    -------------
+    graph
+        Case duration graph
+    """
     if parameters is None:
         parameters = {}
 

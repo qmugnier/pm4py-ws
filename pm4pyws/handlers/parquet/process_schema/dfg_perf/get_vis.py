@@ -7,6 +7,25 @@ from pm4py.visualization.dfg import factory as dfg_vis_factory
 
 
 def apply(dataframe, parameters=None):
+    """
+    Gets the performance DFG
+
+    Parameters
+    ------------
+    dataframe
+        Dataframe
+    parameters
+        Parameters of the algorithm
+
+    Returns
+    ------------
+    base64
+        Base64 of an SVG representing the model
+    model
+        Text representation of the model
+    format
+        Format of the model
+    """
     if parameters is None:
         parameters = {}
     dataframe = auto_filter.apply_auto_filter(dataframe, parameters=parameters)

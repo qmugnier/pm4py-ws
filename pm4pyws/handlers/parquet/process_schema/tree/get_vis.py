@@ -6,6 +6,25 @@ from pm4py.visualization.process_tree import factory as pt_vis_factory
 
 
 def apply(dataframe, parameters=None):
+    """
+    Gets the process tree using Inductive Miner Directly-Follows
+
+    Parameters
+    ------------
+    dataframe
+        Dataframe
+    parameters
+        Parameters of the algorithm
+
+    Returns
+    ------------
+    base64
+        Base64 of an SVG representing the model
+    model
+        Text representation of the model
+    format
+        Format of the model
+    """
     if parameters is None:
         parameters = {}
     dataframe = auto_filter.apply_auto_filter(dataframe, parameters=parameters)
