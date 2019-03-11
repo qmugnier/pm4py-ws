@@ -1,21 +1,25 @@
 <div id="container0" class="container" fxLayout="column" fxLayoutAlign="center" fxFlexFill>
-  <app-header fxFlex="11%" style="background-color: #FF4081"></app-header>
-  <app-filters fxFlex="7%" style="background-color: #FFC0D5"></app-filters>
-  <div fxFlex="77%">
-    <div *ngIf="router.url.startsWith('/process')">
-      <app-process-model></app-process-model>
+  <app-header fxFlex="11%" style="background-color: #FF4081"
+              *ngIf="process_provided == true && !router.url.startsWith('/logsList')"></app-header>
+    <app-filters fxFlex="7%" style="background-color: #FFC0D5"
+                 *ngIf="process_provided == true  && !router.url.startsWith('/logsList')"></app-filters>
+    <app-process-list fxFlex="95%"
+                      *ngIf="process_provided == false || router.url.startsWith('/logsList')"></app-process-list>
+    <div fxFlex="77%" *ngIf="process_provided == true  && !router.url.startsWith('/logsList')">
+      <div *ngIf="router.url.startsWith('/process')">
+        <app-process-model></app-process-model>
+      </div>
+      <div *ngIf="router.url.startsWith('/sna')">
+        <app-sna></app-sna>
+      </div>
+      <div *ngIf="router.url.startsWith('/statistics')">
+        <app-statistics></app-statistics>
+      </div>
+      <div *ngIf="router.url.startsWith('/cases')">
+        <app-cases></app-cases>
+      </div>
     </div>
-    <div *ngIf="router.url.startsWith('/sna')">
-      <app-sna></app-sna>
+    <div fxFlex="5%" style="background-color: #FF4081">
+      <app-footer></app-footer>
     </div>
-    <div *ngIf="router.url.startsWith('/statistics')">
-      <app-statistics></app-statistics>
-    </div>
-    <div *ngIf="router.url.startsWith('/cases')">
-      <app-cases></app-cases>
-    </div>
-  </div>
-  <div fxFlex="5%" style="background-color: #FF4081">
-    <app-footer></app-footer>
-  </div>
 </div>

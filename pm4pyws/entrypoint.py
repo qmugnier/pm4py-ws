@@ -108,3 +108,8 @@ def load_log_from_path():
     except:
         return "FAIL"
     return "OK"
+
+
+@PM4PyServices.app.route("/getLogsList", methods=["GET"])
+def get_logs_list():
+    return jsonify({"logs": list(LogsHandlers.handlers.keys())})

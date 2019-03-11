@@ -18,19 +18,21 @@ import { MatFormFieldModule } from '@angular/material';
 import { MatOptionModule } from '@angular/material';
 import { MatSelectModule } from '@angular/material';
 import { MatRadioModule } from '@angular/material';
-
+import { MatListModule } from '@angular/material';
 
 
 import { RouterModule, Routes } from '@angular/router';
 import { StatisticsComponent } from './statistics/statistics.component';
 import { CasesComponent } from './cases/cases.component';
 import { SnaComponent } from './sna/sna.component';
+import { ProcessListComponent } from './process-list/process-list.component';
 
 const appRoutes: Routes = [
   { path: 'process', component: AppComponent },
   { path: 'sna', component: AppComponent },
   { path: 'cases', component: AppComponent },
   { path: 'statistics', component: AppComponent },
+  { path: 'logsList', component: AppComponent },
   { path: '**', redirectTo: 'process' }
 ];
 
@@ -45,7 +47,8 @@ const appRoutes: Routes = [
     FooterComponent,
     StatisticsComponent,
     CasesComponent,
-    SnaComponent
+    SnaComponent,
+    ProcessListComponent
   ],
   imports: [
     BrowserModule,
@@ -60,10 +63,11 @@ const appRoutes: Routes = [
     MatOptionModule,
     MatSelectModule,
     MatRadioModule,
+    MatListModule,
     FlexLayoutModule,
     RouterModule.forRoot(
       appRoutes,
-      { enableTracing: true } // <-- debugging purposes only
+      { enableTracing: true, onSameUrlNavigation: 'reload' } // <-- debugging purposes only
     )  ],
   providers: [],
   bootstrap: [AppComponent]
