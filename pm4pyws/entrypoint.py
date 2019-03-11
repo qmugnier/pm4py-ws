@@ -82,6 +82,8 @@ def get_process_schema():
     variant = type_of_model + "_" + decoration
     parameters = {"decreasingFactor": simplicity}
     base64, model, format = LogsHandlers.handlers[process].get_schema(variant=variant, parameters=parameters)
+    if model is not None:
+        model = model.decode('utf-8')
     dictio = {"base64": base64.decode('utf-8'), "model": model, "format": format}
     ret = jsonify(dictio)
     return ret
