@@ -1,6 +1,5 @@
 <div id="container0" class="container" fxLayout="column" fxLayoutAlign="center" fxFlexFill>
-  <app-header fxFlex="11%" style="background-color: #FF4081"
-              *ngIf="process_provided == true && !router.url.startsWith('/logsList')"></app-header>
+  <app-header></app-header>
     <app-filters fxFlex="7%" style="background-color: #FFC0D5"
                  *ngIf="process_provided == true  && !router.url.startsWith('/logsList')"></app-filters>
     <app-process-list fxFlex="95%"

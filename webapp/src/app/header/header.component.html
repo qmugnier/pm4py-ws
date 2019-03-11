@@ -1,9 +1,9 @@
 <mat-toolbar color="accent">
   <span><a routerLink="/logsList"><img src="../../assets/home.svg" /></a></span>
-  <span><a routerLink="/process"><img src="../../assets/process_model.svg" /></a></span>
-  <span><a routerLink="/cases"><img src="../../assets/cases.svg" /></a></span>
-  <span><a routerLink="/sna"><img src="../../assets/sna_icon.svg" /></a></span>
-  <span><a routerLink="/statistics"><img src="../../assets/statistics.svg" /></a></span>
+  <span *ngIf="processProvided == true"><a routerLink="/process"><img src="../../assets/process_model.svg" /></a></span>
+  <span *ngIf="processProvided == true"><a routerLink="/cases"><img src="../../assets/cases.svg" /></a></span>
+  <span *ngIf="processProvided == true"><a routerLink="/sna"><img src="../../assets/sna_icon.svg" /></a></span>
+  <span *ngIf="processProvided == true"><a routerLink="/statistics"><img src="../../assets/statistics.svg" /></a></span>
     <span style="flex: 1 1 auto;"></span>
   <span>PM4Py WI</span>
 </mat-toolbar>
