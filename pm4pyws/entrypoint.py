@@ -1,8 +1,10 @@
+from threading import Semaphore
+
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 
 from pm4pyws.handlers.parquet.parquet import ParquetHandler
-from threading import Semaphore
+
 
 class LogsHandlers:
     handlers = {}
@@ -10,6 +12,18 @@ class LogsHandlers:
 
 
 def load_log_static(log_name, file_path, parameters=None):
+    """
+    Loads an event log inside the known handlers
+
+    Parameters
+    ------------
+    log_name
+        Log name
+    file_path
+        Full path (in the services machine) to the log
+    parameters
+        Possible parameters
+    """
     if log_name not in LogsHandlers.handlers:
         if file_path.endswith(".parquet"):
             LogsHandlers.handlers[log_name] = ParquetHandler()
@@ -26,6 +40,18 @@ class PM4PyServices:
     CORS(app)
 
     def load_log(self, log_name, file_path, parameters=None):
+        """
+        Loads an event log inside the known handlers
+
+        Parameters
+        ------------
+        log_name
+            Log name
+        file_path
+            Full path (in the services machine) to the log
+        parameters
+            Possible parameters
+        """
         load_log_static(log_name, file_path, parameters=parameters)
 
     def serve(self, host="0.0.0.0", port="5000", threaded=True):
@@ -34,6 +60,17 @@ class PM4PyServices:
 
 @PM4PyServices.app.route("/getProcessSchema", methods=["GET"])
 def get_process_schema():
+    """
+    Gets the process schema in the wanted format
+
+    Returns
+    ------------
+    dictio
+        JSONified dictionary that contains in the 'base64' entry the SVG representation
+        of the process schema. Moreover, 'model' contains the process model (if the output is meaningful)
+        and 'format' contains the format
+    :return:
+    """
     # reads the requested process name
     process = request.args.get('process', default='receipt', type=str)
     # reads the decoration
@@ -42,17 +79,25 @@ def get_process_schema():
     type_of_model = request.args.get('typeOfModel', default='dfg', type=str)
     # reads the simplicity
     simplicity = request.args.get('simplicity', default=0.6, type=float)
-    print(request.args)
     variant = type_of_model + "_" + decoration
     parameters = {"decreasingFactor": simplicity}
-    base64 = LogsHandlers.handlers[process].get_schema(variant=variant, parameters=parameters)
-    dictio = {"base64": base64.decode('utf-8')}
+    base64, model, format = LogsHandlers.handlers[process].get_schema(variant=variant, parameters=parameters)
+    dictio = {"base64": base64.decode('utf-8'), "model": model, "format": format}
     ret = jsonify(dictio)
     return ret
 
 
 @PM4PyServices.app.route("/getCaseDurationGraph", methods=["GET"])
 def get_case_duration():
+    """
+    Gets the Case Duration graph
+
+    Returns
+    ------------
+    dictio
+        JSONified dictionary that contains in the 'base64' entry the SVG representation
+        of the case duration graph
+    """
     # reads the requested process name
     process = request.args.get('process', default='receipt', type=str)
 
@@ -70,6 +115,15 @@ def get_case_duration():
 
 @PM4PyServices.app.route("/getEventsPerTimeGraph", methods=["GET"])
 def get_events_per_time():
+    """
+    Gets the Event per Time graph
+
+    Returns
+    -------------
+    dictio
+        JSONified dictionary that contains in the 'base64' entry the SVG representation
+        of the events per time graph
+    """
     # reads the requested process name
     process = request.args.get('process', default='receipt', type=str)
 
@@ -88,14 +142,19 @@ def get_events_per_time():
 
 @PM4PyServices.app.route("/getSNA", methods=["GET"])
 def get_sna():
+    """
+    Gets the Social Network (Pyvis) representation of the event log
+
+    Returns
+    -----------
+    html
+        HTML page containing the SNA representation
+    """
     try:
         # reads the requested process name
         process = request.args.get('process', default='receipt', type=str)
         metric = request.args.get('metric', default='handover', type=str)
         threshold = request.args.get('threshold', default=0.0, type=float)
-
-        print(request.args)
-
         sna = LogsHandlers.handlers[process].get_sna(variant=metric, parameters={"weight_threshold": threshold})
     except:
         sna = ""
@@ -105,6 +164,14 @@ def get_sna():
 
 @PM4PyServices.app.route("/getAllVariants", methods=["GET"])
 def get_all_variants():
+    """
+    Gets all the variants from the event log
+
+    Returns
+    ------------
+    dictio
+        JSONified dictionary that contains in the 'variants' entry the list of variants
+    """
     # reads the requested process name
     process = request.args.get('process', default='receipt', type=str)
     variants = LogsHandlers.handlers[process].get_variants()
@@ -115,8 +182,13 @@ def get_all_variants():
 
 @PM4PyServices.app.route("/loadLogFromPath", methods=["POST"])
 def load_log_from_path():
+    """
+    Service that loads a log from a path
+    """
     try:
+        # reads the log_name entry from the request JSON
         log_name = request.json["log_name"]
+        # reads the log_path entry from the request JSON
         log_path = request.json["log_path"]
         print("log_name = ", log_name, "log_path = ", log_path)
         load_log_static(log_name, log_path)
@@ -127,4 +199,12 @@ def load_log_from_path():
 
 @PM4PyServices.app.route("/getLogsList", methods=["GET"])
 def get_logs_list():
+    """
+    Gets the list of logs loaded into the system
+
+    Returns
+    -----------
+    dictio
+        JSONified dictionary that contains in the 'logs' entry the list of events logs
+    """
     return jsonify({"logs": list(LogsHandlers.handlers.keys())})

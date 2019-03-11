@@ -7,6 +7,7 @@ from pm4py.visualization.common.utils import get_base64_from_gviz
 from pm4py.visualization.petrinet import factory as pn_vis_factory
 from pm4py.visualization.petrinet.util.vis_trans_shortest_paths import get_decorations_from_dfg_spaths_acticount
 from pm4py.visualization.petrinet.util.vis_trans_shortest_paths import get_shortest_paths
+from pm4py.objects.petri.exporter.pnml import export_petri_as_string
 
 
 def apply(dataframe, parameters=None):
@@ -22,4 +23,4 @@ def apply(dataframe, parameters=None):
                                                                       variant="performance")
     gviz = pn_vis_factory.apply(net, im, fm, parameters={"format": "svg"}, variant="performance",
                                 aggregated_statistics=aggregated_statistics)
-    return get_base64_from_gviz(gviz)
+    return get_base64_from_gviz(gviz), export_petri_as_string(net, im, fm), ".pnml"
