@@ -22,14 +22,23 @@ export class StatisticsComponent implements OnInit {
   public caseDurationLoading: boolean = true;
 
   constructor(private _sanitizer: DomSanitizer, private pm4pyServ: Pm4pyService) {
+    /**
+     * Constructor
+     */
     this.sanitizer = _sanitizer;
     this.pm4pyService = pm4pyServ;
 
+      // calls the construction of the events per time graph
     this.getEventsPerTime();
+    // calls the construction of the case duration graph
     this.getCaseDuration();
   }
 
   getEventsPerTime() {
+    /**
+     * Gets the event per time graph from the service
+     * and display it as part of the page
+     */
     let params: HttpParams = new HttpParams();
 
     this.pm4pyService.getEventsPerTime(params).subscribe(data => {
@@ -46,6 +55,10 @@ export class StatisticsComponent implements OnInit {
   }
 
   getCaseDuration() {
+    /**
+     * Gets the case duration graph from the service
+     * and display it as part of the page
+     */
     let params: HttpParams = new HttpParams();
 
     this.pm4pyService.getCaseDurationGraph(params).subscribe(data => {
@@ -62,6 +75,9 @@ export class StatisticsComponent implements OnInit {
   }
 
   ngOnInit() {
+    /**
+     * Method that is called at the initialization of the component
+     */
   }
 
 }
