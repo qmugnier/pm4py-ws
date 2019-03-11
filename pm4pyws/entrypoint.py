@@ -2,10 +2,11 @@ from flask import Flask, request, jsonify
 from flask_cors import CORS
 
 from pm4pyws.handlers.parquet.parquet import ParquetHandler
-
+from threading import Semaphore
 
 class LogsHandlers:
     handlers = {}
+    semaphore_matplot = Semaphore(1)
 
 
 def load_log_static(log_name, file_path, parameters=None):
@@ -54,8 +55,15 @@ def get_process_schema():
 def get_case_duration():
     # reads the requested process name
     process = request.args.get('process', default='receipt', type=str)
-    base64 = LogsHandlers.handlers[process].get_case_duration_svg()
-    dictio = {"base64": base64.decode('utf-8')}
+
+    LogsHandlers.semaphore_matplot.acquire()
+    try:
+        base64 = LogsHandlers.handlers[process].get_case_duration_svg()
+        dictio = {"base64": base64.decode('utf-8')}
+    except:
+        dictio = {"base64": ""}
+    LogsHandlers.semaphore_matplot.release()
+
     ret = jsonify(dictio)
     return ret
 
@@ -65,9 +73,16 @@ def get_events_per_time():
     # reads the requested process name
     process = request.args.get('process', default='receipt', type=str)
 
-    base64 = LogsHandlers.handlers[process].get_events_per_time_svg()
-    dictio = {"base64": base64.decode('utf-8')}
+    LogsHandlers.semaphore_matplot.acquire()
+    try:
+        base64 = LogsHandlers.handlers[process].get_events_per_time_svg()
+        dictio = {"base64": base64.decode('utf-8')}
+    except:
+        dictio = {"base64": ""}
+    LogsHandlers.semaphore_matplot.release()
+
     ret = jsonify(dictio)
+
     return ret
 
 
