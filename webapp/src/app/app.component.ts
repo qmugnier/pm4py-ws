@@ -16,6 +16,20 @@ export class AppComponent implements OnInit {
   constructor(private _router: Router, private _route : ActivatedRoute) {
     this.router = _router;
     this.route = _route;
+    this.router.events.subscribe((val) => {
+      let process_name: string = localStorage.getItem("process");
+      if (process_name != null) {
+        if (this.router.url === "/logsList") {
+          this.process_provided = false;
+        }
+        else {
+          this.process_provided = true;
+        }
+      }
+      else {
+        this.process_provided = false;
+      }
+    });
   }
 
   ngOnInit() {

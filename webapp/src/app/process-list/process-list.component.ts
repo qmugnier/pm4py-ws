@@ -38,7 +38,7 @@ export class ProcessListComponent implements OnInit {
     localStorage.setItem("process", log);
     let currentUrl = this.router.url;
     this.router.navigate(["/process"]);
-    window.location.reload();
+    //window.location.reload();
   }
 
 }
