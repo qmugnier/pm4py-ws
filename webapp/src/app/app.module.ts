@@ -20,6 +20,9 @@ import { MatSelectModule } from '@angular/material';
 import { MatRadioModule } from '@angular/material';
 import { MatListModule } from '@angular/material';
 import { MatProgressSpinnerModule } from '@angular/material';
+import { MatMenuModule } from '@angular/material';
+import { MatIconModule } from '@angular/material';
+
 
 
 import { RouterModule, Routes } from '@angular/router';
@@ -65,6 +68,8 @@ const appRoutes: Routes = [
     MatSelectModule,
     MatRadioModule,
     MatListModule,
+    MatMenuModule,
+    MatIconModule,
     FlexLayoutModule,
     MatProgressSpinnerModule,
     RouterModule.forRoot(
