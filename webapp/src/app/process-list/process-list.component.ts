@@ -15,30 +15,39 @@ export class ProcessListComponent implements OnInit {
   public logsList: string[];
 
   constructor(private pm4pyServ: Pm4pyService, private _route : Router) {
+    /**
+     * Constructor
+     */
     this.pm4pyService = pm4pyServ;
     this.router = _route;
     this.getProcessList();
   }
 
   getProcessList() {
+    /**
+     * Gets the list of processes loaded into the service
+     */
     let params: HttpParams = new HttpParams();
 
     this.pm4pyService.getLogsList(params).subscribe(data => {
       this.logsListJson = data as JSON;
       this.logsList = this.logsListJson["logs"];
-      console.log(this.logsList);
     });
   }
 
   ngOnInit() {
+    /**
+     * Manages the initialization of the component
+     */
     localStorage.removeItem("process");
   }
 
   logClicked(log) {
+    /**
+     * Manages the click on a process
+     */
     localStorage.setItem("process", log);
-    let currentUrl = this.router.url;
     this.router.navigate(["/process"]);
-    //window.location.reload();
   }
 
 }
