@@ -9,6 +9,8 @@ from pm4py.visualization.petrinet import factory as pn_vis_factory
 from pm4py.visualization.petrinet.util.vis_trans_shortest_paths import get_decorations_from_dfg_spaths_acticount
 from pm4py.visualization.petrinet.util.vis_trans_shortest_paths import get_shortest_paths
 
+from pm4pyws.util import constants
+
 
 def apply(dataframe, parameters=None):
     """
@@ -32,6 +34,8 @@ def apply(dataframe, parameters=None):
     """
     if parameters is None:
         parameters = {}
+    dataframe = attributes_filter.filter_df_keeping_spno_activities(dataframe,
+                                                                    max_no_activities=constants.MAX_NO_ACTIVITIES)
     dataframe = auto_filter.apply_auto_filter(dataframe, parameters=parameters)
     dfg = df_statistics.get_dfg_graph(dataframe)
     activities_count = attributes_filter.get_attribute_values(dataframe, xes.DEFAULT_NAME_KEY)
