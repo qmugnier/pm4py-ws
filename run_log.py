@@ -28,6 +28,8 @@ if __name__ == "__main__":
     except:
         # otherwise, the service is not listening and it needs to be boot up
         print("service not listening, booting it up")
+        import pm4py
+        print("version of PM4Py: ",pm4py.__version__)
         S = PM4PyServices()
         # loads the process into the services
         S.load_log(log_name, log_path)
