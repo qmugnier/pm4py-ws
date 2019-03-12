@@ -1,6 +1,6 @@
 HOW TO INSTALL THE BINARY DISTRIBUTION:
 
-pip install pm4pyws
+pip install -U pm4pyws
 
 At this point, you could use the script "main.py" as reference to start the service with some logs preloaded,
 or to enable double-click-opening .xes and/or .parquet in Windows,
