@@ -123,4 +123,4 @@ class XesHandler(object):
         sna
             SNA representation
         """
-        return sna_obtainer.apply(self.dataframe, variant=variant, parameters=parameters)
+        return sna_obtainer.apply(self.log, variant=variant, parameters=parameters)
