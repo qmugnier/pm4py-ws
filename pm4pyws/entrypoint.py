@@ -6,6 +6,8 @@ from flask_cors import CORS
 from pm4pyws.handlers.parquet.parquet import ParquetHandler
 from pm4pyws.handlers.xes.xes import XesHandler
 
+import traceback
+
 class LogsHandlers:
     handlers = {}
     semaphore_matplot = Semaphore(1)
@@ -111,6 +113,7 @@ def get_case_duration():
         base64 = LogsHandlers.handlers[process].get_case_duration_svg()
         dictio = {"base64": base64.decode('utf-8')}
     except:
+        traceback.print_exc()
         dictio = {"base64": ""}
     LogsHandlers.semaphore_matplot.release()
 
@@ -137,6 +140,7 @@ def get_events_per_time():
         base64 = LogsHandlers.handlers[process].get_events_per_time_svg()
         dictio = {"base64": base64.decode('utf-8')}
     except:
+        traceback.print_exc()
         dictio = {"base64": ""}
     LogsHandlers.semaphore_matplot.release()
 
@@ -162,6 +166,7 @@ def get_sna():
         threshold = request.args.get('threshold', default=0.0, type=float)
         sna = LogsHandlers.handlers[process].get_sna(variant=metric, parameters={"weight_threshold": threshold})
     except:
+        traceback.print_exc()
         sna = ""
 
     return sna
@@ -199,6 +204,7 @@ def load_log_from_path():
         print("log_name = ", log_name, "log_path = ", log_path)
         load_log_static(log_name, log_path, parameters=parameters)
     except:
+        traceback.print_exc()
         return "FAIL"
     return "OK"
 
