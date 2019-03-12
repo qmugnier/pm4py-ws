@@ -15,8 +15,8 @@ export class ProcessModelComponent implements OnInit {
   processModelBase64Original: string;
   processModelBase64Sanitized: SafeResourceUrl;
   pm4pyJson: JSON;
-  simplicity = 0.6;
-  selectedSimplicity = 0.6;
+  simplicity = 0.45;
+  selectedSimplicity = 0.45;
   decoration = 'freq';
   typeOfModel = 'dfg';
   sanitizer: DomSanitizer;
