@@ -34,6 +34,7 @@ def apply(log, parameters=None):
     filtered_log = auto_filter.apply_auto_filter(log, parameters=parameters)
 
     dfg = dfg_factory.apply(filtered_log, parameters=parameters)
-    gviz = dfg_vis_factory.apply(dfg, log=log, variant="performance", parameters={"format": "svg"})
+    parameters["format"] = "svg"
+    gviz = dfg_vis_factory.apply(dfg, log=log, variant="performance", parameters=parameters)
 
     return get_base64_from_gviz(gviz), None, ""

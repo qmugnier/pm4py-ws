@@ -34,6 +34,8 @@ def apply(log, parameters=None):
     filtered_log = auto_filter.apply_auto_filter(log, parameters=parameters)
 
     tree = inductive_miner.apply_tree(filtered_log, parameters=parameters)
-    gviz = pt_vis_factory.apply(tree, parameters={"format": "svg"})
+    parameters["format"] = "svg"
+    gviz = pt_vis_factory.apply(tree, parameters=parameters)
+
     return get_base64_from_gviz(gviz), None, ""
 

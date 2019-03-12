@@ -36,7 +36,8 @@ def apply(log, parameters=None):
     filtered_log = auto_filter.apply_auto_filter(log, parameters=parameters)
 
     net, im, fm = alpha_miner.apply(filtered_log, parameters=parameters)
-    gviz = pn_vis_factory.apply(net, im, fm, log=log, variant="frequency", parameters={"format": "svg"})
+    parameters["format"] = "svg"
+    gviz = pn_vis_factory.apply(net, im, fm, log=log, variant="frequency", parameters=parameters)
 
     svg = get_base64_from_gviz(gviz)
 
