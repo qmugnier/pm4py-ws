@@ -3,7 +3,7 @@ from setuptools import setup
 setup(
     name='pm4py-ws',
     version='',
-    packages=['pm4pyws', 'pm4pyws.handlers', 'pm4pyws.handlers.xes', 'pm4pyws.handlers.xes.sna',
+    packages=['pm4pyws', 'pm4pyws.util', 'pm4pyws.handlers', 'pm4pyws.handlers.xes', 'pm4pyws.handlers.xes.sna',
               'pm4pyws.handlers.xes.cases', 'pm4pyws.handlers.xes.statistics', 'pm4pyws.handlers.xes.process_schema',
               'pm4pyws.handlers.xes.process_schema.tree', 'pm4pyws.handlers.xes.process_schema.dfg_freq',
               'pm4pyws.handlers.xes.process_schema.dfg_perf', 'pm4pyws.handlers.xes.process_schema.alpha_freq',
