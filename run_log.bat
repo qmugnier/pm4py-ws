@@ -1,0 +1,1 @@
+C:\Users\berti\Anaconda3\python.exe C:\run_log.py %1
