@@ -35,7 +35,8 @@ def apply(log, parameters=None):
     filtered_log = auto_filter.apply_auto_filter(log, parameters=parameters)
 
     net, im, fm = inductive_miner.apply(filtered_log, parameters=parameters)
-    gviz = pn_vis_factory.apply(net, im, fm, log=log, variant="performance", parameters={"format": "svg"})
+    parameters["format"] = "svg"
+    gviz = pn_vis_factory.apply(net, im, fm, log=log, variant="performance", parameters=parameters)
 
     svg = get_base64_from_gviz(gviz)
 
