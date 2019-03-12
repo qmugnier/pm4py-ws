@@ -1,3 +1,4 @@
+import traceback
 from threading import Semaphore
 
 from flask import Flask, request, jsonify
@@ -6,7 +7,6 @@ from flask_cors import CORS
 from pm4pyws.handlers.parquet.parquet import ParquetHandler
 from pm4pyws.handlers.xes.xes import XesHandler
 
-import traceback
 
 class LogsHandlers:
     handlers = {}
@@ -200,7 +200,7 @@ def load_log_from_path():
         log_name = request.json["log_name"]
         # reads the log_path entry from the request JSON
         log_path = request.json["log_path"]
-        parameters = request.json["parameters"]
+        parameters = request.json["parameters"] if "parameters" in request.json else None
         print("log_name = ", log_name, "log_path = ", log_path)
         load_log_static(log_name, log_path, parameters=parameters)
     except:
