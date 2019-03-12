@@ -1,4 +1,4 @@
-from pm4pyws import entrypoint, handlers
+from pm4pyws import entrypoint, handlers, util
 
 __version__ = '0.0.1'
 __doc__ = "PM4Py Web Services"
