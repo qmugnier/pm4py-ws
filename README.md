@@ -1,5 +1,6 @@
 HOW TO INSTALL THE BINARY DISTRIBUTION:
 
+pip install -U Flask flask-cors pm4py
 pip install -U pm4pyws
 
 At this point, you could use the script "main.py" as reference to start the service with some logs preloaded,
@@ -10,6 +11,12 @@ in C: and associate to .xes and/or .parquet the run_log.bat opener.
 
 HOW TO BUILD ON SOURCES:
 
+
+First of all install ANGULAR:
+
+npm install -g @angular/cli
+
+
 PM4Py Web Services along with an Angular7 web interface
 
 A (almost) last build could be found on http://194.32.77.109:5000/index.html
@@ -18,7 +25,6 @@ A (almost) last build could be found on http://194.32.77.109:5000/index.html
 To install the required NPM dependencies (also for building) enter the webapp/ folder and use the following command:
 
 npm install
-
 
 
 On Linux machines, also the following could be necessary:
