@@ -24,6 +24,7 @@ import { MatProgressSpinnerModule } from '@angular/material';
 import { MatMenuModule } from '@angular/material';
 import { MatIconModule } from '@angular/material';
 import { MatTableModule } from '@angular/material';
+import { MatSortModule } from '@angular/material';
 
 
 
@@ -78,6 +79,7 @@ const appRoutes: Routes = [
     MatTableModule,
     MatIconModule,
     FlexLayoutModule,
+    MatSortModule,
     MatProgressSpinnerModule,
     RouterModule.forRoot(
       appRoutes,
