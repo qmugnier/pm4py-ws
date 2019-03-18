@@ -23,6 +23,8 @@ import { MatListModule } from '@angular/material';
 import { MatProgressSpinnerModule } from '@angular/material';
 import { MatMenuModule } from '@angular/material';
 import { MatIconModule } from '@angular/material';
+import { MatTableModule } from '@angular/material';
+
 
 
 
@@ -73,6 +75,7 @@ const appRoutes: Routes = [
     MatRadioModule,
     MatListModule,
     MatMenuModule,
+    MatTableModule,
     MatIconModule,
     FlexLayoutModule,
     MatProgressSpinnerModule,
