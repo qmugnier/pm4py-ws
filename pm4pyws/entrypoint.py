@@ -184,7 +184,7 @@ def get_all_variants():
     """
     # reads the requested process name
     process = request.args.get('process', default='receipt', type=str)
-    variants = LogsHandlers.handlers[process].get_variants()
+    variants = LogsHandlers.handlers[process].get_variant_statistics()
     dictio = {"variants": variants}
     ret = jsonify(dictio)
     return ret
