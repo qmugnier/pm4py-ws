@@ -220,3 +220,24 @@ def get_logs_list():
         JSONified dictionary that contains in the 'logs' entry the list of events logs
     """
     return jsonify({"logs": list(LogsHandlers.handlers.keys())})
+
+
+@PM4PyServices.app.route("/transientAnalysis", methods=["GET"])
+def do_transient_analysis():
+    """
+    Perform transient analysis on the log
+
+    Returns
+    ------------
+    dictio
+        JSONified dictionary that contains in the 'base64' entry the SVG representation
+        of the events per time graph
+    """
+    # reads the requested process name
+    process = request.args.get('process', default='receipt', type=str)
+    delay = request.args.get('delay', default=0.6, type=float)
+
+    base64 = LogsHandlers.handlers[process].get_transient(delay)
+    dictio = {"base64": base64.decode('utf-8')}
+    ret = jsonify(dictio)
+    return ret
