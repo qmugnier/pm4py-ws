@@ -99,7 +99,7 @@ export class TransientComponent implements OnInit {
   }
 
   mouseWheel(event: any) {
-    if (event["deltaY"] == -100) {
+    if (event["deltaY"] < 0) {
       (<HTMLImageElement>document.getElementById("imageProcessModelImage")).height = (<HTMLImageElement>document.getElementById("imageProcessModelImage")).height * 1.1;
       (<HTMLImageElement>document.getElementById("imageProcessModelImage")).width = (<HTMLImageElement>document.getElementById("imageProcessModelImage")).width * 1.1;
     } else {
