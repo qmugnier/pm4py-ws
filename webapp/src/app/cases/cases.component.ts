@@ -24,9 +24,14 @@ export class CasesComponent implements OnInit {
   sanitizer: DomSanitizer;
   pm4pyService: Pm4pyService;
   pm4pyJsonVariants : JSON;
+  pm4pyJsonCases : JSON;
   variants : any[];
+  cases : any[];
   displayedColumnsVariants : string[] = ["variant", "count"];
+  displayedColumnsCases : string[] = ["caseId", "caseDuration", "startTime", "endTime"];
+
   dataSourceVariants = new MatTableDataSource<any>();
+  dataSourceCases = new MatTableDataSource<any>();
   width : number = 1310;
   height : number = 170;
 
@@ -43,12 +48,38 @@ export class CasesComponent implements OnInit {
 
     //this.setTableSize();
     this.getAllVariants();
+    this.getAllCases();
   }
 
   ngOnInit() {
     /**
      * Manages the initialization of the component
      */
+  }
+
+  public secondsToString(seconds : number) {
+    let numdays : number = Math.floor(seconds / 86400);
+    let numhours : number = Math.floor((seconds % 86400) / 3600);
+    let numminutes : number = Math.floor(((seconds % 86400) % 3600) / 60);
+    let numseconds : number = Math.floor(((seconds % 86400) % 3600) % 60);
+
+    if (numdays >= 1) {
+      return numdays.toString() + " days " + numhours.toString() + " hours";
+    }
+    else if (numhours >= 1) {
+      return  numhours.toString() + " hours " + numminutes.toString()+" minutes";
+    }
+    else if (numminutes >= 1) {
+      return numminutes.toString() + " minutes " + numseconds.toString()+"seconds";
+    }
+    else if (numseconds >= 1) {
+      return numseconds.toString()+" seconds";
+    }
+    return "0";
+  }
+
+  public get_repr_time(s : number) {
+    return new Date(s * 1e3).toISOString();
   }
 
   getAllVariants() {
@@ -64,10 +95,24 @@ export class CasesComponent implements OnInit {
         this.variants[i] = {"variant": this.variants[i]["variant"], "count": this.variants[i][keys[0]]};
         i++;
       }
-      this.variantsLoading = true;
+      this.variantsLoading = false;
       this.isLoading = this.variantsLoading || this.casesLoading;
       this.dataSourceVariants.data = this.variants;
       console.log(this.variants);
+    })
+  }
+
+  getAllCases() {
+    this.casesLoading = true;
+    this.isLoading = this.variantsLoading || this.casesLoading;
+    let params : HttpParams = new HttpParams();
+    this.pm4pyService.getAllCases(params).subscribe(data => {
+      this.pm4pyJsonCases = data as JSON;
+      this.cases = this.pm4pyJsonCases["cases"];
+      this.casesLoading = false;
+      this.isLoading = this.variantsLoading || this.casesLoading;
+      this.dataSourceCases.data = this.cases;
+      console.log(this.cases);
     })
   }
 
