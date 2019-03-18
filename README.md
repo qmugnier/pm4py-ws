@@ -1,14 +1,3 @@
-HOW TO INSTALL THE BINARY DISTRIBUTION:
-
-pip install -U Flask flask-cors pm4py
-pip install -U pm4pyws
-
-At this point, you could use the script "main.py" as reference to start the service with some logs preloaded,
-or to enable double-click-opening .xes and/or .parquet in Windows,
-put both the "run_log.py" and "run_log.bat" (changing the paths to python in an opportune way)
-in C: and associate to .xes and/or .parquet the run_log.bat opener.
-
-
 HOW TO BUILD ON SOURCES:
 
 
