@@ -190,6 +190,23 @@ def get_all_variants():
     return ret
 
 
+@PM4PyServices.app.route("/getAllCases", methods=["GET"])
+def get_all_cases():
+    """
+    Gets all the cases from the event log
+
+    Returns
+    ------------
+    dictio
+        JSONified dictionary that contains in the 'cases' entry the list of cases
+    """
+    process = request.args.get('process', default='receipt', type=str)
+    cases_list = LogsHandlers.handlers[process].get_case_statistics()
+    dictio = {"cases": cases_list}
+    ret = jsonify(dictio)
+    return ret
+
+
 @PM4PyServices.app.route("/loadLogFromPath", methods=["POST"])
 def load_log_from_path():
     """
