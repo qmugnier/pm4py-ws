@@ -25,15 +25,22 @@ export class CasesComponent implements OnInit {
   pm4pyService: Pm4pyService;
   pm4pyJsonVariants : JSON;
   pm4pyJsonCases : JSON;
+  pm4pyJsonEvents : JSON;
   variants : any[];
   cases : any[];
+  events : any[];
   displayedColumnsVariants : string[] = ["variant", "count"];
   displayedColumnsCases : string[] = ["caseId", "caseDuration", "startTime", "endTime"];
+  displayedColumnsEvents : string[] = ["concept:name", "org:resource", "time:timestamp", "lifecycle:transition"];
 
   dataSourceVariants = new MatTableDataSource<any>();
   dataSourceCases = new MatTableDataSource<any>();
+  dataSourceEvents = new MatTableDataSource<any>();
+
   width : number = 1310;
   height : number = 170;
+  caseIsSelected : boolean = false;
+  caseSelected : string;
 
 
   constructor(private _sanitizer: DomSanitizer, private pm4pyServ: Pm4pyService) {
@@ -46,7 +53,6 @@ export class CasesComponent implements OnInit {
     this.casesLoading = false;
     this.isLoading = false;
 
-    //this.setTableSize();
     this.getAllVariants();
     this.getAllCases();
   }
@@ -117,13 +123,6 @@ export class CasesComponent implements OnInit {
   }
 
   setTableSize() {
-    /*console.log(screen.height);
-    console.log(screen.width);
-    var targetHeight = Math.floor(0.25 * screen.height) + "px";
-    var targetWidth = Math.floor(0.25 * screen.width) + "px";
-    let elem: HTMLElement = document.getElementById('tableVariants');
-
-    elem.setAttribute("style", "height: "+targetHeight+"px; width: "+targetWidth+"px;");*/
     this.height = Math.floor(0.22 * window.innerHeight);
     this.width = Math.floor(0.968 * window.innerWidth);
 
@@ -141,6 +140,20 @@ export class CasesComponent implements OnInit {
 
   ngAfterViewInit() {
     this.setTableSize();
+  }
+
+  caseClicked(row) {
+    this.caseSelected = row["caseId"];
+
+    let params : HttpParams = new HttpParams();
+    params = params.set("caseid", this.caseSelected);
+    this.pm4pyService.getEvents(params).subscribe(data => {
+      this.pm4pyJsonEvents = data as JSON;
+      this.events = this.pm4pyJsonEvents["events"];
+      this.dataSourceEvents.data = this.events;
+      this.caseIsSelected = true;
+      console.log(this.events);
+    })
   }
 
 }

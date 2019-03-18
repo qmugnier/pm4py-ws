@@ -189,3 +189,21 @@ class XesHandler(object):
         """
         return casestats.include_key_in_value_list(
             case_statistics.get_cases_description(self.log, parameters=parameters))
+
+    def get_events(self, caseid, parameters=None):
+        """
+        Gets the events of a case
+
+        Parameters
+        -------------
+        caseid
+            Case ID
+        parameters
+            Parameters of the algorithm
+
+        Returns
+        ------------
+        list_events
+            Events belonging to the case
+        """
+        return case_statistics.get_events(self.log, caseid, parameters=parameters)

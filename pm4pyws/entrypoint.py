@@ -207,6 +207,24 @@ def get_all_cases():
     return ret
 
 
+@PM4PyServices.app.route("/getEvents", methods=["GET"])
+def get_events():
+    """
+    Gets the events from a Case ID
+
+    Returns
+    -------------
+    dictio
+        JSONified dictionary that contains in the 'events' entry the list of events
+    """
+    process = request.args.get('process', default='receipt', type=str)
+    caseid = request.args.get('caseid', type=str)
+    events = LogsHandlers.handlers[process].get_events(caseid)
+    dictio = {"events": events}
+    ret = jsonify(dictio)
+    return ret
+
+
 @PM4PyServices.app.route("/loadLogFromPath", methods=["POST"])
 def load_log_from_path():
     """
