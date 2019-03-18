@@ -14,6 +14,9 @@
       <div *ngIf="router.url.startsWith('/statistics')">
         <app-statistics></app-statistics>
       </div>
+      <div *ngIf="router.url.startsWith('/simulation')">
+        <app-transient></app-transient>
+      </div>
       <div *ngIf="router.url.startsWith('/cases')">
         <app-cases></app-cases>
       </div>

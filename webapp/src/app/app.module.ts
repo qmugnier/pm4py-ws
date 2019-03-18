@@ -30,6 +30,7 @@ import { StatisticsComponent } from './statistics/statistics.component';
 import { CasesComponent } from './cases/cases.component';
 import { SnaComponent } from './sna/sna.component';
 import { ProcessListComponent } from './process-list/process-list.component';
+import { TransientComponent } from './transient/transient.component';
 
 const appRoutes: Routes = [
   { path: 'process', component: AppComponent },
@@ -37,6 +38,7 @@ const appRoutes: Routes = [
   { path: 'cases', component: AppComponent },
   { path: 'statistics', component: AppComponent },
   { path: 'logsList', component: AppComponent },
+  { path: 'simulation', component: TransientComponent },
   { path: '**', redirectTo: 'logsList' }
 ];
 
@@ -52,7 +54,8 @@ const appRoutes: Routes = [
     StatisticsComponent,
     CasesComponent,
     ProcessModelComponent,
-    SnaComponent
+    SnaComponent,
+    TransientComponent
   ],
   imports: [
     BrowserModule,

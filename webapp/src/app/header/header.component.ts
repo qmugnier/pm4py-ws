@@ -50,6 +50,9 @@ export class HeaderComponent implements OnInit {
             this.title = "PM4Py WI - Statistics" + " (" + process_name + ")";
             this.helpString = "This page shows the 'Events per time' (the distribution of events over time) and the 'Case duration' (the distribution of the duration" +
               " of the single cases) graphs.";
+          } else if (this.router.url === "/simulation") {
+            this.title = "PM4Py WI - Simulation" + " (" + process_name + ")";
+            this.helpString = "Perform transient simulation of the process at the specified delay from the start time (it gives a probability distribution over states of the process).";
           }
         }
       } else {
