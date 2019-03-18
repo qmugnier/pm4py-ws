@@ -9,6 +9,9 @@ if __name__ == "__main__":
     sys.path.insert(0, parent_dir)
 
     from tests.test_parquet import ParquetTests
+    from tests.test_log import XesTests
 
     tp = ParquetTests()
+    tx = XesTests()
+
     unittest.main()
