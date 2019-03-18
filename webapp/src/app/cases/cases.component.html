@@ -1,6 +1,6 @@
-<div>
+<div id="casesContainer">
     Log summary
-    <div class="table-container">
+    <div class="table-container" id="tableVariants" [style.width.px]="width"  [style.height.px]="height">
     <table mat-table [dataSource]="dataSourceVariants" class="mat-elevation-z8">
       <ng-container matColumnDef="variant">
         <th mat-header-cell *matHeaderCellDef>Variant</th>
@@ -16,7 +16,7 @@
       <tr mat-row *matRowDef="let row; columns: displayedColumnsVariants;"></tr>
     </table>
     </div>
-  <div class="table-container">
+  <div class="table-container" id="tableCases" [style.width.px]="width"  [style.height.px]="height">
     <table mat-table [dataSource]="dataSourceVariants" class="mat-elevation-z8">
       <ng-container matColumnDef="variant">
         <th mat-header-cell *matHeaderCellDef>Variant</th>
@@ -32,7 +32,7 @@
       <tr mat-row *matRowDef="let row; columns: displayedColumnsVariants;"></tr>
     </table>
   </div>
-  <div class="table-container">
+  <div class="table-container" id="tableEvents" [style.width.px]="width"  [style.height.px]="height">
     <table mat-table [dataSource]="dataSourceVariants" class="mat-elevation-z8">
       <ng-container matColumnDef="variant">
         <th mat-header-cell *matHeaderCellDef>Variant</th>

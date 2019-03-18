@@ -12,7 +12,10 @@ interface Variant {
 @Component({
   selector: 'app-cases',
   templateUrl: './cases.component.html',
-  styleUrls: ['./cases.component.scss']
+  styleUrls: ['./cases.component.scss'],
+  host: {
+    '(window:resize)': 'onResize($event)'
+  }
 })
 export class CasesComponent implements OnInit {
   public isLoading: boolean;
@@ -24,7 +27,8 @@ export class CasesComponent implements OnInit {
   variants : any[];
   displayedColumnsVariants : string[] = ["variant", "count"];
   dataSourceVariants = new MatTableDataSource<any>();
-
+  width : number = 1310;
+  height : number = 170;
 
 
   constructor(private _sanitizer: DomSanitizer, private pm4pyServ: Pm4pyService) {
@@ -37,6 +41,7 @@ export class CasesComponent implements OnInit {
     this.casesLoading = false;
     this.isLoading = false;
 
+    //this.setTableSize();
     this.getAllVariants();
   }
 
@@ -52,7 +57,6 @@ export class CasesComponent implements OnInit {
     let params: HttpParams = new HttpParams();
     this.pm4pyService.getAllVariants(params).subscribe(data => {
       this.pm4pyJsonVariants = data as JSON;
-      console.log(this.pm4pyJsonVariants);
       this.variants = this.pm4pyJsonVariants["variants"];
       let i : number = 0;
       while (i < this.variants.length) {
@@ -65,6 +69,33 @@ export class CasesComponent implements OnInit {
       this.dataSourceVariants.data = this.variants;
       console.log(this.variants);
     })
+  }
+
+  setTableSize() {
+    /*console.log(screen.height);
+    console.log(screen.width);
+    var targetHeight = Math.floor(0.25 * screen.height) + "px";
+    var targetWidth = Math.floor(0.25 * screen.width) + "px";
+    let elem: HTMLElement = document.getElementById('tableVariants');
+
+    elem.setAttribute("style", "height: "+targetHeight+"px; width: "+targetWidth+"px;");*/
+    this.height = Math.floor(0.22 * window.innerHeight);
+    this.width = Math.floor(0.968 * window.innerWidth);
+
+    console.log(this.width);
+    console.log(this.height);
+  }
+
+  onResize(event) {
+    /**
+     * Manages the resizing of a page
+     */
+    // sets the image size after the resizing
+    this.setTableSize();
+  }
+
+  ngAfterViewInit() {
+    this.setTableSize();
   }
 
 }
