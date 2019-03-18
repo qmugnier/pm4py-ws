@@ -98,4 +98,14 @@ export class TransientComponent implements OnInit {
     this.setImageCorrectSize();
   }
 
+  mouseWheel(event: any) {
+    if (event["deltaY"] == -100) {
+      (<HTMLImageElement>document.getElementById("imageProcessModelImage")).height = (<HTMLImageElement>document.getElementById("imageProcessModelImage")).height * 1.1;
+      (<HTMLImageElement>document.getElementById("imageProcessModelImage")).width = (<HTMLImageElement>document.getElementById("imageProcessModelImage")).width * 1.1;
+    } else {
+      (<HTMLImageElement>document.getElementById("imageProcessModelImage")).height = (<HTMLImageElement>document.getElementById("imageProcessModelImage")).height * 0.9;
+      (<HTMLImageElement>document.getElementById("imageProcessModelImage")).width = (<HTMLImageElement>document.getElementById("imageProcessModelImage")).width * 0.9;
+    }
+  }
+
 }

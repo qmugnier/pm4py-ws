@@ -1,7 +1,7 @@
 <div *ngIf="isLoading == true">
   <mat-spinner></mat-spinner>
 </div>
-<div fxLayout="row" [hidden]="isLoading == true">
+<div fxLayout="row" [hidden]="isLoading == true" (mousewheel)="mouseWheel($event)">
   <div fxFlex="25%">
     <div class="p-2">
       % Variants: <mat-progress-bar mode="determinate" value="100"></mat-progress-bar>
@@ -29,7 +29,7 @@
       </mat-radio-group>
     </div>
   </div>
-  <div id="imageProcessModelDiv" fxFlex="75%" style="overflow: hidden">
+  <div id="imageProcessModelDiv" fxFlex="75%" style="overflow: hidden" >
     <img id="imageProcessModelImage" [src]="processModelBase64Sanitized">
   </div>
 </div>
