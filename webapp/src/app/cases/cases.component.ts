@@ -41,6 +41,7 @@ export class CasesComponent implements OnInit {
   height : number = 170;
   caseIsSelected : boolean = false;
   caseSelected : string;
+  variantSelected : string;
 
 
   constructor(private _sanitizer: DomSanitizer, private pm4pyServ: Pm4pyService) {
@@ -154,6 +155,12 @@ export class CasesComponent implements OnInit {
       this.caseIsSelected = true;
       console.log(this.events);
     })
+  }
+
+  variantClicked(row) {
+    this.variantSelected = row["variant"];
+
+
   }
 
 }
