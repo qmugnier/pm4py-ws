@@ -1,13 +1,14 @@
 import os
 import unittest
 
-from pm4pyws.handlers.parquet.parquet import ParquetHandler
+from pm4pyws.handlers.xes.xes import XesHandler
 
 
-class ParquetTests(unittest.TestCase):
-    def test_parquets(self):
-        handler = ParquetHandler()
-        handler.build_from_path(os.path.join("..", "running-example.parquet"))
+class XesTests(unittest.TestCase):
+    def test_xes(self):
+        handler = XesHandler()
+        path = os.path.join("..", "running-example.xes")
+        handler.build_from_path(path)
         handler.get_schema(variant="dfg_freq")
         handler.get_schema(variant="dfg_perf")
         handler.get_schema(variant="alpha_freq")
@@ -23,7 +24,3 @@ class ParquetTests(unittest.TestCase):
         handler.get_sna(variant="subcontracting")
         handler.get_sna(variant="jointactivities")
         handler.get_transient(86400)
-
-
-if __name__ == "__main__":
-    unittest.main()

@@ -3,3 +3,4 @@ include webapp/dist/webapp/*/*
 include receipt.parquet
 include roadtraffic.parquet
 include running-example.parquet
+include running-example.xes
