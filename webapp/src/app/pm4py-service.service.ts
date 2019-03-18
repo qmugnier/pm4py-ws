@@ -102,6 +102,24 @@ export class Pm4pyService {
     return this.http.get(completeUrl, {params: parameters});
   }
 
+  getAllVariants(parameters : HttpParams) {
+    /**
+     * Gets all the variants from the given log
+     *
+     * Parameters:
+     * parameters: HttpParams -> Parameters to pass in GET to the service
+     *
+     * Returns:
+     * observer object
+     */
+    let process = localStorage.getItem("process");
+    parameters = parameters.set("process", process);
+
+    var completeUrl : string = this.webservicePath + "getAllVariants";
+
+    return this.http.get(completeUrl, {params: parameters});
+  }
+
   getServicePath() {
     /**
      * Gets the service path
