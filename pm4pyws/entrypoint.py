@@ -220,7 +220,15 @@ def get_events():
     process = request.args.get('process', default='receipt', type=str)
     caseid = request.args.get('caseid', type=str)
     events = LogsHandlers.handlers[process].get_events(caseid)
+    i = 0
+    while i < len(events):
+        keys = list(events[i].keys())
+        for key in keys:
+            if str(events[i][key]) == "NaN" or str(events[i][key]) == "NaT":
+                del events[i][key]
+        i = i + 1
     dictio = {"events": events}
+    #print(dictio)
     ret = jsonify(dictio)
     return ret
 
