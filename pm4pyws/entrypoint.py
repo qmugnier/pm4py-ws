@@ -235,7 +235,7 @@ def do_transient_analysis():
     """
     # reads the requested process name
     process = request.args.get('process', default='receipt', type=str)
-    delay = request.args.get('delay', default=0.6, type=float)
+    delay = request.args.get('delay', default=86400, type=float)
 
     base64 = LogsHandlers.handlers[process].get_transient(delay)
     dictio = {"base64": base64.decode('utf-8')}
