@@ -14,7 +14,7 @@
           </ng-container>
 
           <tr mat-header-row *matHeaderRowDef="displayedColumnsVariants"></tr>
-          <tr mat-row *matRowDef="let row; columns: displayedColumnsVariants;"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumnsVariants;"  (click)="variantClicked(row)" [ngClass]="{ 'selected': row['variant'] === variantSelected }"></tr>
           </table>
       </div>
     </div>
@@ -42,7 +42,7 @@
         </ng-container>
 
         <tr mat-header-row *matHeaderRowDef="displayedColumnsCases"></tr>
-        <tr mat-row *matRowDef="let row; columns: displayedColumnsCases;" (click)="caseClicked(row)"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumnsCases;" (click)="caseClicked(row)"  [ngClass]="{ 'selected': row['caseId'] === caseSelected }"></tr>
       </table>
     </div>
   </div>
