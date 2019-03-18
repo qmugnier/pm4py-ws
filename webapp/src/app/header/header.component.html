@@ -2,16 +2,17 @@
   <mat-menu #appMenu="matMenu">
     {{helpString}}
   </mat-menu>
-  <span><a routerLink="/logsList"><img src="../../assets/home.svg" /></a></span>
+  <span><a routerLink="/logsList"><img src="../../assets/home.svg" alt="Home" /></a></span>
   <span>&nbsp;&nbsp;</span>
   <span [matMenuTriggerFor]="appMenu">
-    <img src="../../assets/help.svg" />
+    <img src="../../assets/help.svg" alt="Help" />
   </span>
   <span>&nbsp;&nbsp;</span>
-  <span *ngIf="processProvided == true"><a routerLink="/process"><img src="../../assets/process_model.svg" /></a></span>
-  <span *ngIf="processProvided == true"><a routerLink="/cases"><img src="../../assets/cases.svg" /></a></span>
-  <span *ngIf="processProvided == true"><a routerLink="/sna"><img src="../../assets/sna_icon.svg" /></a></span>
-  <span *ngIf="processProvided == true"><a routerLink="/statistics"><img src="../../assets/statistics.svg" /></a></span>
+  <span *ngIf="processProvided == true"><a routerLink="/process" alt="Process"><img src="../../assets/process_model.svg" /></a></span>
+  <span *ngIf="processProvided == true"><a routerLink="/cases" alt="Cases"><img src="../../assets/cases.svg" /></a></span>
+  <span *ngIf="processProvided == true"><a routerLink="/sna" alt="SNA"><img src="../../assets/sna_icon.svg" /></a></span>
+  <span *ngIf="processProvided == true"><a routerLink="/simulation" alt="Simulation"><img src="../../assets/simulation.svg" /></a></span>
+  <span *ngIf="processProvided == true"><a routerLink="/statistics" alt="Statistics"><img src="../../assets/statistics.svg" /></a></span>
     <span style="flex: 1 1 auto;"></span>
   <span>{{title}}</span>
 </mat-toolbar>

@@ -84,6 +84,24 @@ export class Pm4pyService {
     return this.http.get(completeUrl, {params: parameters});
   }
 
+  transientAnalysis(parameters : HttpParams) {
+    /**
+     * Perform transient analysis of the given process
+     *
+     * Parameters:
+     * parameters: HttpParams -> Parameters to pass in GET to the service
+     *
+     * Returns:
+     * observer object
+     */
+    let process = localStorage.getItem("process");
+    parameters = parameters.set("process", process);
+
+    var completeUrl : string = this.webservicePath + "transientAnalysis";
+
+    return this.http.get(completeUrl, {params: parameters});
+  }
+
   getServicePath() {
     /**
      * Gets the service path
