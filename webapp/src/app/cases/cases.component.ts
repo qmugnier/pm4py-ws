@@ -45,7 +45,6 @@ export class CasesComponent implements OnInit {
   caseSelected : string;
   variantSelected : string;
 
-  @ViewChild(MatSort) variantsSort: MatSort;
   @ViewChild(MatSort) casesSort: MatSort;
 
   constructor(private _sanitizer: DomSanitizer, private pm4pyServ: Pm4pyService) {
@@ -86,7 +85,7 @@ export class CasesComponent implements OnInit {
     else if (numseconds >= 1) {
       return numseconds.toString()+" seconds";
     }
-    return "0";
+    return "0 seconds";
   }
 
   public get_repr_time(s : number) {
@@ -109,7 +108,6 @@ export class CasesComponent implements OnInit {
       this.variantsLoading = false;
       this.isLoading = this.variantsLoading || this.casesLoading;
       this.dataSourceVariants.data = this.variants;
-      this.dataSourceVariants.sort = this.variantsSort;
       console.log(this.variants);
     })
   }
