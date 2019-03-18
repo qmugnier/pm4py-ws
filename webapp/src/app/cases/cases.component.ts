@@ -3,6 +3,8 @@ import {DomSanitizer} from "@angular/platform-browser";
 import {Pm4pyService} from "../pm4py-service.service";
 import {HttpParams} from "@angular/common/http";
 import { MatTableDataSource } from '@angular/material/table';
+import { ViewChild } from '@angular/core';
+import { MatSort } from '@angular/material';
 
 interface Variant {
   variant: string;
@@ -43,6 +45,8 @@ export class CasesComponent implements OnInit {
   caseSelected : string;
   variantSelected : string;
 
+  @ViewChild(MatSort) variantsSort: MatSort;
+  @ViewChild(MatSort) casesSort: MatSort;
 
   constructor(private _sanitizer: DomSanitizer, private pm4pyServ: Pm4pyService) {
     /**
@@ -105,6 +109,7 @@ export class CasesComponent implements OnInit {
       this.variantsLoading = false;
       this.isLoading = this.variantsLoading || this.casesLoading;
       this.dataSourceVariants.data = this.variants;
+      this.dataSourceVariants.sort = this.variantsSort;
       console.log(this.variants);
     })
   }
@@ -119,6 +124,7 @@ export class CasesComponent implements OnInit {
       this.casesLoading = false;
       this.isLoading = this.variantsLoading || this.casesLoading;
       this.dataSourceCases.data = this.cases;
+      this.dataSourceCases.sort = this.casesSort;
       console.log(this.cases);
     })
   }
@@ -159,8 +165,6 @@ export class CasesComponent implements OnInit {
 
   variantClicked(row) {
     this.variantSelected = row["variant"];
-
-
   }
 
 }
