@@ -6,6 +6,7 @@ from pm4py.statistics.traces.pandas import case_statistics
 from pm4py.util import constants
 
 from pm4pyws.handlers.parquet.cases import variants
+from pm4pyws.handlers.parquet.ctmc import transient
 from pm4pyws.handlers.parquet.process_schema import factory as process_schema_factory
 from pm4pyws.handlers.parquet.sna import get_sna as sna_obtainer
 from pm4pyws.handlers.parquet.statistics import case_duration, events_per_time
@@ -179,3 +180,21 @@ class ParquetHandler(object):
             SNA representation
         """
         return sna_obtainer.apply(self.dataframe, variant=variant, parameters=parameters)
+
+    def get_transient(self, delay, parameters=None):
+        """
+        Perform CTMC simulation on a dataframe
+
+        Parameters
+        -------------
+        delay
+            Delay
+        parameters
+            Possible parameters of the algorithm
+
+        Returns
+        -------------
+        graph
+            Case duration graph
+        """
+        return transient.apply(self.dataframe, delay, parameters=parameters)

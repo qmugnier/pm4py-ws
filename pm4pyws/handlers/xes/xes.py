@@ -1,12 +1,13 @@
 from pm4py.objects.log.importer.xes import factory as xes_importer
+from pm4py.objects.log.util import insert_classifier
+from pm4py.objects.log.util import xes
+from pm4py.util import constants
 
-from pm4pyws.handlers.xes.sna import get_sna as sna_obtainer
 from pm4pyws.handlers.xes.cases import variants
 from pm4pyws.handlers.xes.process_schema import factory as process_schema_factory
+from pm4pyws.handlers.xes.sna import get_sna as sna_obtainer
 from pm4pyws.handlers.xes.statistics import events_per_time, case_duration
-from pm4py.objects.log.util import insert_classifier
-from pm4py.util import constants
-from pm4py.objects.log.util import xes
+from pm4pyws.handlers.xes.ctmc import transient
 
 class XesHandler(object):
     def __init__(self):
@@ -150,3 +151,21 @@ class XesHandler(object):
         parameters[constants.PARAMETER_CONSTANT_ACTIVITY_KEY] = self.activity_key
         parameters[constants.PARAMETER_CONSTANT_ATTRIBUTE_KEY] = self.activity_key
         return sna_obtainer.apply(self.log, variant=variant, parameters=parameters)
+
+    def get_transient(self, delay, parameters=None):
+        """
+        Perform CTMC simulation on a log
+
+        Parameters
+        -------------
+        delay
+            Delay
+        parameters
+            Possible parameters of the algorithm
+
+        Returns
+        -------------
+        graph
+            Case duration graph
+        """
+        return transient.apply(self.log, delay, parameters=parameters)
