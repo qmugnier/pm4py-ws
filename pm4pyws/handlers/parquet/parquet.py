@@ -10,6 +10,7 @@ from pm4pyws.handlers.parquet.ctmc import transient
 from pm4pyws.handlers.parquet.process_schema import factory as process_schema_factory
 from pm4pyws.handlers.parquet.sna import get_sna as sna_obtainer
 from pm4pyws.handlers.parquet.statistics import case_duration, events_per_time
+from pm4pyws.util import casestats
 
 
 class ParquetHandler(object):
@@ -198,3 +199,20 @@ class ParquetHandler(object):
             Case duration graph
         """
         return transient.apply(self.dataframe, delay, parameters=parameters)
+
+    def get_case_statistics(self, parameters=None):
+        """
+        Gets the statistics on cases
+
+        Parameters
+        -------------
+        parameters
+            Possible parameters of the algorithm
+
+        Returns
+        -------------
+        list_cases
+            List of cases
+        """
+        return casestats.include_key_in_value_list(
+            case_statistics.get_cases_description(self.dataframe, parameters=parameters))

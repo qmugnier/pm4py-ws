@@ -1,13 +1,16 @@
 from pm4py.objects.log.importer.xes import factory as xes_importer
 from pm4py.objects.log.util import insert_classifier
 from pm4py.objects.log.util import xes
+from pm4py.statistics.traces.log import case_statistics
 from pm4py.util import constants
 
 from pm4pyws.handlers.xes.cases import variants
+from pm4pyws.handlers.xes.ctmc import transient
 from pm4pyws.handlers.xes.process_schema import factory as process_schema_factory
 from pm4pyws.handlers.xes.sna import get_sna as sna_obtainer
 from pm4pyws.handlers.xes.statistics import events_per_time, case_duration
-from pm4pyws.handlers.xes.ctmc import transient
+from pm4pyws.util import casestats
+
 
 class XesHandler(object):
     def __init__(self):
@@ -169,3 +172,20 @@ class XesHandler(object):
             Case duration graph
         """
         return transient.apply(self.log, delay, parameters=parameters)
+
+    def get_case_statistics(self, parameters=None):
+        """
+        Gets the statistics on cases
+
+        Parameters
+        -------------
+        parameters
+            Possible parameters of the algorithm
+
+        Returns
+        -------------
+        list_cases
+            List of cases
+        """
+        return casestats.include_key_in_value_list(
+            case_statistics.get_cases_description(self.log, parameters=parameters))
