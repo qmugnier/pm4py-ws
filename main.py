@@ -26,6 +26,7 @@ if __name__ == "__main__":
         # loads the receipt process into the services
         S.load_log("receipt", "receipt.parquet")
         # S.load_log("roadtraffic", "roadtraffic.parquet")
+		S.load_log("running-example(xes)", "running-example.xes")
 
         # offers the service to the outside
         S.serve(host=LISTENING_HOST, port=LISTENING_PORT)
