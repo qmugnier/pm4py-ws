@@ -248,6 +248,12 @@ class ParquetHandler(object):
         list_cases
             List of cases
         """
+        if parameters is None:
+            parameters = {}
+        parameters["max_ret_cases"] = 500
+        parameters["sort_by_column"] = parameters["sort_by_column"] if "sort_by_column" in parameters else "caseDuration"
+        parameters["sort_ascending"] = parameters["sort_ascending"] if "sort_ascending" in parameters else False
+
         return casestats.include_key_in_value_list(
             case_statistics.get_cases_description(self.dataframe, parameters=parameters))
 
