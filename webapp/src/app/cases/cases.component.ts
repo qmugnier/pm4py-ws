@@ -45,6 +45,17 @@ export class CasesComponent implements OnInit {
   caseSelected : string;
   variantSelected : string;
 
+  logSummaryJson: JSON;
+  public thisVariantsNumber = 0;
+  public thisCasesNumber = 0;
+  public thisEventsNumber = 0;
+  public ancestorVariantsNumber = 0;
+  public ancestorCasesNumber = 0;
+  public ancestorEventsNumber = 0;
+  public ratioVariantsNumber = 100;
+  public ratioCasesNumber = 100;
+  public ratioEventsNumber = 100;
+
   @ViewChild(MatSort) casesSort: MatSort;
 
   constructor(private _sanitizer: DomSanitizer, private pm4pyServ: Pm4pyService) {
@@ -57,8 +68,37 @@ export class CasesComponent implements OnInit {
     this.casesLoading = false;
     this.isLoading = false;
 
+
     this.getAllVariants();
     this.getAllCases();
+    this.getLogSummary();
+  }
+
+  public getLogSummary() {
+    /**
+     * Retrieves the log summary and updates the visualization
+     */
+    let params: HttpParams = new HttpParams();
+
+    this.pm4pyService.getLogSummary(params).subscribe(data => {
+      this.logSummaryJson = data as JSON;
+      this.thisVariantsNumber = this.logSummaryJson["this_variants_number"];
+      this.thisCasesNumber = this.logSummaryJson["this_cases_number"];
+      this.thisEventsNumber = this.logSummaryJson["this_events_number"];
+      this.ancestorVariantsNumber = this.logSummaryJson["ancestor_variants_number"];
+      this.ancestorCasesNumber = this.logSummaryJson["ancestor_cases_number"];
+      this.ancestorEventsNumber = this.logSummaryJson["ancestor_events_number"];
+      if (this.ancestorVariantsNumber > 0) {
+        this.ratioVariantsNumber = this.thisVariantsNumber / this.ancestorVariantsNumber * 100.0;
+        this.ratioCasesNumber = this.thisCasesNumber / this.ancestorCasesNumber * 100.0;
+        this.ratioEventsNumber = this.thisEventsNumber / this.ancestorEventsNumber * 100.0;
+      }
+      else {
+        this.ratioVariantsNumber = 100;
+        this.ratioCasesNumber = 100;
+        this.ratioEventsNumber = 100;
+      }
+    });
   }
 
   ngOnInit() {

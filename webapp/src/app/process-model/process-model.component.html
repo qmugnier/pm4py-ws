@@ -4,9 +4,12 @@
 <div fxLayout="row" [hidden]="isLoading == true" (mousewheel)="mouseWheel($event)">
   <div fxFlex="25%">
     <div class="p-2">
-      % Variants: <mat-progress-bar mode="determinate" value="100"></mat-progress-bar>
-      % Cases: <mat-progress-bar mode="determinate" value="100"></mat-progress-bar>
-      % Events: <mat-progress-bar mode="determinate" value="100"></mat-progress-bar>
+      Variants: <b>{{thisVariantsNumber}}</b>
+      <mat-progress-bar mode="determinate" value="{{ratioVariantsNumber}}"></mat-progress-bar>
+      Cases: <b>{{thisCasesNumber}}</b>
+      <mat-progress-bar mode="determinate" value="{{ratioCasesNumber}}"></mat-progress-bar>
+      Events: <b>{{thisEventsNumber}}</b>
+      <mat-progress-bar mode="determinate" value="{{ratioEventsNumber}}"></mat-progress-bar>
     </div>
     <div class="p-1">
       Simplicity:
