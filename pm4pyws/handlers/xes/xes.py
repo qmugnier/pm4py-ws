@@ -253,6 +253,9 @@ class XesHandler(object):
             parameters = {}
         parameters[constants.PARAMETER_CONSTANT_ACTIVITY_KEY] = self.activity_key
         parameters[constants.PARAMETER_CONSTANT_ATTRIBUTE_KEY] = self.activity_key
+        parameters["max_ret_cases"] = 500
+        parameters["sort_by_index"] = parameters["sort_by_index"] if "sort_by_index" in parameters else 0
+        parameters["sort_ascending"] = parameters["sort_ascending"] if "sort_ascending" in parameters else False
         return casestats.include_key_in_value_list(
             case_statistics.get_cases_description(self.log, parameters=parameters))
 

@@ -230,7 +230,6 @@ def get_events():
     dictio = {"events": events}
     # print(dictio)
     ret = jsonify(dictio)
-    print(dictio)
     return ret
 
 
