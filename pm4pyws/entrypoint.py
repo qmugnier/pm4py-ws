@@ -224,12 +224,13 @@ def get_events():
     while i < len(events):
         keys = list(events[i].keys())
         for key in keys:
-            if str(events[i][key]) == "NaN" or str(events[i][key]) == "NaT":
+            if str(events[i][key]).lower() == "nan" or str(events[i][key]).lower() == "nat":
                 del events[i][key]
         i = i + 1
     dictio = {"events": events}
     # print(dictio)
     ret = jsonify(dictio)
+    print(dictio)
     return ret
 
 
