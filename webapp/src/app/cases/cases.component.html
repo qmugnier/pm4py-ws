@@ -1,4 +1,7 @@
-<div id="casesContainer">
+<div *ngIf="isLoading == true">
+  <mat-spinner></mat-spinner>
+</div>
+<div id="casesContainer" [hidden]="isLoading == true">
   <span>Events: <b>{{thisEventsNumber}}</b></span>
   <span>&nbsp;&nbsp;&nbsp;&nbsp;</span>
   <span>Cases: <b>{{thisCasesNumber}}</b></span>
