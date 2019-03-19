@@ -228,7 +228,7 @@ def get_events():
                 del events[i][key]
         i = i + 1
     dictio = {"events": events}
-    #print(dictio)
+    # print(dictio)
     ret = jsonify(dictio)
     return ret
 
@@ -282,5 +282,25 @@ def do_transient_analysis():
 
     base64 = LogsHandlers.handlers[process].get_transient(delay)
     dictio = {"base64": base64.decode('utf-8')}
+    ret = jsonify(dictio)
+    return ret
+
+
+@PM4PyServices.app.route("/getLogSummary", methods=["GET"])
+def get_log_summary():
+    # reads the requested process name
+    process = request.args.get('process', default='receipt', type=str)
+
+    this_variants_number = LogsHandlers.handlers[process].variants_number
+    this_cases_number = LogsHandlers.handlers[process].cases_number
+    this_events_number = LogsHandlers.handlers[process].events_number
+
+    ancestor_variants_number = LogsHandlers.handlers[process].first_ancestor.variants_number
+    ancestor_cases_number = LogsHandlers.handlers[process].first_ancestor.cases_number
+    ancestor_events_number = LogsHandlers.handlers[process].first_ancestor.events_number
+
+    dictio = {"this_variants_number": this_variants_number, "this_cases_number": this_cases_number,
+              "this_events_number": this_events_number, "ancestor_variants_number": ancestor_variants_number,
+              "ancestor_cases_number": ancestor_cases_number, "ancestor_events_number": ancestor_events_number}
     ret = jsonify(dictio)
     return ret

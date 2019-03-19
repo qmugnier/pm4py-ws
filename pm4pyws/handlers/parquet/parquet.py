@@ -52,6 +52,8 @@ class ParquetHandler(object):
         self.calculate_variants_number()
         self.calculate_cases_number()
         self.calculate_events_number()
+        self.first_ancestor = self
+        self.last_ancestor = self
 
     def build_from_csv(self, path, parameters=None):
         """
@@ -90,6 +92,8 @@ class ParquetHandler(object):
         self.calculate_variants_number()
         self.calculate_cases_number()
         self.calculate_events_number()
+        self.first_ancestor = self
+        self.last_ancestor = self
 
     def build_variants_df(self, parameters=None):
         """
