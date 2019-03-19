@@ -90,6 +90,19 @@ export class TransientComponent implements OnInit {
   ngOnInit() {
   }
 
+  manualInputManagement(event) {
+    console.log("INPUTCHANGE");
+    console.log(event);
+    let noDays : number = parseFloat((<HTMLInputElement> document.getElementById("numberDays")).value);
+    console.log(noDays);
+    let noSeconds : number = noDays * 86400.0;
+    this.delay = Math.log(noSeconds);
+    this.selectedDelay = Math.log(noSeconds);
+    this.expSelectedDelay = noSeconds;
+    this.shownString = this.secondsToString(this.expSelectedDelay);
+    this.populateSimulation();
+  }
+
   onResize(event) {
     /**
      * Manages the resizing of a page

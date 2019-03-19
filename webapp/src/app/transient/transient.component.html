@@ -3,11 +3,17 @@
 </div>
 <div fxLayout="row" [hidden]="isLoading == true" (mousewheel)="mouseWheel($event)">
   <div fxFlex="25%">
-    <div class="p-2">Delay from start time:</div>
+    <div class="p-1">Use slider to select delay:</div>
     <div class="p-1"><mat-slider min="6.00" max="17.00" step="0.01" [value]="delay" (change)="sliderIsChanged($event)"></mat-slider></div>
+    <div class="p-2">
+      Or, digit number of days:<br />
+      <input id="numberDays" matInput style="width: 80px">
+      <button mat-button (click)="manualInputManagement($event)">Simulate</button>
+    </div>
     <div class="p-1">
-      Time from start:<br />
-      {{shownString}}</div>
+      Considered delay:<br />
+      {{shownString}}
+    </div>
   </div>
   <div id="imageProcessModelDiv" fxFlex="75%" style="overflow: auto">
     <img id="imageProcessModelImage" [src]="processModelBase64Sanitized">
