@@ -17,7 +17,7 @@
             <td mat-cell *matCellDef="let element"> {{element["count"]}} </td>
           </ng-container>
 
-          <tr mat-header-row *matHeaderRowDef="displayedColumnsVariants"></tr>
+          <tr mat-header-row *matHeaderRowDef="displayedColumnsVariants" class="variantsHeaderColor"></tr>
           <tr mat-row *matRowDef="let row; columns: displayedColumnsVariants;"  (click)="variantClicked(row)" [ngClass]="{ 'selected': row['variant'] === variantSelected }"></tr>
           </table>
       </div>
@@ -45,7 +45,7 @@
           <td mat-cell *matCellDef="let element"> {{get_repr_time(element["endTime"])}} </td>
         </ng-container>
 
-        <tr mat-header-row *matHeaderRowDef="displayedColumnsCases"></tr>
+        <tr mat-header-row *matHeaderRowDef="displayedColumnsCases" class="casesHeaderColor"></tr>
         <tr mat-row *matRowDef="let row; columns: displayedColumnsCases;" (click)="caseClicked(row)"  [ngClass]="{ 'selected': row['caseId'] === caseSelected }"></tr>
       </table>
     </div>
@@ -73,7 +73,7 @@
           <td mat-cell *matCellDef="let element"> {{element["lifecycle:transition"]}} </td>
         </ng-container>
 
-        <tr mat-header-row *matHeaderRowDef="displayedColumnsEvents"></tr>
+        <tr mat-header-row *matHeaderRowDef="displayedColumnsEvents"  class="eventsHeaderColor"></tr>
         <tr mat-row *matRowDef="let row; columns: displayedColumnsEvents;"></tr>
       </table>
     </div>
