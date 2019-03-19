@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {AfterViewInit, Component, OnInit} from '@angular/core';
 import {DomSanitizer} from "@angular/platform-browser";
 import {Pm4pyService} from "../pm4py-service.service";
 import {HttpParams} from "@angular/common/http";
@@ -19,7 +19,7 @@ interface Variant {
     '(window:resize)': 'onResize($event)'
   }
 })
-export class CasesComponent implements OnInit {
+export class CasesComponent implements OnInit, AfterViewInit {
   public isLoading: boolean;
   public variantsLoading : boolean;
   public casesLoading : boolean;
