@@ -68,6 +68,8 @@ export class CasesComponent implements OnInit, AfterViewInit {
     this.casesLoading = false;
     this.isLoading = false;
 
+    this.variantSelected = null;
+
 
     this.getAllVariants();
     this.getAllCases();
@@ -156,6 +158,11 @@ export class CasesComponent implements OnInit, AfterViewInit {
     this.casesLoading = true;
     this.isLoading = this.variantsLoading || this.casesLoading;
     let params : HttpParams = new HttpParams();
+
+    if (this.variantSelected != null) {
+      params = params.set("variant", this.variantSelected);
+    }
+
     this.pm4pyService.getAllCases(params).subscribe(data => {
       this.pm4pyJsonCases = data as JSON;
       this.cases = this.pm4pyJsonCases["cases"];
@@ -203,6 +210,7 @@ export class CasesComponent implements OnInit, AfterViewInit {
 
   variantClicked(row) {
     this.variantSelected = row["variant"];
+    this.getAllCases();
   }
 
 }

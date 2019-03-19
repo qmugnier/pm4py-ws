@@ -201,7 +201,11 @@ def get_all_cases():
         JSONified dictionary that contains in the 'cases' entry the list of cases
     """
     process = request.args.get('process', default='receipt', type=str)
-    cases_list = LogsHandlers.handlers[process].get_case_statistics()
+    variant = request.args.get('variant', type=str)
+    parameters = {}
+    if variant is not None:
+        parameters["variant"] = variant
+    cases_list = LogsHandlers.handlers[process].get_case_statistics(parameters=parameters)
     dictio = {"cases": cases_list}
     ret = jsonify(dictio)
     return ret

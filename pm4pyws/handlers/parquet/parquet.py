@@ -12,6 +12,7 @@ from pm4pyws.handlers.parquet.sna import get_sna as sna_obtainer
 from pm4pyws.handlers.parquet.statistics import case_duration, events_per_time
 from pm4pyws.util import casestats
 
+from pm4py.algo.filtering.pandas.variants import variants_filter
 
 class ParquetHandler(object):
     def __init__(self):
@@ -254,8 +255,14 @@ class ParquetHandler(object):
         parameters["sort_by_column"] = parameters["sort_by_column"] if "sort_by_column" in parameters else "caseDuration"
         parameters["sort_ascending"] = parameters["sort_ascending"] if "sort_ascending" in parameters else False
 
-        return casestats.include_key_in_value_list(
-            case_statistics.get_cases_description(self.dataframe, parameters=parameters))
+        if "variant" in parameters:
+            filtered_dataframe = variants_filter.apply(self.dataframe, [parameters["variant"]], parameters=parameters)
+            return casestats.include_key_in_value_list(
+            case_statistics.get_cases_description(filtered_dataframe, parameters=parameters))
+            print("CIAOOO")
+        else:
+            return casestats.include_key_in_value_list(
+                case_statistics.get_cases_description(self.dataframe, parameters=parameters))
 
     def get_events(self, caseid, parameters=None):
         """
