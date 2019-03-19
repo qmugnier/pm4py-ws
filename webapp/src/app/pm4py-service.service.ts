@@ -156,6 +156,24 @@ export class Pm4pyService {
     return this.http.get(completeUrl, {params: parameters});
   }
 
+  getLogSummary(parameters : HttpParams) {
+    /**
+     * Gets the log summary
+     *
+     * Parameters:
+     * parameters: HttpParams -> Parameters to pass in GET to the service
+     *
+     * Returns:
+     * observer object
+     */
+    let process = localStorage.getItem("process");
+    parameters = parameters.set("process", process);
+
+    var completeUrl : string = this.webservicePath + "getLogSummary";
+
+    return this.http.get(completeUrl, {params: parameters});
+  }
+
   getServicePath() {
     /**
      * Gets the service path
