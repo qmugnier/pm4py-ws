@@ -10,6 +10,7 @@ from pm4pyws.handlers.xes.process_schema import factory as process_schema_factor
 from pm4pyws.handlers.xes.sna import get_sna as sna_obtainer
 from pm4pyws.handlers.xes.statistics import events_per_time, case_duration
 from pm4pyws.util import casestats
+from pm4py.algo.filtering.log.variants import variants_filter
 
 
 class XesHandler(object):
@@ -26,6 +27,14 @@ class XesHandler(object):
         self.last_ancestor = None
         # classifier
         self.activity_key = None
+        # variants
+        self.variants = None
+        # number of variants
+        self.variants_number = 0
+        # number of cases
+        self.cases_number = 0
+        # number of events
+        self.events_number = 0
 
     def build_from_path(self, path, parameters=None):
         """
@@ -40,12 +49,58 @@ class XesHandler(object):
         """
         if parameters is None:
             parameters = {}
-        self.log = xes_importer.apply(path)
-        self.log, classifier_key = insert_classifier.search_act_class_attr(self.log)
+        try:
+            # try faster non standard importer
+            self.log = xes_importer.apply(path, variant="nonstandard")
+            if len(self.log) == 0:
+                # non standard imported failed
+                self.log = xes_importer.apply(path)
+        except:
+            # revert to classic importer
+            self.log = xes_importer.apply(path)
+        self.log, classifier_key = insert_classifier.search_act_class_attr(self.log,
+                                                                           force_activity_transition_insertion=True)
 
         self.activity_key = xes.DEFAULT_NAME_KEY
         if classifier_key is not None:
             self.activity_key = classifier_key
+        self.build_variants()
+        self.calculate_variants_number()
+        self.calculate_cases_number()
+        self.calculate_events_number()
+
+    def build_variants(self, parameters=None):
+        """
+        Build the variants of the event log
+
+        Parameters
+        ------------
+        parameters
+            Possible parameters of the method
+        """
+        if parameters is None:
+            parameters = {}
+        parameters[constants.PARAMETER_CONSTANT_ACTIVITY_KEY] = self.activity_key
+        parameters[constants.PARAMETER_CONSTANT_ATTRIBUTE_KEY] = self.activity_key
+        self.variants = variants_filter.get_variants(self.log, parameters=parameters)
+
+    def calculate_variants_number(self):
+        """
+        Calculate the number of variants in this log
+        """
+        self.variants_number = len(self.variants.keys())
+
+    def calculate_cases_number(self):
+        """
+        Calculate the number of cases in this log
+        """
+        self.cases_number = len(self.log)
+
+    def calculate_events_number(self):
+        """
+        Calculate the number of events in this log
+        """
+        self.events_number = sum([len(case) for case in self.log])
 
     def get_schema(self, variant=process_schema_factory.DFG_FREQ, parameters=None):
         """
@@ -131,6 +186,7 @@ class XesHandler(object):
             parameters = {}
         parameters[constants.PARAMETER_CONSTANT_ACTIVITY_KEY] = self.activity_key
         parameters[constants.PARAMETER_CONSTANT_ATTRIBUTE_KEY] = self.activity_key
+        parameters["variants"] = self.variants
         return variants.get_statistics(self.log, parameters=parameters)
 
     def get_sna(self, variant="handover", parameters=None):
@@ -171,6 +227,10 @@ class XesHandler(object):
         graph
             Case duration graph
         """
+        if parameters is None:
+            parameters = {}
+        parameters[constants.PARAMETER_CONSTANT_ACTIVITY_KEY] = self.activity_key
+        parameters[constants.PARAMETER_CONSTANT_ATTRIBUTE_KEY] = self.activity_key
         return transient.apply(self.log, delay, parameters=parameters)
 
     def get_case_statistics(self, parameters=None):
@@ -187,6 +247,10 @@ class XesHandler(object):
         list_cases
             List of cases
         """
+        if parameters is None:
+            parameters = {}
+        parameters[constants.PARAMETER_CONSTANT_ACTIVITY_KEY] = self.activity_key
+        parameters[constants.PARAMETER_CONSTANT_ATTRIBUTE_KEY] = self.activity_key
         return casestats.include_key_in_value_list(
             case_statistics.get_cases_description(self.log, parameters=parameters))
 
@@ -206,4 +270,8 @@ class XesHandler(object):
         list_events
             Events belonging to the case
         """
+        if parameters is None:
+            parameters = {}
+        parameters[constants.PARAMETER_CONSTANT_ACTIVITY_KEY] = self.activity_key
+        parameters[constants.PARAMETER_CONSTANT_ATTRIBUTE_KEY] = self.activity_key
         return case_statistics.get_events(self.log, caseid, parameters=parameters)

@@ -27,6 +27,12 @@ class ParquetHandler(object):
         self.last_ancestor = None
         # sets the variant dataframe (useful in variants retrieval)
         self.variants_df = None
+        # number of variants
+        self.variants_number = 0
+        # number of cases
+        self.cases_number = 0
+        # number of events
+        self.events_number = 0
 
     def build_from_path(self, path, parameters=None):
         """
@@ -43,6 +49,9 @@ class ParquetHandler(object):
             parameters = {}
         self.dataframe = parquet_importer.apply(path)
         self.build_variants_df()
+        self.calculate_variants_number()
+        self.calculate_cases_number()
+        self.calculate_events_number()
 
     def build_from_csv(self, path, parameters=None):
         """
@@ -78,6 +87,9 @@ class ParquetHandler(object):
         if not case_id_glue == CASE_CONCEPT_NAME:
             self.dataframe[case_id_glue] = CASE_CONCEPT_NAME
         self.build_variants_df()
+        self.calculate_variants_number()
+        self.calculate_cases_number()
+        self.calculate_events_number()
 
     def build_variants_df(self, parameters=None):
         """
@@ -89,6 +101,24 @@ class ParquetHandler(object):
             Possible parameters of the algorithm
         """
         self.variants_df = case_statistics.get_variants_df(self.dataframe, parameters=parameters)
+
+    def calculate_variants_number(self):
+        """
+        Calculate the number of variants in this log
+        """
+        self.variants_number = len(self.variants_df.groupby("variant"))
+
+    def calculate_cases_number(self):
+        """
+        Calculate the number of cases in this log
+        """
+        self.cases_number = len(self.dataframe.groupby("case:concept:name"))
+
+    def calculate_events_number(self):
+        """
+        Calculate the number of events in this log
+        """
+        self.events_number = len(self.dataframe)
 
     def get_schema(self, variant=process_schema_factory.DFG_FREQ, parameters=None):
         """
