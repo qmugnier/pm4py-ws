@@ -8,6 +8,8 @@ from pm4pyws.entrypoint import PM4PyServices
 
 # local host of the current machine
 THIS_HOST = "127.0.0.1"
+# web pages location
+WEB_PAGES = "http://www.alessandroberti.it/webapp"
 # host that shall be listening (0.0.0.0 means accepting connections from everything)
 LISTENING_HOST = "0.0.0.0"
 # listen to this port
@@ -24,7 +26,7 @@ if __name__ == "__main__":
                           json={"log_name": log_name,
                                 "log_path": log_path})
         print("service listening, told to load the log, response: " + str(r.text))
-        webbrowser.open("http://" + THIS_HOST + ":" + str(LISTENING_PORT) + "/index.html")
+        webbrowser.open(WEB_PAGES + "/index.html")
     except:
         # otherwise, the service is not listening and it needs to be boot up
         print("service not listening, booting it up")
@@ -34,5 +36,5 @@ if __name__ == "__main__":
         # loads the process into the services
         S.load_log(log_name, log_path)
         # offers the service to the outside
-        webbrowser.open("http://" + THIS_HOST + ":" + str(LISTENING_PORT) + "/index.html")
+        webbrowser.open(WEB_PAGES + "/index.html")
         S.serve(host=LISTENING_HOST, port=LISTENING_PORT)
