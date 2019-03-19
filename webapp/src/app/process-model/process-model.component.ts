@@ -18,15 +18,15 @@ export class ProcessModelComponent implements OnInit {
   simplicity = 0.45;
   selectedSimplicity = 0.45;
   logSummaryJson: JSON;
-  thisVariantsNumber = 0;
-  thisCasesNumber = 0;
-  thisEventsNumber = 0;
-  ancestorVariantsNumber = 0;
-  ancestorCasesNumber = 0;
-  ancestorEventsNumber = 0;
-  ratioVariantsNumber = 100;
-  ratioCasesNumber = 100;
-  ratioEventsNumber = 100;
+  public thisVariantsNumber = 0;
+  public thisCasesNumber = 0;
+  public thisEventsNumber = 0;
+  public ancestorVariantsNumber = 0;
+  public ancestorCasesNumber = 0;
+  public ancestorEventsNumber = 0;
+  public ratioVariantsNumber = 100;
+  public ratioCasesNumber = 100;
+  public ratioEventsNumber = 100;
   decoration = 'freq';
   typeOfModel = 'dfg';
   sanitizer: DomSanitizer;
@@ -41,6 +41,7 @@ export class ProcessModelComponent implements OnInit {
     this.pm4pyService = pm4pyServ;
     // calls the retrieval of the process schema from the service
     this.populateProcessSchema();
+    this.getLogSummary();
   }
 
   public populateProcessSchema() {
@@ -77,16 +78,16 @@ export class ProcessModelComponent implements OnInit {
       this.ancestorCasesNumber = this.logSummaryJson["ancestor_cases_number"];
       this.ancestorEventsNumber = this.logSummaryJson["ancestor_events_number"];
       if (this.ancestorVariantsNumber > 0) {
-        this.ratioVariantsNumber = this.thisVariantsNumber / this.ancestorVariantsNumber;
-        this.ratioCasesNumber = this.thisCasesNumber / this.ancestorCasesNumber;
-        this.ratioEventsNumber = this.thisEventsNumber / this.ancestorEventsNumber;
+        this.ratioVariantsNumber = this.thisVariantsNumber / this.ancestorVariantsNumber * 100.0;
+        this.ratioCasesNumber = this.thisCasesNumber / this.ancestorCasesNumber * 100.0;
+        this.ratioEventsNumber = this.thisEventsNumber / this.ancestorEventsNumber * 100.0;
       }
       else {
         this.ratioVariantsNumber = 100;
         this.ratioCasesNumber = 100;
         this.ratioEventsNumber = 100;
       }
-    })
+    });
   }
 
   setImageCorrectSize() {

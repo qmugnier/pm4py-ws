@@ -1,5 +1,9 @@
 <div id="casesContainer">
-    Log summary
+  <span>Events: <b>{{thisEventsNumber}}</b></span>
+  <span>&nbsp;&nbsp;&nbsp;&nbsp;</span>
+  <span>Cases: <b>{{thisCasesNumber}}</b></span>
+  <span>&nbsp;&nbsp;&nbsp;&nbsp;</span>
+  <span>Variants: <b>{{thisVariantsNumber}}</b></span>
     <div class="table-container" id="tableVariants" [style.width.px]="width"  [style.height.px]="height">
       <div fxLayout="row">
           <table mat-table [dataSource]="dataSourceVariants" class="mat-elevation-z8" fxFlex="100%">
