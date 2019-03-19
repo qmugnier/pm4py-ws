@@ -17,6 +17,16 @@ export class ProcessModelComponent implements OnInit {
   pm4pyJson: JSON;
   simplicity = 0.45;
   selectedSimplicity = 0.45;
+  logSummaryJson: JSON;
+  thisVariantsNumber = 0;
+  thisCasesNumber = 0;
+  thisEventsNumber = 0;
+  ancestorVariantsNumber = 0;
+  ancestorCasesNumber = 0;
+  ancestorEventsNumber = 0;
+  ratioVariantsNumber = 100;
+  ratioCasesNumber = 100;
+  ratioEventsNumber = 100;
   decoration = 'freq';
   typeOfModel = 'dfg';
   sanitizer: DomSanitizer;
@@ -50,6 +60,33 @@ export class ProcessModelComponent implements OnInit {
       this.setImageCorrectSize();
       this.isLoading = false;
     });
+  }
+
+  public getLogSummary() {
+    /**
+     * Retrieves the log summary and updates the visualization
+     */
+    let params: HttpParams = new HttpParams();
+
+    this.pm4pyService.getLogSummary(params).subscribe(data => {
+      this.logSummaryJson = data as JSON;
+      this.thisVariantsNumber = this.logSummaryJson["this_variants_number"];
+      this.thisCasesNumber = this.logSummaryJson["this_cases_number"];
+      this.thisEventsNumber = this.logSummaryJson["this_events_number"];
+      this.ancestorVariantsNumber = this.logSummaryJson["ancestor_variants_number"];
+      this.ancestorCasesNumber = this.logSummaryJson["ancestor_cases_number"];
+      this.ancestorEventsNumber = this.logSummaryJson["ancestor_events_number"];
+      if (this.ancestorVariantsNumber > 0) {
+        this.ratioVariantsNumber = this.thisVariantsNumber / this.ancestorVariantsNumber;
+        this.ratioCasesNumber = this.thisCasesNumber / this.ancestorCasesNumber;
+        this.ratioEventsNumber = this.thisEventsNumber / this.ancestorEventsNumber;
+      }
+      else {
+        this.ratioVariantsNumber = 100;
+        this.ratioCasesNumber = 100;
+        this.ratioEventsNumber = 100;
+      }
+    })
   }
 
   setImageCorrectSize() {
