@@ -256,6 +256,7 @@ class XesHandler(object):
         parameters["max_ret_cases"] = 500
         parameters["sort_by_index"] = parameters["sort_by_index"] if "sort_by_index" in parameters else 0
         parameters["sort_ascending"] = parameters["sort_ascending"] if "sort_ascending" in parameters else False
+        parameters["variants"] = self.variants
         if "variant" in parameters:
             filtered_log = variants_filter.apply(self.log, [parameters["variant"]], parameters=parameters)
             return casestats.include_key_in_value_list(
