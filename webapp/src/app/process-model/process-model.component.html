@@ -31,6 +31,9 @@
         <mat-radio-button value="perf">Performance</mat-radio-button>
       </mat-radio-group>
     </div>
+    <div class="p-1" *ngIf="enableConformanceChecking">
+      <button mat-button routerLink="/alignments">Conformance Checking</button>
+    </div>
   </div>
   <div id="imageProcessModelDiv" fxFlex="75%" style="overflow: auto" >
     <img id="imageProcessModelImage" [src]="processModelBase64Sanitized">

@@ -20,6 +20,9 @@
       <div *ngIf="router.url.startsWith('/cases')">
         <app-cases></app-cases>
       </div>
+      <div *ngIf="router.url.startsWith('/alignments')">
+        <app-alignments></app-alignments>
+      </div>
     </div>
     <div fxFlex="5%" style="background-color: #FF4081">
       <app-footer></app-footer>

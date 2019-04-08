@@ -25,6 +25,7 @@ import { MatMenuModule } from '@angular/material';
 import { MatIconModule } from '@angular/material';
 import { MatTableModule } from '@angular/material';
 import { MatSortModule } from '@angular/material';
+import { MatTabsModule } from '@angular/material';
 
 
 
@@ -35,6 +36,7 @@ import { CasesComponent } from './cases/cases.component';
 import { SnaComponent } from './sna/sna.component';
 import { ProcessListComponent } from './process-list/process-list.component';
 import { TransientComponent } from './transient/transient.component';
+import { AlignmentsComponent } from './alignments/alignments.component';
 
 const appRoutes: Routes = [
   { path: 'process', component: AppComponent },
@@ -43,6 +45,7 @@ const appRoutes: Routes = [
   { path: 'statistics', component: AppComponent },
   { path: 'logsList', component: AppComponent },
   { path: 'simulation', component: TransientComponent },
+  { path: 'alignments', component: AlignmentsComponent },
   { path: '**', redirectTo: 'logsList' }
 ];
 
@@ -59,7 +62,8 @@ const appRoutes: Routes = [
     CasesComponent,
     ProcessModelComponent,
     SnaComponent,
-    TransientComponent
+    TransientComponent,
+    AlignmentsComponent
   ],
   imports: [
     BrowserModule,
@@ -79,6 +83,7 @@ const appRoutes: Routes = [
     MatTableModule,
     MatIconModule,
     FlexLayoutModule,
+    MatTabsModule,
     MatSortModule,
     MatProgressSpinnerModule,
     RouterModule.forRoot(

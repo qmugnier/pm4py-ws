@@ -61,6 +61,9 @@ export class HeaderComponent implements OnInit {
           } else if (this.router.url === "/simulation") {
             this.title = "PM4Py WI - Simulation" + " (" + process_name + ")";
             this.helpString = "Perform transient simulation of the process at the specified delay from the start time (it gives a probability distribution over states of the process).";
+          } else if (this.router.url == "/alignments") {
+            this.title = "PM4Py WI - Alignments (" + process_name + ")";
+            this.helpString = "Perform alignments between the log and the reference model that was selected. Two tabs are provided, one containing the projection of the alignments on the model and one reporting a table of the alignments.";
           }
         }
       } else {
