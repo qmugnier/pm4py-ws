@@ -1,12 +1,12 @@
 import {Component, OnInit} from '@angular/core';
 import {Router} from "@angular/router";
-import {MatDialog} from "@angular/material";
 
+/**
 @Component({
   selector: 'start-activities-filter',
   templateUrl: 'start-activities-filter.html',
 })
-export class StartActivitiesFilter {}
+export class StartActivitiesFilter {}*/
 
 @Component({
   selector: 'app-header',
