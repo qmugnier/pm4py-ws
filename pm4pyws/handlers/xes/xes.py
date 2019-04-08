@@ -305,4 +305,8 @@ class XesHandler(object):
         table
             SVG of the decorated table
         """
+        if parameters is None:
+            parameters = {}
+        parameters[constants.PARAMETER_CONSTANT_ACTIVITY_KEY] = self.activity_key
+        parameters[constants.PARAMETER_CONSTANT_ATTRIBUTE_KEY] = self.activity_key
         return get_align.perform_alignments(self.log, petri_string, parameters=parameters)
