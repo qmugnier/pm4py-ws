@@ -11,7 +11,7 @@ from pm4pyws.handlers.xes.sna import get_sna as sna_obtainer
 from pm4pyws.handlers.xes.statistics import events_per_time, case_duration
 from pm4pyws.util import casestats
 from pm4py.algo.filtering.log.variants import variants_filter
-
+from pm4pyws.handlers.xes.alignments import get_align
 
 class XesHandler(object):
     def __init__(self):
@@ -286,3 +286,23 @@ class XesHandler(object):
         parameters[constants.PARAMETER_CONSTANT_ACTIVITY_KEY] = self.activity_key
         parameters[constants.PARAMETER_CONSTANT_ATTRIBUTE_KEY] = self.activity_key
         return case_statistics.get_events(self.log, caseid, parameters=parameters)
+
+    def get_alignments(self, petri_string, parameters=None):
+        """
+        Gets the alignments from a string
+
+        Parameters
+        -------------
+        petri_string
+            Petri string
+        parameters
+            Parameters of the algorithm
+
+        Returns
+        -------------
+        petri
+            SVG of the decorated Petri
+        table
+            SVG of the decorated table
+        """
+        return get_align.perform_alignments(self.log, petri_string, parameters=parameters)

@@ -183,4 +183,13 @@ export class Pm4pyService {
      */
     return this.webservicePath;
   }
+
+  getAlignmentsVisualizations(model : string, parameters : HttpParams) {
+    let process = localStorage.getItem("process");
+    parameters = parameters.set("process", process);
+
+    var completeUrl : string = this.webservicePath + "getAlignmentsVisualizations";
+
+    return this.http.post(completeUrl, {"model": model}, {params: parameters});
+  }
 }
