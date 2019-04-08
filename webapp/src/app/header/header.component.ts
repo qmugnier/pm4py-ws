@@ -1,5 +1,12 @@
 import {Component, OnInit} from '@angular/core';
 import {Router} from "@angular/router";
+import {MatDialog} from "@angular/material";
+
+@Component({
+  selector: 'start-activities-filter',
+  templateUrl: 'start-activities-filter.html',
+})
+export class StartActivitiesFilter {}
 
 @Component({
   selector: 'app-header',
@@ -11,6 +18,7 @@ export class HeaderComponent implements OnInit {
   router: Router;
   public title: string;
   public helpString: string = "";
+
   public logsListHelpString: string = "This page contains a list of logs loaded in the system. To open one of them click on the name of the log.";
 
 
@@ -76,6 +84,14 @@ export class HeaderComponent implements OnInit {
     } else {
       this.processProvided = false;
     }
+  }
+
+  startActivitiesFilter() {
+    /*const dialogRef = this.dialog.open(DialogContentExampleDialog);
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log(`Dialog result: ${result}`);
+    });*/
   }
 
 }
