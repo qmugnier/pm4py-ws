@@ -7,6 +7,7 @@ from pm4py.visualization.dfg import factory as dfg_vis_factory
 
 from pm4pyws.util import constants
 
+
 def apply(dataframe, parameters=None):
     """
     Gets the performance DFG
