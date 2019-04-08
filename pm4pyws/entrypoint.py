@@ -308,3 +308,18 @@ def get_log_summary():
               "ancestor_cases_number": ancestor_cases_number, "ancestor_events_number": ancestor_events_number}
     ret = jsonify(dictio)
     return ret
+
+
+@PM4PyServices.app.route("/getAlignmentsVisualizations", methods=["POST"])
+def get_alignments():
+    # reads the requested process name
+    process = request.args.get('process', default='receipt', type=str)
+
+    petri_string = request.json["model"]
+
+    svg_on_petri, svg_table = LogsHandlers.handlers[process].get_alignments(petri_string, parameters={})
+
+    dictio = {"petri": svg_on_petri.decode('utf-8'), "table": svg_table.decode('utf-8')}
+    ret = jsonify(dictio)
+
+    return ret

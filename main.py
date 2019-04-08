@@ -21,12 +21,15 @@ if __name__ == "__main__":
         # otherwise, the service is not listening and it needs to be boot up
         print("service not listening, booting it up")
         S = PM4PyServices()
+        # loads the running-example process into the services from XES file
+        S.load_log("running-example(xes)", "running-example.xes")
+        # loads the receipt process into the services from XES file
+        S.load_log("receipt(xes)", "receipt.xes")
         # loads the running-example process into the services
         S.load_log("running-example", "running-example.parquet")
         # loads the receipt process into the services
         S.load_log("receipt", "receipt.parquet")
         # S.load_log("roadtraffic", "roadtraffic.parquet")
-        S.load_log("running-example(xes)", "running-example.xes")
 
         # offers the service to the outside
         S.serve(host=LISTENING_HOST, port=LISTENING_PORT)
