@@ -37,5 +37,5 @@ def apply(log, parameters=None):
     parameters["format"] = "svg"
     gviz = pt_vis_factory.apply(tree, parameters=parameters)
 
-    return get_base64_from_gviz(gviz), None, ""
+    return get_base64_from_gviz(gviz), None, "", "xes"
 

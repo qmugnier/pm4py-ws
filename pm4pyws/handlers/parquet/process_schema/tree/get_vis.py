@@ -36,4 +36,4 @@ def apply(dataframe, parameters=None):
     dfg = df_statistics.get_dfg_graph(dataframe)
     tree = inductive_miner.apply_tree_dfg(dfg, parameters=parameters)
     gviz = pt_vis_factory.apply(tree, parameters={"format": "svg"})
-    return get_base64_from_gviz(gviz), None, ""
+    return get_base64_from_gviz(gviz), None, "", "parquet"
