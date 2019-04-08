@@ -45,4 +45,4 @@ def apply(dataframe, parameters=None):
                                                                       variant="performance")
     gviz = pn_vis_factory.apply(net, im, fm, parameters={"format": "svg"}, variant="performance",
                                 aggregated_statistics=aggregated_statistics)
-    return get_base64_from_gviz(gviz), export_petri_as_string(net, im, fm), ".pnml"
+    return get_base64_from_gviz(gviz), export_petri_as_string(net, im, fm), ".pnml", "parquet"

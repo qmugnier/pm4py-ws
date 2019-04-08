@@ -40,4 +40,4 @@ def apply(log, parameters=None):
 
     svg = get_base64_from_gviz(gviz)
 
-    return svg, export_petri_as_string(net, im, fm), ".pnml"
+    return svg, export_petri_as_string(net, im, fm), ".pnml", "xes"

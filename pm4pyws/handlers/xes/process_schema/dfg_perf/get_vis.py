@@ -37,4 +37,4 @@ def apply(log, parameters=None):
     parameters["format"] = "svg"
     gviz = dfg_vis_factory.apply(dfg, log=log, variant="performance", parameters=parameters)
 
-    return get_base64_from_gviz(gviz), None, ""
+    return get_base64_from_gviz(gviz), None, "", "xes"

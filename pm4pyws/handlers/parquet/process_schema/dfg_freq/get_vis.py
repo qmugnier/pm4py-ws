@@ -36,4 +36,4 @@ def apply(dataframe, parameters=None):
     dfg = df_statistics.get_dfg_graph(dataframe)
     activities_count = attributes_filter.get_attribute_values(dataframe, xes.DEFAULT_NAME_KEY)
     gviz = dfg_vis_factory.apply(dfg, activities_count=activities_count, parameters={"format": "svg"})
-    return get_base64_from_gviz(gviz), None, ""
+    return get_base64_from_gviz(gviz), None, "", "parquet"
