@@ -15,6 +15,8 @@ export class ProcessModelComponent implements OnInit {
   processModelBase64Original: string;
   processModelBase64Sanitized: SafeResourceUrl;
   pm4pyJson: JSON;
+  thisProcessModel: string;
+  thisHandler: string;
   simplicity = 0.45;
   selectedSimplicity = 0.45;
   logSummaryJson: JSON;
@@ -32,6 +34,7 @@ export class ProcessModelComponent implements OnInit {
   sanitizer: DomSanitizer;
   pm4pyService: Pm4pyService;
   public isLoading: boolean;
+  public enableConformanceChecking: boolean = false;
 
   constructor(private _sanitizer: DomSanitizer, private pm4pyServ: Pm4pyService) {
     /**
@@ -57,6 +60,12 @@ export class ProcessModelComponent implements OnInit {
     this.pm4pyService.getProcessSchema(params).subscribe(data => {
       this.pm4pyJson = data as JSON;
       this.processModelBase64Original = this.pm4pyJson["base64"];
+      this.thisProcessModel = this.pm4pyJson["model"];
+      this.thisHandler = this.pm4pyJson["handler"];
+      this.enableConformanceChecking = this.typeOfModel === 'inductive' && this.thisHandler === 'xes';
+      if (this.enableConformanceChecking) {
+        localStorage.setItem("process_model", this.thisProcessModel);
+      }
       this.processModelBase64Sanitized = this.sanitizer.bypassSecurityTrustResourceUrl('data:image/svg+xml;base64,' + this.processModelBase64Original);
       this.setImageCorrectSize();
       this.isLoading = false;
