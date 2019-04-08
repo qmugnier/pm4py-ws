@@ -1,7 +1,7 @@
 <div *ngIf="isLoading == true">
   <mat-spinner></mat-spinner>
 </div>
-<mat-tab-group mat-align-tabs="start">
+<mat-tab-group mat-align-tabs="start" [hidden]="isLoading == true">
   <mat-tab label="Projection">
     <img id="projectionImageImg" [src]="projectionImage">
   </mat-tab>

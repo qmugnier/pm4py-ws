@@ -10,7 +10,7 @@ from pm4pyws.util import constants
 
 def apply(log, parameters=None):
     """
-    Gets the frequency HNet
+    Gets the performance HNet
 
     Parameters
     ------------
@@ -35,9 +35,10 @@ def apply(log, parameters=None):
                                                             parameters=parameters)
     filtered_log = auto_filter.apply_auto_filter(log, parameters=parameters)
 
-    dfg_freq = dfg_factory.apply(filtered_log)
+    dfg_freq = dfg_factory.apply(filtered_log, parameters=parameters)
+    dfg_perf = dfg_factory.apply(filtered_log, variant="performance", parameters=parameters)
 
-    heu_net = HeuristicsNet(dfg_freq)
+    heu_net = HeuristicsNet(dfg_freq, performance_dfg=dfg_perf)
 
     heu_net.calculate()
 
