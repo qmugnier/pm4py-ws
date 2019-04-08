@@ -49,6 +49,6 @@ def apply(dataframe, parameters=None):
     heu_net = HeuristicsNet(dfg_frequency, performance_dfg=dfg_performance)
     heu_net.calculate()
 
-    vis = heu_vis_factory.apply(heu_net)
+    vis = heu_vis_factory.apply(heu_net, parameters={"format": "svg"})
 
     return get_base64_from_file(vis.name), None, "", "parquet"
