@@ -9,8 +9,8 @@ from pm4pyws.configuration import Configuration
 from pm4pyws.handlers.parquet.parquet import ParquetHandler
 from pm4pyws.handlers.xes.xes import XesHandler
 
-conn = sqlite3.connect('event_logs.db')
-c = conn.cursor()
+conn_event_logs = sqlite3.connect('event_logs.db')
+cursor_event_logs = conn_event_logs.cursor()
 
 
 class LogsHandlers:
