@@ -22,6 +22,25 @@ class LogsHandlers:
     semaphore_matplot = Semaphore(1)
 
 
+def do_login(user, password):
+    """
+    Logs in a user and returns a session id
+
+    Parameters
+    ------------
+    user
+        Username
+    password
+        Password
+
+    Returns
+    ------------
+    session_id
+        Session ID
+    """
+    return um.do_login(user, password)
+
+
 def check_session_validity(session_id):
     """
     Checks the validity of a session
@@ -604,6 +623,23 @@ def download_csv_log():
                     content = LogsHandlers.handlers[process].download_csv_log()
                     return jsonify({"content": content})
     return jsonify({"content": ""})
+
+
+@PM4PyServices.app.route("/loginService", methods=["GET"])
+def loginService():
+    if Configuration.enable_session:
+        # reads the user name
+        user = request.args.get('user', type=str)
+        # reads the password
+        password = request.args.get('password', type=str)
+        session_id = do_login(user, password)
+
+        if session_id is not None:
+            return jsonify({"status": "OK", "sessionEnabled": True, "sessionId": session_id})
+        else:
+            return jsonify({"status": "OK", "sessionEnabled": True, "sessionId": None})
+
+    return jsonify({"status": "OK", "sessionEnabled": False, "sessionId": None})
 
 
 def generate_random_string(N):
