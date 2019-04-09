@@ -165,11 +165,11 @@ export class HeaderComponent implements OnInit {
       }
 
       if ("can_upload" in sessionJson) {
-        this.enableUpload = sessionJson["can_upload"];
+        this.enableUpload = environment.enableUpload && sessionJson["can_upload"];
       }
 
       if ("can_download" in sessionJson) {
-        this.enableDownload = sessionJson["can_download"];
+        this.enableDownload = environment.enableDownload && sessionJson["can_download"];
       }
     })
   }
