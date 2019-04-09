@@ -15,6 +15,8 @@ from pm4pyws.util import casestats
 from pm4py.objects.log.exporter.xes.versions.etree_xes_exp import export_log_as_string
 from pm4py.objects.conversion.log import factory as conversion_factory
 
+import tempfile
+
 class XesHandler(object):
     def __init__(self):
         """

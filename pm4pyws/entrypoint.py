@@ -1,4 +1,8 @@
+import base64
+import os
+import random
 import sqlite3
+import string
 import traceback
 from threading import Semaphore
 
@@ -563,6 +567,45 @@ def download_csv_log():
                     content = LogsHandlers.handlers[process].download_csv_log()
                     return jsonify({"content": content})
     return jsonify({"content": ""})
+
+
+def generate_random_string(N):
+    return ''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(N))
+
+
+@PM4PyServices.app.route("/uploadLog", methods=["POST"])
+def upload_log():
+    # reads the session
+    session = request.args.get('session', type=str)
+    if Configuration.enable_session:
+        if check_session_validity(session):
+            user = get_user_from_session(session)
+            if check_user_enabled_upload(user):
+                try:
+                    filename = request.json["filename"]
+                    base64_content = request.json["base64"]
+                    basename = filename.split(".")[0] + "_" + generate_random_string(4)
+                    extension = filename.split(".")[1]
+                    base64_content = base64_content.split(";base64,")[1]
+                    stru = base64.b64decode(base64_content).decode('utf-8')
+                    if extension.lower() == "xes":
+                        filepath = os.path.join("logs", basename + "." + extension)
+                        F = open(filepath, "w")
+                        F.write(stru)
+                        F.close()
+                        LogsHandlers.handlers[basename] = XesHandler()
+                        LogsHandlers.handlers[basename].build_from_path(filepath)
+                        conn_logs = sqlite3.connect('event_logs.db')
+                        curs_logs = conn_logs.cursor()
+                        curs_logs.execute("INSERT INTO EVENT_LOGS VALUES (?,?)", (basename, filepath))
+                        conn_logs.commit()
+                        conn_logs.close()
+                        return jsonify({"status": "OK"})
+                except:
+                    # traceback.print_exc()
+                    pass
+
+    return jsonify({"status": "FAIL"})
 
 
 @PM4PyServices.app.route("/getAlignmentsVisualizations", methods=["POST"])
