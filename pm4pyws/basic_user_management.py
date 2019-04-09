@@ -21,7 +21,8 @@ class BasicUserManagement(object):
         curs_users = conn_users.cursor()
         sid = str(session_id)
         curs_users.execute("SELECT USER_ID FROM SESSIONS WHERE SESSION_ID = ? AND SESSION_ID = ?", (sid, sid))
-        for res in curs_users.fetchone():
+        results = curs_users.fetchone()
+        if results is not None:
             validity = True
         conn_users.close()
         return validity
@@ -45,7 +46,8 @@ class BasicUserManagement(object):
         curs_users = conn_users.cursor()
         sid = str(session_id)
         curs_users.execute("SELECT USER_ID FROM SESSIONS WHERE SESSION_ID = ? AND SESSION_ID = ?", (sid, sid))
-        for res in curs_users.fetchone():
-            user = str(res)
+        results = curs_users.fetchone()
+        if results is not None:
+            user = str(results[0])
         conn_users.close()
         return user

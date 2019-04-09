@@ -38,7 +38,7 @@ def check_session_validity(session_id):
     """
     if Configuration.enable_session:
         validity = um.check_session_validity(session_id)
-        return True
+        return validity
     return True
 
 
@@ -58,7 +58,7 @@ def get_user_from_session(session_id):
     """
     if Configuration.enable_session:
         user = um.get_user_from_session(session_id)
-        return None
+        return user
     return None
 
 
@@ -77,7 +77,13 @@ def check_is_admin(user):
         Boolean value
     """
     if Configuration.enable_session:
-        return True
+        conn_logs = sqlite3.connect('event_logs.db')
+        curs_logs = conn_logs.cursor()
+        curs_logs.execute("SELECT USER_ID FROM ADMINS WHERE USER_ID = ? AND USER_ID = ?", (user, user))
+        results = curs_logs.fetchone()
+        if results is not None:
+            return True
+        return False
     return True
 
 
@@ -93,7 +99,13 @@ def check_user_log_visibility(user, process):
         Process
     """
     if Configuration.enable_session:
-        return True
+        conn_logs = sqlite3.connect('event_logs.db')
+        curs_logs = conn_logs.cursor()
+        curs_logs.execute("SELECT USER_ID FROM USER_LOG_VISIBILITY WHERE USER_ID = ? AND LOG_NAME = ?", (user, process))
+        results = curs_logs.fetchone()
+        if results is not None:
+            return True
+        return check_is_admin(user)
     return True
 
 
@@ -112,7 +124,13 @@ def check_user_enabled_upload(user):
         Boolean value
     """
     if Configuration.enable_session:
-        return True
+        conn_logs = sqlite3.connect('event_logs.db')
+        curs_logs = conn_logs.cursor()
+        curs_logs.execute("SELECT USER_ID FROM USER_UPLOADABLE WHERE USER_ID = ? AND USER_ID = ?", (user, user))
+        results = curs_logs.fetchone()
+        if results is not None:
+            return True
+        return check_is_admin(user)
     return True
 
 
@@ -133,7 +151,14 @@ def check_user_enabled_download(user, process):
         Boolean value
     """
     if Configuration.enable_session:
-        return True
+        conn_logs = sqlite3.connect('event_logs.db')
+        curs_logs = conn_logs.cursor()
+        curs_logs.execute("SELECT USER_ID FROM USER_LOG_DOWNLOADABLE WHERE USER_ID = ? AND LOG_NAME = ?",
+                          (user, process))
+        results = curs_logs.fetchone()
+        if results is not None:
+            return True
+        return check_is_admin(user)
     return True
 
 
@@ -452,7 +477,19 @@ def get_logs_list():
     """
     # reads the session
     session = request.args.get('session', type=str)
-    return jsonify({"logs": list(LogsHandlers.handlers.keys())})
+
+    available_keys = []
+
+    if check_session_validity(session):
+        user = get_user_from_session(session)
+
+        all_keys = LogsHandlers.handlers.keys()
+
+        for key in all_keys:
+            if check_user_log_visibility(user, key):
+                available_keys.append(key)
+
+    return jsonify({"logs": available_keys})
 
 
 @PM4PyServices.app.route("/transientAnalysis", methods=["GET"])
