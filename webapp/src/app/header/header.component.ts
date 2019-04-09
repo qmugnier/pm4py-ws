@@ -125,6 +125,32 @@ export class HeaderComponent implements OnInit {
     });
   }
 
+  uploadFile($event) {
+    let reader = new FileReader();
+    let filename : string = $event.target.files[0].name;
+    let filetype : string = $event.target.files[0].type;
+    let extension : string = filename.split(".")[1];
+    if (extension === "xes") {
+      reader.readAsDataURL($event.target.files[0]);
+      reader.onload = () => {
+        let base64: string = reader.result.toString();
+        let data : any = {"filename": filename, "base64": base64};
+        this.pm4pyService.uploadLog(data, new HttpParams()).subscribe(data => {
+          let responseJson : JSON = data as JSON;
+          if (responseJson["status"] === "OK") {
+            window.location.reload();
+          }
+          else {
+            alert("Something has gone wrong in the upload!");
+          }
+        })
+      }
+    }
+    else {
+      alert("unsupported file type for direct upload!")
+    }
+  }
+
   startActivitiesFilter() {
     /*const dialogRef = this.dialog.open(DialogContentExampleDialog);
 

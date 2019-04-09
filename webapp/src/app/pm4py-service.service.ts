@@ -246,4 +246,14 @@ export class Pm4pyService {
 
     return this.http.get(completeUrl, {params: parameters});
   }
+
+  uploadLog(data : any, parameters : HttpParams) {
+    let sessionId = localStorage.getItem("sessionId");
+
+    parameters = parameters.set("sessionId", sessionId);
+
+    var completeUrl : string = this.webservicePath + "uploadLog";
+
+    return this.http.post(completeUrl, data, {params: parameters});
+  }
 }

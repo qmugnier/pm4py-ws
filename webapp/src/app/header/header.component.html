@@ -16,6 +16,11 @@
       Paths filter
     </button>
   </mat-menu>
+  <mat-menu #uploadMenu="matMenu">
+    <button mat-menu-item (click)="uploader.click()">
+      Upload
+    </button>
+  </mat-menu>
   <mat-menu #downloadMenu="matMenu">
     <button mat-menu-item (click)="downloadCsv()">
       Download CSV
@@ -30,7 +35,7 @@
     <img src="../../assets/help.svg" alt="Help" />
   </span>
   <span>&nbsp;&nbsp;</span>
-  <span *ngIf="processProvided == false && enableUpload == true" [matMenuTriggerFor]="appMenu">
+  <span *ngIf="processProvided == false && enableUpload == true" [matMenuTriggerFor]="uploadMenu">
     <img src="../../assets/up.svg" alt="Help" />
   </span>
   <span *ngIf="processProvided == true && enableDownload == true" [matMenuTriggerFor]="downloadMenu">
@@ -48,3 +53,5 @@
     <span style="flex: 1 1 auto;"></span>
   <span>{{title}}</span>
 </mat-toolbar>
+<input hidden type="file" #uploader
+       (change)="uploadFile($event)"/>
