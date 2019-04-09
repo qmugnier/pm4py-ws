@@ -642,6 +642,33 @@ def login_service():
     return jsonify({"status": "OK", "sessionEnabled": False, "sessionId": None})
 
 
+@PM4PyServices.app.route("/checkSessionService", methods=["GET"])
+def check_session_service():
+    if Configuration.enable_session:
+        # reads the session
+        session = request.args.get('session', type=str)
+        # reads the requested process name
+        process = request.args.get('process', default=None, type=str)
+
+        if check_session_validity(session):
+            user = get_user_from_session(session)
+            is_admin = check_is_admin(user)
+            can_upload = check_user_enabled_upload(user)
+            if process is not None:
+                log_visibility = check_user_log_visibility(user, process)
+                can_download = check_user_enabled_download(user, process)
+                return jsonify(
+                    {"status": "OK", "sessionEnabled": True, "session": session, "user": user, "is_admin": is_admin,
+                     "can_upload": can_upload, "log_visibility": log_visibility, "can_download": can_download})
+            return jsonify(
+                {"status": "OK", "sessionEnabled": True, "session": session, "user": user, "is_admin": is_admin,
+                 "can_upload": can_upload})
+        else:
+            return jsonify({"status": "FAIL", "sessionEnabled": True})
+
+    return jsonify({"status": "OK", "sessionEnabled": False})
+
+
 def generate_random_string(N):
     return ''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(N))
 
