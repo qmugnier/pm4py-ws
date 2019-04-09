@@ -16,12 +16,26 @@
       Paths filter
     </button>
   </mat-menu>
+  <mat-menu #downloadMenu="matMenu">
+    <button mat-menu-item (click)="downloadCsv()">
+      Download CSV
+    </button>
+    <button mat-menu-item (click)="downloadXes()">
+      Download XES
+    </button>
+  </mat-menu>
   <span><a routerLink="/logsList"><img src="../../assets/home.svg" alt="Home" /></a></span>
   <span>&nbsp;&nbsp;</span>
   <span [matMenuTriggerFor]="appMenu">
     <img src="../../assets/help.svg" alt="Help" />
   </span>
   <span>&nbsp;&nbsp;</span>
+  <span *ngIf="processProvided == false && enableUpload == true" [matMenuTriggerFor]="appMenu">
+    <img src="../../assets/up.svg" alt="Help" />
+  </span>
+  <span *ngIf="processProvided == true && enableDownload == true" [matMenuTriggerFor]="downloadMenu">
+    <img src="../../assets/down.svg" alt="Help" />
+  </span>
   <span *ngIf="processProvided == true"><a routerLink="/process" alt="Process"><img src="../../assets/process_model.svg" /></a></span>
   <span *ngIf="processProvided == true"><a routerLink="/cases" alt="Cases"><img src="../../assets/cases.svg" /></a></span>
   <span *ngIf="processProvided == true"><a routerLink="/sna" alt="SNA"><img src="../../assets/sna_icon.svg" /></a></span>
