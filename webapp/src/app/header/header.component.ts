@@ -27,6 +27,8 @@ export class HeaderComponent implements OnInit {
   sanitizer: DomSanitizer;
   pm4pyService: Pm4pyService;
 
+  userId: string;
+
   public logsListHelpString: string = "This page contains a list of logs loaded in the system. To open one of them click on the name of the log.";
 
 
@@ -38,6 +40,7 @@ export class HeaderComponent implements OnInit {
     this.sanitizer = _sanitizer;
     this.enableDownload = environment.enableDownload;
     this.enableUpload = environment.enableUpload;
+    this.checkSession();
     this.title = "PM4Py WI";
     this.router = _route;
     this.router.events.subscribe((val) => {
@@ -149,6 +152,26 @@ export class HeaderComponent implements OnInit {
     else {
       alert("unsupported file type for direct upload!")
     }
+  }
+
+  checkSession() {
+    let httpParams : HttpParams = new HttpParams();
+
+    this.pm4pyService.checkSessionService(httpParams).subscribe(data => {
+      let sessionJson : JSON = data as JSON;
+
+      if ("user" in sessionJson) {
+        this.userId = sessionJson["user"];
+      }
+
+      if ("can_upload" in sessionJson) {
+        this.enableUpload = sessionJson["can_upload"];
+      }
+
+      if ("can_download" in sessionJson) {
+        this.enableDownload = sessionJson["can_download"];
+      }
+    })
   }
 
   startActivitiesFilter() {

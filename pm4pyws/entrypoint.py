@@ -654,7 +654,7 @@ def check_session_service():
             user = get_user_from_session(session)
             is_admin = check_is_admin(user)
             can_upload = check_user_enabled_upload(user)
-            if process is not None:
+            if process is not None and not process == "null":
                 log_visibility = check_user_log_visibility(user, process)
                 can_download = check_user_enabled_download(user, process)
                 return jsonify(
