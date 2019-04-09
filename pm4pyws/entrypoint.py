@@ -4,6 +4,7 @@ from threading import Semaphore
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 
+from pm4pyws.configuration import Configuration
 from pm4pyws.handlers.parquet.parquet import ParquetHandler
 from pm4pyws.handlers.xes.xes import XesHandler
 
@@ -86,7 +87,8 @@ def get_process_schema():
     simplicity = request.args.get('simplicity', default=0.6, type=float)
     variant = type_of_model + "_" + decoration
     parameters = {"decreasingFactor": simplicity}
-    base64, model, format, this_handler = LogsHandlers.handlers[process].get_schema(variant=variant, parameters=parameters)
+    base64, model, format, this_handler = LogsHandlers.handlers[process].get_schema(variant=variant,
+                                                                                    parameters=parameters)
     if model is not None:
         model = model.decode('utf-8')
     dictio = {"base64": base64.decode('utf-8'), "model": model, "format": format, "handler": this_handler}
@@ -292,6 +294,14 @@ def do_transient_analysis():
 
 @PM4PyServices.app.route("/getLogSummary", methods=["GET"])
 def get_log_summary():
+    """
+    Gets a summary of the log
+
+    Returns
+    ------------
+    log_summary
+        Log summary
+    """
     # reads the requested process name
     process = request.args.get('process', default='receipt', type=str)
 
@@ -310,8 +320,52 @@ def get_log_summary():
     return ret
 
 
+@PM4PyServices.app.route("/downloadXesLog", methods=["GET"])
+def download_xes_log():
+    """
+    Download the XES log
+
+    Returns
+    ------------
+    xes_log
+        XES log
+    """
+    # reads the requested process name
+    process = request.args.get('process', default='receipt', type=str)
+    if Configuration.enable_download:
+        content = LogsHandlers.handlers[process].download_xes_log()
+        return content
+    return ""
+
+
+@PM4PyServices.app.route("/downloadCsvLog", methods=["GET"])
+def download_csv_log():
+    """
+    Download the CSV log
+
+    Returns
+    ------------
+    csv_log
+        CSV log
+    """
+    # reads the requested process name
+    process = request.args.get('process', default='receipt', type=str)
+    if Configuration.enable_download:
+        content = LogsHandlers.handlers[process].download_csv_log()
+        return content
+    return ""
+
+
 @PM4PyServices.app.route("/getAlignmentsVisualizations", methods=["POST"])
 def get_alignments():
+    """
+    Get alignments visualizations
+
+    Returns
+    -------------
+    dictio
+        Dictionary containing the Petri net and the table
+    """
     # reads the requested process name
     process = request.args.get('process', default='receipt', type=str)
 

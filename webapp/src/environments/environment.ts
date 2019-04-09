@@ -3,7 +3,10 @@
 // The list of file replacements can be found in `angular.json`.
 
 export const environment = {
-  production: false
+  production: false,
+  webServicePath: "http://localhost:5000/",
+  enableUpload: true,
+  enableDownload: true
 };
 
 /*
