@@ -25,6 +25,7 @@ class BasicUserManagement(object):
         results = curs_users.fetchone()
         if results is not None:
             session_id = str(uuid.uuid4())
+            curs_users.execute("DELETE FROM SESSIONS WHERE USER_ID = ? AND USER_ID = ?", (user, user))
             curs_users.execute("INSERT INTO SESSIONS VALUES (?,?,DateTime('now'))", (session_id, user))
             conn_users.commit()
             return session_id
