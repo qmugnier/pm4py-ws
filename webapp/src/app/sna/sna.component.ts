@@ -36,7 +36,7 @@ export class SnaComponent implements OnInit {
     let process : string = localStorage.getItem("process");
     let sessionId = localStorage.getItem("sessionId");
 
-    let snaPlainUrl : string = this.pm4pyService.getServicePath() + "getSNA?process="+process+"&metric="+this.metric+"&threshold="+this.selectedArcsThreshold+"&sessionId="+sessionId;
+    let snaPlainUrl : string = this.pm4pyService.getServicePath() + "getSNA?process="+process+"&metric="+this.metric+"&threshold="+this.selectedArcsThreshold+"&session="+sessionId;
 
     this.snaContent = this.sanitizer.bypassSecurityTrustResourceUrl(snaPlainUrl);
 
