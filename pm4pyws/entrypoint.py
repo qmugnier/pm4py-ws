@@ -5,12 +5,12 @@ from threading import Semaphore
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 
+from pm4pyws.basic_user_management import BasicUserManagement
 from pm4pyws.configuration import Configuration
 from pm4pyws.handlers.parquet.parquet import ParquetHandler
 from pm4pyws.handlers.xes.xes import XesHandler
 
-conn_event_logs = sqlite3.connect('event_logs.db')
-cursor_event_logs = conn_event_logs.cursor()
+um = BasicUserManagement()
 
 
 class LogsHandlers:
@@ -32,6 +32,9 @@ def check_session_validity(session_id):
     boolean
         Boolean value
     """
+    if Configuration.enable_session:
+        validity = um.check_session_validity(session_id)
+        return True
     return True
 
 
@@ -49,6 +52,9 @@ def get_user_from_session(session_id):
     user
         User ID
     """
+    if Configuration.enable_session:
+        user = um.get_user_from_session(session_id)
+        return None
     return None
 
 
@@ -66,6 +72,8 @@ def check_is_admin(user):
     boolean
         Boolean value
     """
+    if Configuration.enable_session:
+        return True
     return True
 
 
@@ -80,6 +88,8 @@ def check_user_log_visibility(user, process):
     process
         Process
     """
+    if Configuration.enable_session:
+        return True
     return True
 
 
@@ -97,6 +107,8 @@ def check_user_enabled_upload(user):
     boolean
         Boolean value
     """
+    if Configuration.enable_session:
+        return True
     return True
 
 
@@ -116,6 +128,8 @@ def check_user_enabled_download(user, process):
     boolean
         Boolean value
     """
+    if Configuration.enable_session:
+        return True
     return True
 
 
