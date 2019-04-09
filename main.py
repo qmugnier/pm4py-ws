@@ -2,6 +2,10 @@ import requests
 
 from pm4pyws.entrypoint import PM4PyServices
 
+import sqlite3
+conn = sqlite3.connect('event_logs.db')
+c = conn.cursor()
+
 # local host of the current machine
 THIS_HOST = "127.0.0.1"
 # host that shall be listening (0.0.0.0 means accepting connections from everything)
@@ -21,15 +25,9 @@ if __name__ == "__main__":
         # otherwise, the service is not listening and it needs to be boot up
         print("service not listening, booting it up")
         S = PM4PyServices()
-        # loads the running-example process into the services from XES file
-        S.load_log("running-example(xes)", "running-example.xes")
-        # loads the receipt process into the services from XES file
-        S.load_log("receipt(xes)", "receipt.xes")
-        # loads the running-example process into the services
-        S.load_log("running-example", "running-example.parquet")
-        # loads the receipt process into the services
-        S.load_log("receipt", "receipt.parquet")
-        # S.load_log("roadtraffic", "roadtraffic.parquet")
+        c.execute("SELECT LOG_NAME, LOG_PATH FROM EVENT_LOGS")
+        for result in c.fetchall():
+            S.load_log(str(result[0]), str(result[1]))
 
         # offers the service to the outside
         S.serve(host=LISTENING_HOST, port=LISTENING_PORT)
