@@ -537,8 +537,8 @@ def download_xes_log():
             if check_user_log_visibility(user, process):
                 if check_user_enabled_download(user, process):
                     content = LogsHandlers.handlers[process].download_xes_log()
-                    return content
-    return ""
+                    return jsonify({"content": content.decode('utf-8')})
+        return jsonify({"content": ""})
 
 
 @PM4PyServices.app.route("/downloadCsvLog", methods=["GET"])
@@ -561,8 +561,8 @@ def download_csv_log():
             if check_user_log_visibility(user, process):
                 if check_user_enabled_download(user, process):
                     content = LogsHandlers.handlers[process].download_csv_log()
-                    return content
-    return ""
+                    return jsonify({"content": content})
+    return jsonify({"content": ""})
 
 
 @PM4PyServices.app.route("/getAlignmentsVisualizations", methods=["POST"])

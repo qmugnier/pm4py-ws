@@ -222,4 +222,28 @@ export class Pm4pyService {
 
     return this.http.post(completeUrl, {"model": model}, {params: parameters});
   }
+
+  downloadCsvLog(parameters : HttpParams) {
+    let process = localStorage.getItem("process");
+    let sessionId = localStorage.getItem("sessionId");
+
+    parameters = parameters.set("process", process);
+    parameters = parameters.set("sessionId", sessionId);
+
+    var completeUrl : string = this.webservicePath + "downloadCsvLog";
+
+    return this.http.get(completeUrl, {params: parameters});
+  }
+
+  downloadXesLog(parameters : HttpParams) {
+    let process = localStorage.getItem("process");
+    let sessionId = localStorage.getItem("sessionId");
+
+    parameters = parameters.set("process", process);
+    parameters = parameters.set("sessionId", sessionId);
+
+    var completeUrl : string = this.webservicePath + "downloadXesLog";
+
+    return this.http.get(completeUrl, {params: parameters});
+  }
 }

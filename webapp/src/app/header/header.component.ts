@@ -1,5 +1,9 @@
 import {Component, OnInit} from '@angular/core';
 import {Router} from "@angular/router";
+import { environment } from '../../environments/environment';
+import {HttpParams} from "@angular/common/http";
+import {DomSanitizer} from "@angular/platform-browser";
+import {Pm4pyService} from "../pm4py-service.service";
 
 /**
 @Component({
@@ -18,14 +22,22 @@ export class HeaderComponent implements OnInit {
   router: Router;
   public title: string;
   public helpString: string = "";
+  public enableDownload : boolean = false;
+  public enableUpload : boolean = false;
+  sanitizer: DomSanitizer;
+  pm4pyService: Pm4pyService;
 
   public logsListHelpString: string = "This page contains a list of logs loaded in the system. To open one of them click on the name of the log.";
 
 
-  constructor(private _route: Router) {
+  constructor(private _route: Router, private _sanitizer: DomSanitizer, private pm4pyServ: Pm4pyService) {
     /**
      * Constructor (initialize the title and the help of the single page)
      */
+    this.pm4pyService = pm4pyServ;
+    this.sanitizer = _sanitizer;
+    this.enableDownload = environment.enableDownload;
+    this.enableUpload = environment.enableUpload;
     this.title = "PM4Py WI";
     this.router = _route;
     this.router.events.subscribe((val) => {
@@ -87,6 +99,30 @@ export class HeaderComponent implements OnInit {
     } else {
       this.processProvided = false;
     }
+  }
+
+  downloadFile(data: string, type: string) {
+    const blob = new Blob([data], { type: type });
+    const url= window.URL.createObjectURL(blob);
+    window.open(url);
+  }
+
+  downloadCsv() {
+    let httpParams : HttpParams = new HttpParams();
+
+    this.pm4pyService.downloadCsvLog(httpParams).subscribe(data => {
+      let csvJson : JSON = data as JSON;
+      this.downloadFile(csvJson['content'], 'text/csv');
+    });
+  }
+
+  downloadXes() {
+    let httpParams : HttpParams = new HttpParams();
+
+    this.pm4pyService.downloadXesLog(httpParams).subscribe(data => {
+      let xesJson : JSON = data as JSON;
+      this.downloadFile(xesJson['content'], 'text/csv');
+    });
   }
 
   startActivitiesFilter() {
