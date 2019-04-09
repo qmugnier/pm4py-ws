@@ -7,3 +7,4 @@ curs_users.execute("INSERT INTO USERS VALUES (?,?)",('admin', 'admin'))
 
 curs_users.execute("CREATE TABLE SESSIONS(SESSION_ID PRIMARY KEY, USER_ID, CREATION_DATE)")
 
+conn_users.commit()
