@@ -118,3 +118,7 @@ dmypy.json
 .idea
 .idea/
 .idea/*
+
+backup
+backup/
+backup/*
