@@ -1,3 +1,4 @@
+import sqlite3
 import traceback
 from threading import Semaphore
 
@@ -8,10 +9,114 @@ from pm4pyws.configuration import Configuration
 from pm4pyws.handlers.parquet.parquet import ParquetHandler
 from pm4pyws.handlers.xes.xes import XesHandler
 
+conn = sqlite3.connect('event_logs.db')
+c = conn.cursor()
+
 
 class LogsHandlers:
     handlers = {}
     semaphore_matplot = Semaphore(1)
+
+
+def check_session_validity(session_id):
+    """
+    Checks the validity of a session
+
+    Parameters
+    ------------
+    session_id
+        Session ID
+
+    Returns
+    ------------
+    boolean
+        Boolean value
+    """
+    return True
+
+
+def get_user_from_session(session_id):
+    """
+    Gets the user from the session
+
+    Parameters
+    ------------
+    session_id
+        Session ID
+
+    Returns
+    ------------
+    user
+        User ID
+    """
+    return None
+
+
+def check_is_admin(user):
+    """
+    Checks if the user is an administrator
+
+    Parameters
+    -------------
+    user
+        User
+
+    Returns
+    -------------
+    boolean
+        Boolean value
+    """
+    return True
+
+
+def check_user_log_visibility(user, process):
+    """
+    Checks if the user has visibility on the given process
+
+    Parameters
+    -------------
+    user
+        User
+    process
+        Process
+    """
+    return True
+
+
+def check_user_enabled_upload(user):
+    """
+    Checks if the user is enabled to upload a log
+
+    Parameters
+    ------------
+    user
+        User
+
+    Returns
+    ------------
+    boolean
+        Boolean value
+    """
+    return True
+
+
+def check_user_enabled_download(user, process):
+    """
+    Checks if the user is enabled to download a log
+
+    Parameters
+    ------------
+    user
+        User
+    process
+        Process
+
+    Returns
+    ------------
+    boolean
+        Boolean value
+    """
+    return True
 
 
 def load_log_static(log_name, file_path, parameters=None):
@@ -77,21 +182,27 @@ def get_process_schema():
         and 'format' contains the format
     :return:
     """
+    dictio = {}
+    # reads the session
+    session = request.args.get('session', type=str)
     # reads the requested process name
     process = request.args.get('process', default='receipt', type=str)
-    # reads the decoration
-    decoration = request.args.get('decoration', default='freq', type=str)
-    # reads the typeOfModel
-    type_of_model = request.args.get('typeOfModel', default='dfg', type=str)
-    # reads the simplicity
-    simplicity = request.args.get('simplicity', default=0.6, type=float)
-    variant = type_of_model + "_" + decoration
-    parameters = {"decreasingFactor": simplicity}
-    base64, model, format, this_handler = LogsHandlers.handlers[process].get_schema(variant=variant,
-                                                                                    parameters=parameters)
-    if model is not None:
-        model = model.decode('utf-8')
-    dictio = {"base64": base64.decode('utf-8'), "model": model, "format": format, "handler": this_handler}
+    if check_session_validity(session):
+        user = get_user_from_session(session)
+        if check_user_log_visibility(user, process):
+            # reads the decoration
+            decoration = request.args.get('decoration', default='freq', type=str)
+            # reads the typeOfModel
+            type_of_model = request.args.get('typeOfModel', default='dfg', type=str)
+            # reads the simplicity
+            simplicity = request.args.get('simplicity', default=0.6, type=float)
+            variant = type_of_model + "_" + decoration
+            parameters = {"decreasingFactor": simplicity}
+            base64, model, format, this_handler = LogsHandlers.handlers[process].get_schema(variant=variant,
+                                                                                            parameters=parameters)
+            if model is not None:
+                model = model.decode('utf-8')
+            dictio = {"base64": base64.decode('utf-8'), "model": model, "format": format, "handler": this_handler}
     ret = jsonify(dictio)
     return ret
 
@@ -107,17 +218,23 @@ def get_case_duration():
         JSONified dictionary that contains in the 'base64' entry the SVG representation
         of the case duration graph
     """
+    # reads the session
+    session = request.args.get('session', type=str)
     # reads the requested process name
     process = request.args.get('process', default='receipt', type=str)
 
-    LogsHandlers.semaphore_matplot.acquire()
-    try:
-        base64 = LogsHandlers.handlers[process].get_case_duration_svg()
-        dictio = {"base64": base64.decode('utf-8')}
-    except:
-        traceback.print_exc()
-        dictio = {"base64": ""}
-    LogsHandlers.semaphore_matplot.release()
+    dictio = {}
+    if check_session_validity(session):
+        user = get_user_from_session(session)
+        if check_user_log_visibility(user, process):
+            LogsHandlers.semaphore_matplot.acquire()
+            try:
+                base64 = LogsHandlers.handlers[process].get_case_duration_svg()
+                dictio = {"base64": base64.decode('utf-8')}
+            except:
+                traceback.print_exc()
+                dictio = {"base64": ""}
+            LogsHandlers.semaphore_matplot.release()
 
     ret = jsonify(dictio)
     return ret
@@ -134,17 +251,24 @@ def get_events_per_time():
         JSONified dictionary that contains in the 'base64' entry the SVG representation
         of the events per time graph
     """
+    # reads the session
+    session = request.args.get('session', type=str)
     # reads the requested process name
     process = request.args.get('process', default='receipt', type=str)
 
-    LogsHandlers.semaphore_matplot.acquire()
-    try:
-        base64 = LogsHandlers.handlers[process].get_events_per_time_svg()
-        dictio = {"base64": base64.decode('utf-8')}
-    except:
-        traceback.print_exc()
-        dictio = {"base64": ""}
-    LogsHandlers.semaphore_matplot.release()
+    dictio = {}
+
+    if check_session_validity(session):
+        user = get_user_from_session(session)
+        if check_user_log_visibility(user, process):
+            LogsHandlers.semaphore_matplot.acquire()
+            try:
+                base64 = LogsHandlers.handlers[process].get_events_per_time_svg()
+                dictio = {"base64": base64.decode('utf-8')}
+            except:
+                traceback.print_exc()
+                dictio = {"base64": ""}
+            LogsHandlers.semaphore_matplot.release()
 
     ret = jsonify(dictio)
 
@@ -162,11 +286,18 @@ def get_sna():
         HTML page containing the SNA representation
     """
     try:
+        # reads the session
+        session = request.args.get('session', type=str)
         # reads the requested process name
         process = request.args.get('process', default='receipt', type=str)
-        metric = request.args.get('metric', default='handover', type=str)
-        threshold = request.args.get('threshold', default=0.0, type=float)
-        sna = LogsHandlers.handlers[process].get_sna(variant=metric, parameters={"weight_threshold": threshold})
+        sna = ""
+
+        if check_session_validity(session):
+            user = get_user_from_session(session)
+            if check_user_log_visibility(user, process):
+                metric = request.args.get('metric', default='handover', type=str)
+                threshold = request.args.get('threshold', default=0.0, type=float)
+                sna = LogsHandlers.handlers[process].get_sna(variant=metric, parameters={"weight_threshold": threshold})
     except:
         traceback.print_exc()
         sna = ""
@@ -184,11 +315,21 @@ def get_all_variants():
     dictio
         JSONified dictionary that contains in the 'variants' entry the list of variants
     """
+    # reads the session
+    session = request.args.get('session', type=str)
     # reads the requested process name
     process = request.args.get('process', default='receipt', type=str)
-    variants = LogsHandlers.handlers[process].get_variant_statistics()
-    dictio = {"variants": variants}
+
+    dictio = {}
+
+    if check_session_validity(session):
+        user = get_user_from_session(session)
+        if check_user_log_visibility(user, process):
+            variants = LogsHandlers.handlers[process].get_variant_statistics()
+            dictio = {"variants": variants}
+
     ret = jsonify(dictio)
+
     return ret
 
 
@@ -202,13 +343,21 @@ def get_all_cases():
     dictio
         JSONified dictionary that contains in the 'cases' entry the list of cases
     """
+    # reads the session
+    session = request.args.get('session', type=str)
     process = request.args.get('process', default='receipt', type=str)
     variant = request.args.get('variant', type=str)
-    parameters = {}
-    if variant is not None:
-        parameters["variant"] = variant
-    cases_list = LogsHandlers.handlers[process].get_case_statistics(parameters=parameters)
-    dictio = {"cases": cases_list}
+
+    dictio = {}
+
+    if check_session_validity(session):
+        user = get_user_from_session(session)
+        if check_user_log_visibility(user, process):
+            parameters = {}
+            if variant is not None:
+                parameters["variant"] = variant
+            cases_list = LogsHandlers.handlers[process].get_case_statistics(parameters=parameters)
+            dictio = {"cases": cases_list}
     ret = jsonify(dictio)
     return ret
 
@@ -223,18 +372,25 @@ def get_events():
     dictio
         JSONified dictionary that contains in the 'events' entry the list of events
     """
+    # reads the session
+    session = request.args.get('session', type=str)
     process = request.args.get('process', default='receipt', type=str)
-    caseid = request.args.get('caseid', type=str)
-    events = LogsHandlers.handlers[process].get_events(caseid)
-    i = 0
-    while i < len(events):
-        keys = list(events[i].keys())
-        for key in keys:
-            if str(events[i][key]).lower() == "nan" or str(events[i][key]).lower() == "nat":
-                del events[i][key]
-        i = i + 1
-    dictio = {"events": events}
-    # print(dictio)
+
+    dictio = {}
+
+    if check_session_validity(session):
+        user = get_user_from_session(session)
+        if check_user_log_visibility(user, process):
+            caseid = request.args.get('caseid', type=str)
+            events = LogsHandlers.handlers[process].get_events(caseid)
+            i = 0
+            while i < len(events):
+                keys = list(events[i].keys())
+                for key in keys:
+                    if str(events[i][key]).lower() == "nan" or str(events[i][key]).lower() == "nat":
+                        del events[i][key]
+                i = i + 1
+            dictio = {"events": events}
     ret = jsonify(dictio)
     return ret
 
@@ -244,18 +400,26 @@ def load_log_from_path():
     """
     Service that loads a log from a path
     """
-    try:
-        # reads the log_name entry from the request JSON
-        log_name = request.json["log_name"]
-        # reads the log_path entry from the request JSON
-        log_path = request.json["log_path"]
-        parameters = request.json["parameters"] if "parameters" in request.json else None
-        print("log_name = ", log_name, "log_path = ", log_path)
-        load_log_static(log_name, log_path, parameters=parameters)
-    except:
-        traceback.print_exc()
-        return "FAIL"
-    return "OK"
+    if Configuration.enable_load_local_path:
+        try:
+            # reads the session
+            session = request.args.get('session', type=str)
+
+            if check_session_validity(session):
+                user = get_user_from_session(session)
+
+                # reads the log_name entry from the request JSON
+                log_name = request.json["log_name"]
+                # reads the log_path entry from the request JSON
+                log_path = request.json["log_path"]
+                parameters = request.json["parameters"] if "parameters" in request.json else None
+                print("log_name = ", log_name, "log_path = ", log_path)
+                load_log_static(log_name, log_path, parameters=parameters)
+                return "OK"
+        except:
+            traceback.print_exc()
+            return "FAIL"
+    return "FAIL"
 
 
 @PM4PyServices.app.route("/getLogsList", methods=["GET"])
@@ -268,6 +432,8 @@ def get_logs_list():
     dictio
         JSONified dictionary that contains in the 'logs' entry the list of events logs
     """
+    # reads the session
+    session = request.args.get('session', type=str)
     return jsonify({"logs": list(LogsHandlers.handlers.keys())})
 
 
@@ -282,12 +448,21 @@ def do_transient_analysis():
         JSONified dictionary that contains in the 'base64' entry the SVG representation
         of the events per time graph
     """
+    # reads the session
+    session = request.args.get('session', type=str)
     # reads the requested process name
     process = request.args.get('process', default='receipt', type=str)
-    delay = request.args.get('delay', default=86400, type=float)
 
-    base64 = LogsHandlers.handlers[process].get_transient(delay)
-    dictio = {"base64": base64.decode('utf-8')}
+    dictio = {}
+
+    if check_session_validity(session):
+        user = get_user_from_session(session)
+        if check_user_log_visibility(user, process):
+            delay = request.args.get('delay', default=86400, type=float)
+
+            base64 = LogsHandlers.handlers[process].get_transient(delay)
+            dictio = {"base64": base64.decode('utf-8')}
+
     ret = jsonify(dictio)
     return ret
 
@@ -302,20 +477,28 @@ def get_log_summary():
     log_summary
         Log summary
     """
+    # reads the session
+    session = request.args.get('session', type=str)
     # reads the requested process name
     process = request.args.get('process', default='receipt', type=str)
 
-    this_variants_number = LogsHandlers.handlers[process].variants_number
-    this_cases_number = LogsHandlers.handlers[process].cases_number
-    this_events_number = LogsHandlers.handlers[process].events_number
+    dictio = {}
 
-    ancestor_variants_number = LogsHandlers.handlers[process].first_ancestor.variants_number
-    ancestor_cases_number = LogsHandlers.handlers[process].first_ancestor.cases_number
-    ancestor_events_number = LogsHandlers.handlers[process].first_ancestor.events_number
+    if check_session_validity(session):
+        user = get_user_from_session(session)
+        if check_user_log_visibility(user, process):
+            this_variants_number = LogsHandlers.handlers[process].variants_number
+            this_cases_number = LogsHandlers.handlers[process].cases_number
+            this_events_number = LogsHandlers.handlers[process].events_number
 
-    dictio = {"this_variants_number": this_variants_number, "this_cases_number": this_cases_number,
-              "this_events_number": this_events_number, "ancestor_variants_number": ancestor_variants_number,
-              "ancestor_cases_number": ancestor_cases_number, "ancestor_events_number": ancestor_events_number}
+            ancestor_variants_number = LogsHandlers.handlers[process].first_ancestor.variants_number
+            ancestor_cases_number = LogsHandlers.handlers[process].first_ancestor.cases_number
+            ancestor_events_number = LogsHandlers.handlers[process].first_ancestor.events_number
+
+            dictio = {"this_variants_number": this_variants_number, "this_cases_number": this_cases_number,
+                      "this_events_number": this_events_number, "ancestor_variants_number": ancestor_variants_number,
+                      "ancestor_cases_number": ancestor_cases_number, "ancestor_events_number": ancestor_events_number}
+
     ret = jsonify(dictio)
     return ret
 
@@ -330,11 +513,17 @@ def download_xes_log():
     xes_log
         XES log
     """
+    # reads the session
+    session = request.args.get('session', type=str)
     # reads the requested process name
     process = request.args.get('process', default='receipt', type=str)
     if Configuration.enable_download:
-        content = LogsHandlers.handlers[process].download_xes_log()
-        return content
+        if check_session_validity(session):
+            user = get_user_from_session(session)
+            if check_user_log_visibility(user, process):
+                if check_user_enabled_download(user, process):
+                    content = LogsHandlers.handlers[process].download_xes_log()
+                    return content
     return ""
 
 
@@ -348,11 +537,17 @@ def download_csv_log():
     csv_log
         CSV log
     """
+    # reads the session
+    session = request.args.get('session', type=str)
     # reads the requested process name
     process = request.args.get('process', default='receipt', type=str)
     if Configuration.enable_download:
-        content = LogsHandlers.handlers[process].download_csv_log()
-        return content
+        if check_session_validity(session):
+            user = get_user_from_session(session)
+            if check_user_log_visibility(user, process):
+                if check_user_enabled_download(user, process):
+                    content = LogsHandlers.handlers[process].download_csv_log()
+                    return content
     return ""
 
 
@@ -366,14 +561,20 @@ def get_alignments():
     dictio
         Dictionary containing the Petri net and the table
     """
+    # reads the session
+    session = request.args.get('session', type=str)
     # reads the requested process name
     process = request.args.get('process', default='receipt', type=str)
 
-    petri_string = request.json["model"]
+    dictio = {}
 
-    svg_on_petri, svg_table = LogsHandlers.handlers[process].get_alignments(petri_string, parameters={})
+    if check_session_validity(session):
+        user = get_user_from_session(session)
+        if check_user_log_visibility(user, process):
+            petri_string = request.json["model"]
+            svg_on_petri, svg_table = LogsHandlers.handlers[process].get_alignments(petri_string, parameters={})
+            dictio = {"petri": svg_on_petri.decode('utf-8'), "table": svg_table.decode('utf-8')}
 
-    dictio = {"petri": svg_on_petri.decode('utf-8'), "table": svg_table.decode('utf-8')}
     ret = jsonify(dictio)
 
     return ret

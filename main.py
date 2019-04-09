@@ -29,5 +29,7 @@ if __name__ == "__main__":
         for result in c.fetchall():
             S.load_log(str(result[0]), str(result[1]))
 
+        conn.close()
+
         # offers the service to the outside
         S.serve(host=LISTENING_HOST, port=LISTENING_PORT)

@@ -26,7 +26,10 @@ export class Pm4pyService {
      * observer object
      */
     let process = localStorage.getItem("process");
+    let sessionId = localStorage.getItem("sessionId");
+
     parameters = parameters.set("process", process);
+    parameters = parameters.set("sessionId", sessionId);
 
     var completeUrl : string = this.webservicePath + "getProcessSchema";
 
@@ -44,7 +47,10 @@ export class Pm4pyService {
      * observer object
      */
     let process = localStorage.getItem("process");
+    let sessionId = localStorage.getItem("sessionId");
+
     parameters = parameters.set("process", process);
+    parameters = parameters.set("sessionId", sessionId);
 
     var completeUrl : string = this.webservicePath + "getEventsPerTimeGraph";
 
@@ -62,7 +68,10 @@ export class Pm4pyService {
      * observer object
      */
     let process = localStorage.getItem("process");
+    let sessionId = localStorage.getItem("sessionId");
+
     parameters = parameters.set("process", process);
+    parameters = parameters.set("sessionId", sessionId);
 
     var completeUrl : string = this.webservicePath + "getCaseDurationGraph";
 
@@ -81,6 +90,9 @@ export class Pm4pyService {
      */
     var completeUrl : string = this.webservicePath + "getLogsList";
 
+    let sessionId = localStorage.getItem("sessionId");
+    parameters = parameters.set("sessionId", sessionId);
+
     return this.http.get(completeUrl, {params: parameters});
   }
 
@@ -95,7 +107,10 @@ export class Pm4pyService {
      * observer object
      */
     let process = localStorage.getItem("process");
+    let sessionId = localStorage.getItem("sessionId");
+
     parameters = parameters.set("process", process);
+    parameters = parameters.set("sessionId", sessionId);
 
     var completeUrl : string = this.webservicePath + "transientAnalysis";
 
@@ -113,7 +128,10 @@ export class Pm4pyService {
      * observer object
      */
     let process = localStorage.getItem("process");
+    let sessionId = localStorage.getItem("sessionId");
+
     parameters = parameters.set("process", process);
+    parameters = parameters.set("sessionId", sessionId);
 
     var completeUrl : string = this.webservicePath + "getAllVariants";
 
@@ -131,7 +149,10 @@ export class Pm4pyService {
      * observer object
      */
     let process = localStorage.getItem("process");
+    let sessionId = localStorage.getItem("sessionId");
+
     parameters = parameters.set("process", process);
+    parameters = parameters.set("sessionId", sessionId);
 
     var completeUrl : string = this.webservicePath + "getAllCases";
 
@@ -149,7 +170,10 @@ export class Pm4pyService {
      * observer object
      */
     let process = localStorage.getItem("process");
+    let sessionId = localStorage.getItem("sessionId");
+
     parameters = parameters.set("process", process);
+    parameters = parameters.set("sessionId", sessionId);
 
     var completeUrl : string = this.webservicePath + "getEvents";
 
@@ -167,7 +191,10 @@ export class Pm4pyService {
      * observer object
      */
     let process = localStorage.getItem("process");
+    let sessionId = localStorage.getItem("sessionId");
+
     parameters = parameters.set("process", process);
+    parameters = parameters.set("sessionId", sessionId);
 
     var completeUrl : string = this.webservicePath + "getLogSummary";
 
@@ -186,7 +213,10 @@ export class Pm4pyService {
 
   getAlignmentsVisualizations(model : string, parameters : HttpParams) {
     let process = localStorage.getItem("process");
+    let sessionId = localStorage.getItem("sessionId");
+
     parameters = parameters.set("process", process);
+    parameters = parameters.set("sessionId", sessionId);
 
     var completeUrl : string = this.webservicePath + "getAlignmentsVisualizations";
 

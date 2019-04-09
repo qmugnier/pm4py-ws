@@ -34,7 +34,9 @@ export class SnaComponent implements OnInit {
      * Gets the SNA representation and includes it as an IFrame object
      */
     let process : string = localStorage.getItem("process");
-    let snaPlainUrl : string = this.pm4pyService.getServicePath() + "getSNA?process="+process+"&metric="+this.metric+"&threshold="+this.selectedArcsThreshold;
+    let sessionId = localStorage.getItem("sessionId");
+
+    let snaPlainUrl : string = this.pm4pyService.getServicePath() + "getSNA?process="+process+"&metric="+this.metric+"&threshold="+this.selectedArcsThreshold+"&sessionId="+sessionId;
 
     this.snaContent = this.sanitizer.bypassSecurityTrustResourceUrl(snaPlainUrl);
 
