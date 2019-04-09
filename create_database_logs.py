@@ -8,4 +8,13 @@ c.execute("INSERT INTO EVENT_LOGS VALUES (?,?)",("receipt(xes)","logs/receipt.xe
 c.execute("INSERT INTO EVENT_LOGS VALUES (?,?)",("running-example","logs/running-example.parquet"))
 c.execute("INSERT INTO EVENT_LOGS VALUES (?,?)",("receipt","logs/receipt.parquet"))
 
+c.execute("CREATE TABLE ADMINS(USER_ID PRIMARY KEY)")
+c.execute("INSERT INTO ADMINS VALUES ('admin')")
+
+c.execute("CREATE TABLE USER_LOG_VISIBILITY(USER_ID, LOG_NAME)")
+
+c.execute("CREATE TABLE USER_LOG_DOWNLOADABLE(USER_ID, LOG_NAME)")
+
+c.execute("CREATE TABLE USER_UPLOADABLE(USER_ID PRIMARY KEY)")
+
 conn.commit()
