@@ -12,6 +12,8 @@ from pm4pyws.handlers.parquet.process_schema import factory as process_schema_fa
 from pm4pyws.handlers.parquet.sna import get_sna as sna_obtainer
 from pm4pyws.handlers.parquet.statistics import case_duration, events_per_time
 from pm4pyws.util import casestats
+from pm4py.objects.conversion.log import factory as conv_factory
+from pm4py.objects.log.exporter.xes.versions import etree_xes_exp
 
 
 class ParquetHandler(object):
@@ -281,3 +283,15 @@ class ParquetHandler(object):
             Events belonging to the case
         """
         return case_statistics.get_events(self.dataframe, caseid, parameters=parameters)
+
+    def download_xes_log(self):
+        """
+        Downloads the XES log as string
+        """
+        return etree_xes_exp.export_log_as_string(conv_factory.apply(self.dataframe))
+
+    def download_csv_log(self):
+        """
+        Downloads the CSV log as string
+        """
+        return self.dataframe.to_string()

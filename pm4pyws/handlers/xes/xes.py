@@ -1,17 +1,19 @@
+from pm4py.algo.filtering.log.variants import variants_filter
 from pm4py.objects.log.importer.xes import factory as xes_importer
 from pm4py.objects.log.util import insert_classifier
 from pm4py.objects.log.util import xes
 from pm4py.statistics.traces.log import case_statistics
 from pm4py.util import constants
 
+from pm4pyws.handlers.xes.alignments import get_align
 from pm4pyws.handlers.xes.cases import variants
 from pm4pyws.handlers.xes.ctmc import transient
 from pm4pyws.handlers.xes.process_schema import factory as process_schema_factory
 from pm4pyws.handlers.xes.sna import get_sna as sna_obtainer
 from pm4pyws.handlers.xes.statistics import events_per_time, case_duration
 from pm4pyws.util import casestats
-from pm4py.algo.filtering.log.variants import variants_filter
-from pm4pyws.handlers.xes.alignments import get_align
+from pm4py.objects.log.exporter.xes.versions.etree_xes_exp import export_log_as_string
+from pm4py.objects.conversion.log import factory as conversion_factory
 
 class XesHandler(object):
     def __init__(self):
@@ -310,3 +312,18 @@ class XesHandler(object):
         parameters[constants.PARAMETER_CONSTANT_ACTIVITY_KEY] = self.activity_key
         parameters[constants.PARAMETER_CONSTANT_ATTRIBUTE_KEY] = self.activity_key
         return get_align.perform_alignments(self.log, petri_string, parameters=parameters)
+
+    def download_xes_log(self):
+        """
+        Downloads the XES log as string
+        """
+        log_string = export_log_as_string(self.log)
+        return log_string
+
+    def download_csv_log(self):
+        """
+        Downloads the CSV log as string
+        """
+        dataframe = conversion_factory.apply(self.log, variant=conversion_factory.TO_DATAFRAME)
+        log_string = dataframe.to_string()
+        return log_string
