@@ -637,7 +637,7 @@ def loginService():
         if session_id is not None:
             return jsonify({"status": "OK", "sessionEnabled": True, "sessionId": session_id})
         else:
-            return jsonify({"status": "OK", "sessionEnabled": True, "sessionId": None})
+            return jsonify({"status": "FAIL", "sessionEnabled": True, "sessionId": None})
 
     return jsonify({"status": "OK", "sessionEnabled": False, "sessionId": None})
 
