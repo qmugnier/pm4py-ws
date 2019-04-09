@@ -626,7 +626,7 @@ def download_csv_log():
 
 
 @PM4PyServices.app.route("/loginService", methods=["GET"])
-def loginService():
+def login_service():
     if Configuration.enable_session:
         # reads the user name
         user = request.args.get('user', type=str)
