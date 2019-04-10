@@ -27,6 +27,7 @@ export class HeaderComponent implements OnInit {
   sanitizer: DomSanitizer;
   pm4pyService: Pm4pyService;
   isNotLogin : boolean = true;
+  loginEnabled : boolean = true;
 
   userId: string;
 
@@ -44,6 +45,7 @@ export class HeaderComponent implements OnInit {
     this.checkSession();
     this.title = "PM4Py WI";
     this.router = _route;
+    this.loginEnabled = environment.enableLogin;
     this.router.events.subscribe((val) => {
       let process_name: string = localStorage.getItem("process");
       if (process_name != null) {
@@ -192,6 +194,13 @@ export class HeaderComponent implements OnInit {
         this.enableDownload = environment.enableDownload && sessionJson["can_download"] && this.isNotLogin;
       }
     })
+  }
+
+  doLogout() {
+    localStorage.removeItem("process");
+    localStorage.removeItem("sessionId");
+    this.router.navigateByUrl("/login");
+    window.location.reload();
   }
 
   startActivitiesFilter() {
