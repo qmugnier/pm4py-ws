@@ -16,6 +16,7 @@ export class LoginComponent implements OnInit {
   sanitizer: DomSanitizer;
   pm4pyService: Pm4pyService;
   router: Router;
+  public loginTextHint : string;
 
   constructor(private _route: Router, private _sanitizer: DomSanitizer, private pm4pyServ: Pm4pyService) {
     this.pm4pyService = pm4pyServ;
@@ -30,6 +31,7 @@ export class LoginComponent implements OnInit {
 
     this.username = "";
     this.password = "";
+    this.loginTextHint = environment.loginTextHint;
   }
 
   ngOnInit() {
