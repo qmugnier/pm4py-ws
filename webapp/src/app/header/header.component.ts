@@ -53,7 +53,16 @@ export class HeaderComponent implements OnInit {
           this.processProvided = false;
           this.title = "PM4Py WI - List of Logs";
           this.helpString = this.logsListHelpString;
-        } else {
+        }
+        else if (this.router.url == "/login") {
+          this.title = "PM4Py WI - Login";
+          this.helpString = "Insert your username and password to enter the application";
+          this.processProvided = false;
+          this.enableDownload = false;
+          this.enableUpload = false;
+          this.isNotLogin = false;
+        }
+        else {
           this.processProvided = true;
           if (this.router.url === "/process") {
             this.title = "PM4Py WI - Process Discovery" + " (" + process_name + ")";
@@ -80,19 +89,22 @@ export class HeaderComponent implements OnInit {
           } else if (this.router.url == "/alignments") {
             this.title = "PM4Py WI - Alignments (" + process_name + ")";
             this.helpString = "Perform alignments between the log and the reference model that was selected. Two tabs are provided, one containing the projection of the alignments on the model and one reporting a table of the alignments.";
-          } else if (this.router.url == "/login") {
-            this.title = "PM4Py WI - Login";
-            this.helpString = "Insert your username and password to enter the application";
-            this.processProvided = false;
-            this.enableDownload = false;
-            this.enableUpload = false;
-            this.isNotLogin = false;
           }
         }
       } else {
         this.processProvided = false;
-        this.title = "PM4Py WI - List of Logs";
-        this.helpString = this.logsListHelpString;
+        if (environment.enableLogin) {
+          this.title = "PM4Py WI - Login";
+          this.helpString = "Insert your username and password to enter the application";
+          this.processProvided = false;
+          this.enableDownload = false;
+          this.enableUpload = false;
+          this.isNotLogin = false;
+        }
+        else {
+          this.title = "PM4Py WI - List of Logs";
+          this.helpString = this.logsListHelpString;
+        }
       }
     });
   }
