@@ -268,4 +268,15 @@ export class Pm4pyService {
 
     return this.http.post(completeUrl, data, {params: parameters});
   }
+
+  loginService(username : string, password : string) {
+    var completeUrl : string = this.webservicePath + "loginService";
+
+    let httpParams : HttpParams = new HttpParams();
+    httpParams = httpParams.set("user", username);
+    httpParams = httpParams.set("password", password);
+
+    return this.http.get(completeUrl, {params: httpParams});
+  }
+
 }

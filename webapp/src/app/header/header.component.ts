@@ -26,6 +26,7 @@ export class HeaderComponent implements OnInit {
   public enableUpload : boolean = false;
   sanitizer: DomSanitizer;
   pm4pyService: Pm4pyService;
+  isNotLogin : boolean = true;
 
   userId: string;
 
@@ -79,6 +80,13 @@ export class HeaderComponent implements OnInit {
           } else if (this.router.url == "/alignments") {
             this.title = "PM4Py WI - Alignments (" + process_name + ")";
             this.helpString = "Perform alignments between the log and the reference model that was selected. Two tabs are provided, one containing the projection of the alignments on the model and one reporting a table of the alignments.";
+          } else if (this.router.url == "/login") {
+            this.title = "PM4Py WI - Login";
+            this.helpString = "Insert your username and password to enter the application";
+            this.processProvided = false;
+            this.enableDownload = false;
+            this.enableUpload = false;
+            this.isNotLogin = false;
           }
         }
       } else {
@@ -165,11 +173,11 @@ export class HeaderComponent implements OnInit {
       }
 
       if ("can_upload" in sessionJson) {
-        this.enableUpload = environment.enableUpload && sessionJson["can_upload"];
+        this.enableUpload = environment.enableUpload && sessionJson["can_upload"] && this.isNotLogin;
       }
 
       if ("can_download" in sessionJson) {
-        this.enableDownload = environment.enableDownload && sessionJson["can_download"];
+        this.enableDownload = environment.enableDownload && sessionJson["can_download"] && this.isNotLogin;
       }
     })
   }

@@ -1,10 +1,11 @@
 <div id="container0" class="container" fxLayout="column" fxLayoutAlign="center" fxFlexFill>
   <app-header></app-header>
+    <app-login fxFlex="95%" *ngIf="sessionId_provided == false"></app-login>
     <app-filters fxFlex="7%" style="background-color: #FFC0D5"
-                 *ngIf="process_provided == true  && !router.url.startsWith('/logsList')"></app-filters>
+                 *ngIf="sessionId_provided == true && process_provided == true  && !router.url.startsWith('/logsList')"></app-filters>
     <app-process-list fxFlex="95%"
-                      *ngIf="process_provided == false || router.url.startsWith('/logsList')"></app-process-list>
-    <div fxFlex="77%" *ngIf="process_provided == true  && !router.url.startsWith('/logsList')">
+                      *ngIf="sessionId_provided == true && (process_provided == false || router.url.startsWith('/logsList'))"></app-process-list>
+    <div fxFlex="77%" *ngIf="sessionId_provided == true && process_provided == true  && !router.url.startsWith('/logsList')">
       <div *ngIf="router.url.startsWith('/process')">
         <app-process-model></app-process-model>
       </div>
@@ -22,6 +23,9 @@
       </div>
       <div *ngIf="router.url.startsWith('/alignments')">
         <app-alignments></app-alignments>
+      </div>
+      <div *ngIf="router.url.startsWith('/login')">
+        <app-login></app-login>
       </div>
     </div>
     <div fxFlex="5%" style="background-color: #FF4081">

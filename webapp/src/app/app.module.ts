@@ -26,6 +26,10 @@ import { MatIconModule } from '@angular/material';
 import { MatTableModule } from '@angular/material';
 import { MatSortModule } from '@angular/material';
 import { MatTabsModule } from '@angular/material';
+import { MatCardModule } from '@angular/material';
+import { MatInputModule } from '@angular/material';
+import { FormsModule } from '@angular/forms';
+
 
 
 
@@ -37,6 +41,7 @@ import { SnaComponent } from './sna/sna.component';
 import { ProcessListComponent } from './process-list/process-list.component';
 import { TransientComponent } from './transient/transient.component';
 import { AlignmentsComponent } from './alignments/alignments.component';
+import { LoginComponent } from './login/login.component';
 
 const appRoutes: Routes = [
   { path: 'process', component: AppComponent },
@@ -46,7 +51,8 @@ const appRoutes: Routes = [
   { path: 'logsList', component: AppComponent },
   { path: 'simulation', component: TransientComponent },
   { path: 'alignments', component: AlignmentsComponent },
-  { path: '**', redirectTo: 'logsList' }
+  { path: 'login', component: LoginComponent },
+  { path: '**', redirectTo: 'login' }
 ];
 
 
@@ -63,7 +69,8 @@ const appRoutes: Routes = [
     ProcessModelComponent,
     SnaComponent,
     TransientComponent,
-    AlignmentsComponent
+    AlignmentsComponent,
+    LoginComponent
   ],
   imports: [
     BrowserModule,
@@ -85,6 +92,9 @@ const appRoutes: Routes = [
     FlexLayoutModule,
     MatTabsModule,
     MatSortModule,
+    MatCardModule,
+    MatInputModule,
+    FormsModule,
     MatProgressSpinnerModule,
     RouterModule.forRoot(
       appRoutes,
