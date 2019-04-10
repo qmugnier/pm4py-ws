@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import {DomSanitizer} from "@angular/platform-browser";
 import {Pm4pyService} from "../pm4py-service.service";
 import {Router} from "@angular/router";
+import { environment } from '../../environments/environment';
+
 
 @Component({
   selector: 'app-login',
@@ -19,6 +21,10 @@ export class LoginComponent implements OnInit {
     this.pm4pyService = pm4pyServ;
     this.sanitizer = _sanitizer;
     this.router = _route;
+
+    if (!environment.enableLogin) {
+      this.router.navigateByUrl('/logsList');
+    }
 
     localStorage.removeItem("sessionId");
 

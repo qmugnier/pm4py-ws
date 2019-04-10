@@ -20,6 +20,7 @@ export class ProcessListComponent implements OnInit {
      */
     this.pm4pyService = pm4pyServ;
     this.router = _route;
+
     this.getProcessList();
   }
 

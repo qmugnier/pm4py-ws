@@ -1,5 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from "@angular/router";
+import { environment } from '../environments/environment';
 
 @Component({
   selector: 'app-root',
@@ -22,7 +23,7 @@ export class AppComponent implements OnInit {
     this.router = _router;
     this.route = _route;
     this.router.events.subscribe((val) => {
-      if (localStorage.getItem("sessionId") != null) {
+      if (environment.enableLogin && localStorage.getItem("sessionId") != null) {
         this.sessionId_provided = true;
       }
       let process_name: string = localStorage.getItem("process");
@@ -45,11 +46,16 @@ export class AppComponent implements OnInit {
     /**
      * Method that is called on initialization of the app
      */
-    if (localStorage.getItem("sessionId") != null && this.router.url != "/login" && this.router.url != "/" && this.router.url != "/index.html") {
+    if (environment.enableLogin) {
+      if (localStorage.getItem("sessionId") != null && this.router.url != "/login" && this.router.url != "/" && this.router.url != "/index.html") {
+        this.sessionId_provided = true;
+      } else {
+        this.sessionId_provided = false;
+        this.process_provided = false;
+      }
+    }
+    else {
       this.sessionId_provided = true;
-    } else {
-      this.sessionId_provided = false;
-      this.process_provided = false;
     }
     let url: string = window.location.href;
     if (url.split("process=").length > 1) {
