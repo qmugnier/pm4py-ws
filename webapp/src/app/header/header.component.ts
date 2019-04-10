@@ -42,7 +42,6 @@ export class HeaderComponent implements OnInit {
     this.sanitizer = _sanitizer;
     this.enableDownload = environment.enableDownload;
     this.enableUpload = environment.enableUpload;
-    this.checkSession();
     this.title = "PM4Py WI";
     this.router = _route;
     this.loginEnabled = environment.enableLogin;
@@ -66,6 +65,7 @@ export class HeaderComponent implements OnInit {
         }
         else {
           this.processProvided = true;
+          this.isNotLogin = true;
           if (this.router.url === "/process") {
             this.title = "PM4Py WI - Process Discovery" + " (" + process_name + ")";
             this.helpString = "This page shows the process discovered by our algorithms on the given log. You can change the discovery algorithm" +
@@ -105,9 +105,11 @@ export class HeaderComponent implements OnInit {
         }
         else {
           this.title = "PM4Py WI - List of Logs";
+          this.isNotLogin = true;
           this.helpString = this.logsListHelpString;
         }
       }
+      this.checkSession();
     });
   }
 
