@@ -698,6 +698,8 @@ def upload_log():
                         conn_logs = sqlite3.connect('event_logs.db')
                         curs_logs = conn_logs.cursor()
                         curs_logs.execute("INSERT INTO EVENT_LOGS VALUES (?,?)", (basename, filepath))
+                        curs_logs.execute("INSERT INTO USER_LOG_VISIBILITY VALUES (?,?)", (user, basename))
+                        curs_logs.execute("INSERT INTO USER_LOG_DOWNLOADABLE VALUES (?,?)", (user, basename))
                         conn_logs.commit()
                         conn_logs.close()
                         return jsonify({"status": "OK"})

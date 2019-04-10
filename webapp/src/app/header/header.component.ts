@@ -51,6 +51,7 @@ export class HeaderComponent implements OnInit {
         this.title = "PM4Py WI";
         this.helpString = "";
         if (this.router.url === "/logsList") {
+          this.isNotLogin = true;
           this.processProvided = false;
           this.title = "PM4Py WI - List of Logs";
           this.helpString = this.logsListHelpString;
@@ -184,8 +185,11 @@ export class HeaderComponent implements OnInit {
     this.pm4pyService.checkSessionService(httpParams).subscribe(data => {
       let sessionJson : JSON = data as JSON;
 
+      console.log(sessionJson);
+
       if ("user" in sessionJson) {
         this.userId = sessionJson["user"];
+        this.isNotLogin = true;
       }
 
       if ("can_upload" in sessionJson) {
