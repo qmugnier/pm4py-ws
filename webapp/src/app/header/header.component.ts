@@ -185,8 +185,6 @@ export class HeaderComponent implements OnInit {
     this.pm4pyService.checkSessionService(httpParams).subscribe(data => {
       let sessionJson : JSON = data as JSON;
 
-      console.log(sessionJson);
-
       if ("user" in sessionJson) {
         this.userId = sessionJson["user"];
         this.isNotLogin = true;
