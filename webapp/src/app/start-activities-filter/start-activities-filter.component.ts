@@ -2,8 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import {DomSanitizer} from "@angular/platform-browser";
 import {Pm4pyService} from "../pm4py-service.service";
 import {HttpParams} from "@angular/common/http";
-import {FiltersComponent} from "../filters/filters.component";
-import {MatDialog} from "@angular/material";
+import { FilterServiceService } from '../filter-service.service';
 
 @Component({
   selector: 'app-start-activities-filter',
@@ -15,13 +14,12 @@ export class StartActivitiesFilterComponent implements OnInit {
   pm4pyService: Pm4pyService;
   public startActivities : string[];
   public selectedStartActivities : string[];
-  filtersProcess : FiltersComponent;
 
-  constructor(private _sanitizer: DomSanitizer, private pm4pyServ: Pm4pyService, private _filtersProcess : FiltersComponent) {
+  constructor(private _sanitizer: DomSanitizer, private pm4pyServ: Pm4pyService, public filterService : FilterServiceService) {
     this.sanitizer = _sanitizer;
     this.pm4pyService = pm4pyServ;
     this.selectedStartActivities = [];
-    this.filtersProcess = _filtersProcess;
+    this.filterService = filterService;
     this.getStartActivities();
   }
 
@@ -48,7 +46,7 @@ export class StartActivitiesFilterComponent implements OnInit {
   }
 
   applyFilter() {
-    this.filtersProcess.addFilter("start_activities", this.selectedStartActivities);
+    this.filterService.addFilter("start_activities", this.selectedStartActivities);
   }
 
 }

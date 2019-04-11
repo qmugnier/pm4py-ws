@@ -25,18 +25,16 @@ export class HeaderComponent implements OnInit {
   isNotLogin : boolean = true;
   loginEnabled : boolean = true;
   public dialog : MatDialog;
-  filtersProcess : FiltersComponent;
 
   userId: string;
 
   public logsListHelpString: string = "This page contains a list of logs loaded in the system. To open one of them click on the name of the log.";
 
 
-  constructor(private _route: Router, private _sanitizer: DomSanitizer, private pm4pyServ: Pm4pyService, public _dialog: MatDialog, private _filtersProcess : FiltersComponent) {
+  constructor(private _route: Router, private _sanitizer: DomSanitizer, private pm4pyServ: Pm4pyService, public _dialog: MatDialog) {
     /**
      * Constructor (initialize the title and the help of the single page)
      */
-    this.filtersProcess = _filtersProcess;
     this.pm4pyService = pm4pyServ;
     this.sanitizer = _sanitizer;
     this.dialog = _dialog;
