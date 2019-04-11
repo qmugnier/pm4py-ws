@@ -56,10 +56,6 @@ class ParquetHandler(object):
         self.last_ancestor = ancestor
         self.filters_chain = ancestor.filters_chain
         self.dataframe = ancestor.dataframe
-        self.build_variants_df()
-        self.calculate_variants_number()
-        self.calculate_cases_number()
-        self.calculate_events_number()
 
     def build_from_path(self, path, parameters=None):
         """
@@ -76,9 +72,6 @@ class ParquetHandler(object):
             parameters = {}
         self.dataframe = parquet_importer.apply(path)
         self.build_variants_df()
-        self.calculate_variants_number()
-        self.calculate_cases_number()
-        self.calculate_events_number()
 
     def remove_filter(self, filter, all_filters):
         """
@@ -100,6 +93,10 @@ class ParquetHandler(object):
         new_handler.copy_from_ancestor(self.first_ancestor)
         for filter in all_filters:
             new_handler.add_filter0(filter)
+        new_handler.build_variants_df()
+        new_handler.calculate_cases_number()
+        new_handler.calculate_variants_number()
+        new_handler.calculate_events_number()
         return new_handler
 
     def add_filter(self, filter, all_filters):

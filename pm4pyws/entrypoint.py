@@ -622,6 +622,7 @@ def get_log_summary():
             dictio = {"this_variants_number": this_variants_number, "this_cases_number": this_cases_number,
                       "this_events_number": this_events_number, "ancestor_variants_number": ancestor_variants_number,
                       "ancestor_cases_number": ancestor_cases_number, "ancestor_events_number": ancestor_events_number}
+            print(dictio)
 
     ret = jsonify(dictio)
     return ret
