@@ -27,6 +27,7 @@ import { MatTableModule } from '@angular/material';
 import { MatSortModule } from '@angular/material';
 import { MatTabsModule } from '@angular/material';
 import { MatCardModule } from '@angular/material';
+import { MatDialogModule } from '@angular/material';
 import { MatInputModule } from '@angular/material';
 import { FormsModule } from '@angular/forms';
 
@@ -42,6 +43,7 @@ import { ProcessListComponent } from './process-list/process-list.component';
 import { TransientComponent } from './transient/transient.component';
 import { AlignmentsComponent } from './alignments/alignments.component';
 import { LoginComponent } from './login/login.component';
+import { StartActivitiesFilterComponent } from './start-activities-filter/start-activities-filter.component';
 
 const appRoutes: Routes = [
   { path: 'process', component: AppComponent },
@@ -70,7 +72,8 @@ const appRoutes: Routes = [
     SnaComponent,
     TransientComponent,
     AlignmentsComponent,
-    LoginComponent
+    LoginComponent,
+    StartActivitiesFilterComponent
   ],
   imports: [
     BrowserModule,
@@ -85,6 +88,7 @@ const appRoutes: Routes = [
     MatOptionModule,
     MatSelectModule,
     MatRadioModule,
+    MatDialogModule,
     MatListModule,
     MatMenuModule,
     MatTableModule,
@@ -100,6 +104,7 @@ const appRoutes: Routes = [
       appRoutes,
       { enableTracing: true, onSameUrlNavigation: 'reload' } // <-- debugging purposes only
     )  ],
+  entryComponents: [StartActivitiesFilterComponent],
   providers: [],
   bootstrap: [AppComponent]
 })

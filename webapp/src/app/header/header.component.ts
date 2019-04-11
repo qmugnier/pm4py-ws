@@ -4,13 +4,8 @@ import { environment } from '../../environments/environment';
 import {HttpParams} from "@angular/common/http";
 import {DomSanitizer} from "@angular/platform-browser";
 import {Pm4pyService} from "../pm4py-service.service";
-
-/**
-@Component({
-  selector: 'start-activities-filter',
-  templateUrl: 'start-activities-filter.html',
-})
-export class StartActivitiesFilter {}*/
+import {MatDialog} from '@angular/material';
+import {StartActivitiesFilterComponent} from "../start-activities-filter/start-activities-filter.component";
 
 @Component({
   selector: 'app-header',
@@ -28,18 +23,20 @@ export class HeaderComponent implements OnInit {
   pm4pyService: Pm4pyService;
   isNotLogin : boolean = true;
   loginEnabled : boolean = true;
+  public dialog : MatDialog;
 
   userId: string;
 
   public logsListHelpString: string = "This page contains a list of logs loaded in the system. To open one of them click on the name of the log.";
 
 
-  constructor(private _route: Router, private _sanitizer: DomSanitizer, private pm4pyServ: Pm4pyService) {
+  constructor(private _route: Router, private _sanitizer: DomSanitizer, private pm4pyServ: Pm4pyService, public _dialog: MatDialog) {
     /**
      * Constructor (initialize the title and the help of the single page)
      */
     this.pm4pyService = pm4pyServ;
     this.sanitizer = _sanitizer;
+    this.dialog = _dialog;
     this.enableDownload = environment.enableDownload;
     this.enableUpload = environment.enableUpload;
     this.title = "PM4Py WI";
@@ -208,11 +205,7 @@ export class HeaderComponent implements OnInit {
   }
 
   startActivitiesFilter() {
-    /*const dialogRef = this.dialog.open(DialogContentExampleDialog);
-
-    dialogRef.afterClosed().subscribe(result => {
-      console.log(`Dialog result: ${result}`);
-    });*/
+    this.dialog.open(StartActivitiesFilterComponent);
   }
 
 }

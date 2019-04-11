@@ -14,6 +14,8 @@ from pm4pyws.handlers.xes.statistics import events_per_time, case_duration
 from pm4pyws.util import casestats
 from pm4py.objects.log.exporter.xes.versions.etree_xes_exp import export_log_as_string
 from pm4py.objects.conversion.log import factory as conversion_factory
+from pm4py.algo.filtering.log.start_activities import start_activities_filter
+from pm4py.algo.filtering.log.end_activities import end_activities_filter
 
 import tempfile
 
@@ -329,3 +331,33 @@ class XesHandler(object):
         dataframe = conversion_factory.apply(self.log, variant=conversion_factory.TO_DATAFRAME)
         log_string = dataframe.to_string()
         return log_string
+
+    def get_start_activities(self, parameters=None):
+        """
+        Gets the start activities from the log
+
+        Returns
+        ------------
+        start_activities_dict
+            Dictionary of start activities
+        """
+        if parameters is None:
+            parameters = {}
+        parameters[constants.PARAMETER_CONSTANT_ACTIVITY_KEY] = self.activity_key
+        parameters[constants.PARAMETER_CONSTANT_ATTRIBUTE_KEY] = self.activity_key
+        return start_activities_filter.get_start_activities(self.log, parameters=parameters)
+
+    def get_end_activities(self, parameters=None):
+        """
+        Gets the end activities from the log
+
+        Returns
+        -------------
+        end_activities_dict
+            Dictionary of end activities
+        """
+        if parameters is None:
+            parameters = {}
+        parameters[constants.PARAMETER_CONSTANT_ACTIVITY_KEY] = self.activity_key
+        parameters[constants.PARAMETER_CONSTANT_ATTRIBUTE_KEY] = self.activity_key
+        return end_activities_filter.get_end_activities(self.log, parameters=parameters)

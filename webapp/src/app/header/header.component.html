@@ -3,17 +3,8 @@
     {{helpString}}
   </mat-menu>
   <mat-menu #filtersMenu="matMenu">
-    <button mat-menu-item>
+    <button mat-menu-item (click)="startActivitiesFilter()">
       Start activities filter
-    </button>
-    <button mat-menu-item>
-      End activities filter
-    </button>
-    <button mat-menu-item>
-      Attributes filter
-    </button>
-    <button mat-menu-item>
-      Paths filter
     </button>
   </mat-menu>
   <mat-menu #uploadMenu="matMenu">
@@ -51,7 +42,7 @@
   <span *ngIf="processProvided == true"><a routerLink="/simulation" alt="Simulation"><img src="../../assets/simulation.svg" /></a></span>
   <span *ngIf="processProvided == true"><a routerLink="/statistics" alt="Statistics"><img src="../../assets/statistics.svg" /></a></span>
   <span>&nbsp;&nbsp;</span>
-  <span *ngIf="false" [matMenuTriggerFor]="filtersMenu">
+  <span *ngIf="processProvided == true" [matMenuTriggerFor]="filtersMenu">
     <img src="../../assets/filter.svg" alt="Help" />
   </span>
     <span style="flex: 1 1 auto;"></span>
