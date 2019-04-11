@@ -639,15 +639,14 @@ def get_start_activities():
     session = request.args.get('session', type=str)
     # reads the requested process name
     process = request.args.get('process', default='receipt', type=str)
-    if Configuration.enable_download:
-        if check_session_validity(session):
-            user = get_user_from_session(session)
-            if check_user_log_visibility(user, process):
-                dictio = LogsHandlers.handlers[process].get_start_activities()
-                for entry in dictio:
-                    dictio[entry] = int(dictio[entry])
-                list_act = sorted([(x, y) for x, y in dictio.items()], key=lambda x: x[1], reverse=True)
-                return jsonify({"startActivities": list_act})
+    if check_session_validity(session):
+        user = get_user_from_session(session)
+        if check_user_log_visibility(user, process):
+            dictio = LogsHandlers.handlers[process].get_start_activities()
+            for entry in dictio:
+                dictio[entry] = int(dictio[entry])
+            list_act = sorted([(x, y) for x, y in dictio.items()], key=lambda x: x[1], reverse=True)
+            return jsonify({"startActivities": list_act})
     return jsonify({"startActivities": []})
 
 
@@ -665,15 +664,14 @@ def get_end_activities():
     session = request.args.get('session', type=str)
     # reads the requested process name
     process = request.args.get('process', default='receipt', type=str)
-    if Configuration.enable_download:
-        if check_session_validity(session):
-            user = get_user_from_session(session)
-            if check_user_log_visibility(user, process):
-                dictio = LogsHandlers.handlers[process].get_end_activities()
-                for entry in dictio:
-                    dictio[entry] = int(dictio[entry])
-                list_act = sorted([(x, y) for x, y in dictio.items()], key=lambda x: x[1], reverse=True)
-                return jsonify({"endActivities": list_act})
+    if check_session_validity(session):
+        user = get_user_from_session(session)
+        if check_user_log_visibility(user, process):
+            dictio = LogsHandlers.handlers[process].get_end_activities()
+            for entry in dictio:
+                dictio[entry] = int(dictio[entry])
+            list_act = sorted([(x, y) for x, y in dictio.items()], key=lambda x: x[1], reverse=True)
+            return jsonify({"endActivities": list_act})
     return jsonify({"endActivities": []})
 
 
@@ -683,13 +681,29 @@ def get_attributes_list():
     session = request.args.get('session', type=str)
     # reads the requested process name
     process = request.args.get('process', default='receipt', type=str)
-    if Configuration.enable_download:
-        if check_session_validity(session):
-            user = get_user_from_session(session)
-            if check_user_log_visibility(user, process):
-                attributes_list = sorted(list(LogsHandlers.handlers[process].get_attributes_list()))
-                return jsonify({"attributes_list": attributes_list})
+    if check_session_validity(session):
+        user = get_user_from_session(session)
+        if check_user_log_visibility(user, process):
+            attributes_list = sorted(list(LogsHandlers.handlers[process].get_attributes_list()))
+            return jsonify({"attributes_list": attributes_list})
     return jsonify({"attributes_list": []})
+
+
+@PM4PyServices.app.route("/getAttributeValues", methods=["GET"])
+def get_attribute_values():
+    # reads the session
+    session = request.args.get('session', type=str)
+    # reads the requested process name
+    process = request.args.get('process', default='receipt', type=str)
+    # reads the requested attribute
+    attribute_key = request.args.get('attribute_key', type=str)
+    if check_session_validity(session):
+        user = get_user_from_session(session)
+        if check_user_log_visibility(user, process):
+            dictio = LogsHandlers.handlers[process].get_attribute_values(attribute_key)
+            list_values = sorted([(x, y) for x, y in dictio.items()], key=lambda x: x[1], reverse=True)
+            return jsonify({"attributeValues": list_values})
+    return jsonify({"attributeValues": []})
 
 
 @PM4PyServices.app.route("/loginService", methods=["GET"])
