@@ -19,7 +19,33 @@ um = BasicUserManagement()
 
 class LogsHandlers:
     handlers = {}
+    session_handlers = {}
     semaphore_matplot = Semaphore(1)
+
+
+def get_handler_for_process_and_session(process, session):
+    """
+    Gets an handler for a given process and session
+
+    Parameters
+    -------------
+    process
+        Process
+    session
+        Session
+
+    Returns
+    -------------
+    handler
+        Handler
+    """
+    if process in LogsHandlers.handlers:
+        if session not in LogsHandlers.session_handlers:
+            LogsHandlers.session_handlers[session] = {}
+        if process not in LogsHandlers.session_handlers:
+            LogsHandlers.session_handlers[session][process] = LogsHandlers.handlers[process]
+        return LogsHandlers.session_handlers[session][process]
+    return None
 
 
 def do_login(user, password):
@@ -260,7 +286,7 @@ def get_process_schema():
             simplicity = request.args.get('simplicity', default=0.6, type=float)
             variant = type_of_model + "_" + decoration
             parameters = {"decreasingFactor": simplicity}
-            base64, model, format, this_handler = LogsHandlers.handlers[process].get_schema(variant=variant,
+            base64, model, format, this_handler = get_handler_for_process_and_session(process, session).get_schema(variant=variant,
                                                                                             parameters=parameters)
             if model is not None:
                 model = model.decode('utf-8')
@@ -291,7 +317,7 @@ def get_case_duration():
         if check_user_log_visibility(user, process):
             LogsHandlers.semaphore_matplot.acquire()
             try:
-                base64 = LogsHandlers.handlers[process].get_case_duration_svg()
+                base64 = get_handler_for_process_and_session(process, session).get_case_duration_svg()
                 dictio = {"base64": base64.decode('utf-8')}
             except:
                 traceback.print_exc()
@@ -325,7 +351,7 @@ def get_events_per_time():
         if check_user_log_visibility(user, process):
             LogsHandlers.semaphore_matplot.acquire()
             try:
-                base64 = LogsHandlers.handlers[process].get_events_per_time_svg()
+                base64 = get_handler_for_process_and_session(process, session).get_events_per_time_svg()
                 dictio = {"base64": base64.decode('utf-8')}
             except:
                 traceback.print_exc()
@@ -359,7 +385,7 @@ def get_sna():
             if check_user_log_visibility(user, process):
                 metric = request.args.get('metric', default='handover', type=str)
                 threshold = request.args.get('threshold', default=0.0, type=float)
-                sna = LogsHandlers.handlers[process].get_sna(variant=metric, parameters={"weight_threshold": threshold})
+                sna = get_handler_for_process_and_session(process, session).get_sna(variant=metric, parameters={"weight_threshold": threshold})
     except:
         traceback.print_exc()
         sna = ""
@@ -387,7 +413,7 @@ def get_all_variants():
     if check_session_validity(session):
         user = get_user_from_session(session)
         if check_user_log_visibility(user, process):
-            variants = LogsHandlers.handlers[process].get_variant_statistics()
+            variants = get_handler_for_process_and_session(process, session).get_variant_statistics()
             dictio = {"variants": variants}
 
     ret = jsonify(dictio)
@@ -418,7 +444,7 @@ def get_all_cases():
             parameters = {}
             if variant is not None:
                 parameters["variant"] = variant
-            cases_list = LogsHandlers.handlers[process].get_case_statistics(parameters=parameters)
+            cases_list = get_handler_for_process_and_session(process, session).get_case_statistics(parameters=parameters)
             dictio = {"cases": cases_list}
     ret = jsonify(dictio)
     return ret
@@ -444,7 +470,7 @@ def get_events():
         user = get_user_from_session(session)
         if check_user_log_visibility(user, process):
             caseid = request.args.get('caseid', type=str)
-            events = LogsHandlers.handlers[process].get_events(caseid)
+            events = get_handler_for_process_and_session(process, session).get_events(caseid)
             i = 0
             while i < len(events):
                 keys = list(events[i].keys())
@@ -534,7 +560,7 @@ def do_transient_analysis():
         if check_user_log_visibility(user, process):
             delay = request.args.get('delay', default=86400, type=float)
 
-            base64 = LogsHandlers.handlers[process].get_transient(delay)
+            base64 = get_handler_for_process_and_session(process, session).get_transient(delay)
             dictio = {"base64": base64.decode('utf-8')}
 
     ret = jsonify(dictio)
@@ -561,13 +587,13 @@ def get_log_summary():
     if check_session_validity(session):
         user = get_user_from_session(session)
         if check_user_log_visibility(user, process):
-            this_variants_number = LogsHandlers.handlers[process].variants_number
-            this_cases_number = LogsHandlers.handlers[process].cases_number
-            this_events_number = LogsHandlers.handlers[process].events_number
+            this_variants_number = get_handler_for_process_and_session(process, session).variants_number
+            this_cases_number = get_handler_for_process_and_session(process, session).cases_number
+            this_events_number = get_handler_for_process_and_session(process, session).events_number
 
-            ancestor_variants_number = LogsHandlers.handlers[process].first_ancestor.variants_number
-            ancestor_cases_number = LogsHandlers.handlers[process].first_ancestor.cases_number
-            ancestor_events_number = LogsHandlers.handlers[process].first_ancestor.events_number
+            ancestor_variants_number = get_handler_for_process_and_session(process, session).first_ancestor.variants_number
+            ancestor_cases_number = get_handler_for_process_and_session(process, session).first_ancestor.cases_number
+            ancestor_events_number = get_handler_for_process_and_session(process, session).first_ancestor.events_number
 
             dictio = {"this_variants_number": this_variants_number, "this_cases_number": this_cases_number,
                       "this_events_number": this_events_number, "ancestor_variants_number": ancestor_variants_number,
@@ -596,7 +622,7 @@ def download_xes_log():
             user = get_user_from_session(session)
             if check_user_log_visibility(user, process):
                 if check_user_enabled_download(user, process):
-                    content = LogsHandlers.handlers[process].download_xes_log()
+                    content = get_handler_for_process_and_session(process, session).download_xes_log()
                     return jsonify({"content": content.decode('utf-8')})
         return jsonify({"content": ""})
 
@@ -620,7 +646,7 @@ def download_csv_log():
             user = get_user_from_session(session)
             if check_user_log_visibility(user, process):
                 if check_user_enabled_download(user, process):
-                    content = LogsHandlers.handlers[process].download_csv_log()
+                    content = get_handler_for_process_and_session(process, session).download_csv_log()
                     return jsonify({"content": content})
     return jsonify({"content": ""})
 
@@ -642,7 +668,7 @@ def get_start_activities():
     if check_session_validity(session):
         user = get_user_from_session(session)
         if check_user_log_visibility(user, process):
-            dictio = LogsHandlers.handlers[process].get_start_activities()
+            dictio = get_handler_for_process_and_session(process, session).get_start_activities()
             for entry in dictio:
                 dictio[entry] = int(dictio[entry])
             list_act = sorted([(x, y) for x, y in dictio.items()], key=lambda x: x[1], reverse=True)
@@ -667,7 +693,7 @@ def get_end_activities():
     if check_session_validity(session):
         user = get_user_from_session(session)
         if check_user_log_visibility(user, process):
-            dictio = LogsHandlers.handlers[process].get_end_activities()
+            dictio = get_handler_for_process_and_session(process, session).get_end_activities()
             for entry in dictio:
                 dictio[entry] = int(dictio[entry])
             list_act = sorted([(x, y) for x, y in dictio.items()], key=lambda x: x[1], reverse=True)
@@ -684,7 +710,7 @@ def get_attributes_list():
     if check_session_validity(session):
         user = get_user_from_session(session)
         if check_user_log_visibility(user, process):
-            attributes_list = sorted(list(LogsHandlers.handlers[process].get_attributes_list()))
+            attributes_list = sorted(list(get_handler_for_process_and_session(process, session).get_attributes_list()))
             return jsonify({"attributes_list": attributes_list})
     return jsonify({"attributes_list": []})
 
@@ -700,7 +726,7 @@ def get_attribute_values():
     if check_session_validity(session):
         user = get_user_from_session(session)
         if check_user_log_visibility(user, process):
-            dictio = LogsHandlers.handlers[process].get_attribute_values(attribute_key)
+            dictio = get_handler_for_process_and_session(process, session).get_attribute_values(attribute_key)
             list_values = sorted([(x, y) for x, y in dictio.items()], key=lambda x: x[1], reverse=True)
             return jsonify({"attributeValues": list_values})
     return jsonify({"attributeValues": []})
@@ -812,7 +838,7 @@ def get_alignments():
         user = get_user_from_session(session)
         if check_user_log_visibility(user, process):
             petri_string = request.json["model"]
-            svg_on_petri, svg_table = LogsHandlers.handlers[process].get_alignments(petri_string, parameters={})
+            svg_on_petri, svg_table = get_handler_for_process_and_session(process, session).get_alignments(petri_string, parameters={})
             dictio = {"petri": svg_on_petri.decode('utf-8'), "table": svg_table.decode('utf-8')}
 
     ret = jsonify(dictio)
