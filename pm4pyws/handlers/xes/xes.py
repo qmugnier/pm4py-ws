@@ -13,6 +13,7 @@ from pm4py.util import constants
 from pm4pyws.handlers.xes.alignments import get_align
 from pm4pyws.handlers.xes.cases import variants
 from pm4pyws.handlers.xes.ctmc import transient
+from pm4pyws.handlers.xes.filtering import factory as filtering_factory
 from pm4pyws.handlers.xes.process_schema import factory as process_schema_factory
 from pm4pyws.handlers.xes.sna import get_sna as sna_obtainer
 from pm4pyws.handlers.xes.statistics import events_per_time, case_duration
@@ -62,6 +63,28 @@ class XesHandler(object):
         self.calculate_cases_number()
         self.calculate_events_number()
 
+    def remove_filter(self, filter, all_filters):
+        """
+        Removes a filter from the current handler
+
+        Parameters
+        -----------
+        filter
+            Filter to remove
+        all_filters
+            All the filters that are still there
+
+        Returns
+        ------------
+        new_handler
+            New handler
+        """
+        new_handler = XesHandler()
+        new_handler.copy_from_ancestor(self.first_ancestor)
+        for filter in all_filters:
+            new_handler.add_filter0(filter)
+        return new_handler
+
     def add_filter(self, filter, all_filters):
         """
         Adds a filter to the current handler
@@ -93,6 +116,10 @@ class XesHandler(object):
         filter
             Filter to add
         """
+        parameters = {}
+        parameters[constants.PARAMETER_CONSTANT_ACTIVITY_KEY] = self.activity_key
+        parameters[constants.PARAMETER_CONSTANT_ATTRIBUTE_KEY] = self.activity_key
+        self.log = filtering_factory.apply(self.log, filter, parameters=parameters)
         self.filters_chain.append(filter)
 
     def build_from_path(self, path, parameters=None):
