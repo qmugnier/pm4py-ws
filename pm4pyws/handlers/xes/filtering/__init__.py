@@ -1,1 +1,1 @@
-from pm4pyws.handlers.xes.filtering import factory
+from pm4pyws.handlers.xes.filtering import factory, versions

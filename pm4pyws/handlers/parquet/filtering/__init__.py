@@ -1,1 +1,1 @@
-from pm4pyws.handlers.parquet.filtering import factory
+from pm4pyws.handlers.parquet.filtering import factory, versions
