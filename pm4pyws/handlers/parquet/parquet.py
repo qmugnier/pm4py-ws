@@ -320,3 +320,14 @@ class ParquetHandler(object):
         """
         return end_activities_filter.get_end_activities(self.dataframe, parameters=parameters)
 
+    def get_attributes_list(self, parameters=None):
+        """
+        Gets the attributes list from the log
+
+        Returns
+        -------------
+        attributes_list
+            List of attributes
+        """
+        return list(self.dataframe.columns)
+

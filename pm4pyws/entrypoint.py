@@ -646,8 +646,9 @@ def get_start_activities():
                 dictio = LogsHandlers.handlers[process].get_start_activities()
                 for entry in dictio:
                     dictio[entry] = int(dictio[entry])
-                return jsonify({"startActivities": dictio})
-    return jsonify({"startActivities": {}})
+                list_act = sorted([(x, y) for x, y in dictio.items()], key=lambda x: x[1], reverse=True)
+                return jsonify({"startActivities": list_act})
+    return jsonify({"startActivities": []})
 
 
 @PM4PyServices.app.route("/getEndActivities", methods=["GET"])
@@ -671,8 +672,24 @@ def get_end_activities():
                 dictio = LogsHandlers.handlers[process].get_end_activities()
                 for entry in dictio:
                     dictio[entry] = int(dictio[entry])
-                return jsonify({"endActivities": dictio})
-    return jsonify({"endActivities": {}})
+                list_act = sorted([(x, y) for x, y in dictio.items()], key=lambda x: x[1], reverse=True)
+                return jsonify({"endActivities": list_act})
+    return jsonify({"endActivities": []})
+
+
+@PM4PyServices.app.route("/getAttributesList", methods=["GET"])
+def get_attributes_list():
+    # reads the session
+    session = request.args.get('session', type=str)
+    # reads the requested process name
+    process = request.args.get('process', default='receipt', type=str)
+    if Configuration.enable_download:
+        if check_session_validity(session):
+            user = get_user_from_session(session)
+            if check_user_log_visibility(user, process):
+                attributes_list = sorted(list(LogsHandlers.handlers[process].get_attributes_list()))
+                return jsonify({"attributes_list": attributes_list})
+    return jsonify({"attributes_list": []})
 
 
 @PM4PyServices.app.route("/loginService", methods=["GET"])

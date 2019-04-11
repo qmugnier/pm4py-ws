@@ -16,6 +16,7 @@ from pm4py.objects.log.exporter.xes.versions.etree_xes_exp import export_log_as_
 from pm4py.objects.conversion.log import factory as conversion_factory
 from pm4py.algo.filtering.log.start_activities import start_activities_filter
 from pm4py.algo.filtering.log.end_activities import end_activities_filter
+from pm4py.algo.filtering.log.attributes import attributes_filter
 
 import tempfile
 
@@ -361,3 +362,14 @@ class XesHandler(object):
         parameters[constants.PARAMETER_CONSTANT_ACTIVITY_KEY] = self.activity_key
         parameters[constants.PARAMETER_CONSTANT_ATTRIBUTE_KEY] = self.activity_key
         return end_activities_filter.get_end_activities(self.log, parameters=parameters)
+
+    def get_attributes_list(self, parameters=None):
+        """
+        Gets the attributes list from the log
+
+        Returns
+        -------------
+        attributes_list
+            List of attributes
+        """
+        return attributes_filter.get_all_event_attributes_from_log(self.log)
