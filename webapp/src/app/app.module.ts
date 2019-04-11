@@ -29,6 +29,7 @@ import { MatTabsModule } from '@angular/material';
 import { MatCardModule } from '@angular/material';
 import { MatDialogModule } from '@angular/material';
 import { MatInputModule } from '@angular/material';
+import { MatChipsModule } from '@angular/material';
 import { FormsModule } from '@angular/forms';
 
 
@@ -97,6 +98,7 @@ const appRoutes: Routes = [
     MatTabsModule,
     MatSortModule,
     MatCardModule,
+    MatChipsModule,
     MatInputModule,
     FormsModule,
     MatProgressSpinnerModule,
@@ -105,7 +107,7 @@ const appRoutes: Routes = [
       { enableTracing: true, onSameUrlNavigation: 'reload' } // <-- debugging purposes only
     )  ],
   entryComponents: [StartActivitiesFilterComponent],
-  providers: [FiltersComponent],
+  providers: [],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
