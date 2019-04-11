@@ -625,6 +625,56 @@ def download_csv_log():
     return jsonify({"content": ""})
 
 
+@PM4PyServices.app.route("/getStartActivities", methods=["GET"])
+def get_start_activities():
+    """
+    Gets the start activities from the log
+
+    Returns
+    ------------
+    start_activities
+        Dictionary of start activities
+    """
+    # reads the session
+    session = request.args.get('session', type=str)
+    # reads the requested process name
+    process = request.args.get('process', default='receipt', type=str)
+    if Configuration.enable_download:
+        if check_session_validity(session):
+            user = get_user_from_session(session)
+            if check_user_log_visibility(user, process):
+                dictio = LogsHandlers.handlers[process].get_start_activities()
+                for entry in dictio:
+                    dictio[entry] = int(dictio[entry])
+                return jsonify({"startActivities": dictio})
+    return jsonify({"startActivities": {}})
+
+
+@PM4PyServices.app.route("/getEndActivities", methods=["GET"])
+def get_end_activities():
+    """
+    Gets the end activities from the log
+
+    Returns
+    ------------
+    end_activities
+        Dictionary of end activities
+    """
+    # reads the session
+    session = request.args.get('session', type=str)
+    # reads the requested process name
+    process = request.args.get('process', default='receipt', type=str)
+    if Configuration.enable_download:
+        if check_session_validity(session):
+            user = get_user_from_session(session)
+            if check_user_log_visibility(user, process):
+                dictio = LogsHandlers.handlers[process].get_end_activities()
+                for entry in dictio:
+                    dictio[entry] = int(dictio[entry])
+                return jsonify({"endActivities": dictio})
+    return jsonify({"endActivities": {}})
+
+
 @PM4PyServices.app.route("/loginService", methods=["GET"])
 def login_service():
     if Configuration.enable_session:

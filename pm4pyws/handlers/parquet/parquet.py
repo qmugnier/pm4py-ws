@@ -14,6 +14,8 @@ from pm4pyws.handlers.parquet.statistics import case_duration, events_per_time
 from pm4pyws.util import casestats
 from pm4py.objects.conversion.log import factory as conv_factory
 from pm4py.objects.log.exporter.xes.versions import etree_xes_exp
+from pm4py.algo.filtering.pandas.start_activities import start_activities_filter
+from pm4py.algo.filtering.pandas.end_activities import end_activities_filter
 
 
 class ParquetHandler(object):
@@ -295,3 +297,26 @@ class ParquetHandler(object):
         Downloads the CSV log as string
         """
         return self.dataframe.to_string()
+
+    def get_start_activities(self, parameters=None):
+        """
+        Gets the start activities from the log
+
+        Returns
+        ------------
+        start_activities_dict
+            Dictionary of start activities
+        """
+        return start_activities_filter.get_start_activities(self.dataframe, parameters=parameters)
+
+    def get_end_activities(self, parameters=None):
+        """
+        Gets the end activities from the log
+
+        Returns
+        -------------
+        end_activities_dict
+            Dictionary of end activities
+        """
+        return end_activities_filter.get_end_activities(self.dataframe, parameters=parameters)
+
