@@ -48,6 +48,25 @@ def get_handler_for_process_and_session(process, session):
     return None
 
 
+def set_handler_for_process_and_session(process, session, handler):
+    """
+    Sets the handler for the current process and session
+
+    Parameters
+    -------------
+    process
+        Process
+    session
+        Session
+    handler
+        Handler
+    """
+    if process in LogsHandlers.handlers:
+        if session not in LogsHandlers.session_handlers:
+            LogsHandlers.session_handlers[session] = {}
+        LogsHandlers.session_handlers[session][process] = handler
+
+
 def do_login(user, password):
     """
     Logs in a user and returns a session id
@@ -286,8 +305,9 @@ def get_process_schema():
             simplicity = request.args.get('simplicity', default=0.6, type=float)
             variant = type_of_model + "_" + decoration
             parameters = {"decreasingFactor": simplicity}
-            base64, model, format, this_handler = get_handler_for_process_and_session(process, session).get_schema(variant=variant,
-                                                                                            parameters=parameters)
+            base64, model, format, this_handler = get_handler_for_process_and_session(process, session).get_schema(
+                variant=variant,
+                parameters=parameters)
             if model is not None:
                 model = model.decode('utf-8')
             dictio = {"base64": base64.decode('utf-8'), "model": model, "format": format, "handler": this_handler}
@@ -385,7 +405,8 @@ def get_sna():
             if check_user_log_visibility(user, process):
                 metric = request.args.get('metric', default='handover', type=str)
                 threshold = request.args.get('threshold', default=0.0, type=float)
-                sna = get_handler_for_process_and_session(process, session).get_sna(variant=metric, parameters={"weight_threshold": threshold})
+                sna = get_handler_for_process_and_session(process, session).get_sna(variant=metric, parameters={
+                    "weight_threshold": threshold})
     except:
         traceback.print_exc()
         sna = ""
@@ -444,7 +465,8 @@ def get_all_cases():
             parameters = {}
             if variant is not None:
                 parameters["variant"] = variant
-            cases_list = get_handler_for_process_and_session(process, session).get_case_statistics(parameters=parameters)
+            cases_list = get_handler_for_process_and_session(process, session).get_case_statistics(
+                parameters=parameters)
             dictio = {"cases": cases_list}
     ret = jsonify(dictio)
     return ret
@@ -591,7 +613,8 @@ def get_log_summary():
             this_cases_number = get_handler_for_process_and_session(process, session).cases_number
             this_events_number = get_handler_for_process_and_session(process, session).events_number
 
-            ancestor_variants_number = get_handler_for_process_and_session(process, session).first_ancestor.variants_number
+            ancestor_variants_number = get_handler_for_process_and_session(process,
+                                                                           session).first_ancestor.variants_number
             ancestor_cases_number = get_handler_for_process_and_session(process, session).first_ancestor.cases_number
             ancestor_events_number = get_handler_for_process_and_session(process, session).first_ancestor.events_number
 
@@ -838,9 +861,80 @@ def get_alignments():
         user = get_user_from_session(session)
         if check_user_log_visibility(user, process):
             petri_string = request.json["model"]
-            svg_on_petri, svg_table = get_handler_for_process_and_session(process, session).get_alignments(petri_string, parameters={})
+            svg_on_petri, svg_table = get_handler_for_process_and_session(process, session).get_alignments(petri_string,
+                                                                                                           parameters={})
             dictio = {"petri": svg_on_petri.decode('utf-8'), "table": svg_table.decode('utf-8')}
 
     ret = jsonify(dictio)
 
     return ret
+
+
+@PM4PyServices.app.route("/addFilter", methods=["POST"])
+def add_filter():
+    """
+    Adds a filter to the process
+
+    Returns
+    -------------
+    dictio
+        Success, or not
+    """
+    # reads the session
+    session = request.args.get('session', type=str)
+    # reads the requested process name
+    process = request.args.get('process', default='receipt', type=str)
+
+    if check_session_validity(session):
+        user = get_user_from_session(session)
+        if check_user_log_visibility(user, process):
+            # reads the specific filter to add
+            filter = request.json['filter']
+            # reads all the filters
+            all_filters = request.json['all_filters']
+
+            print("ADD FILTER")
+            print(filter)
+            print(all_filters)
+
+            new_handler = get_handler_for_process_and_session(process, session).add_filter(filter, all_filters)
+            set_handler_for_process_and_session(process, session, new_handler)
+
+            return jsonify({"status": "OK"})
+
+    return jsonify({"status": "FAIL"})
+
+
+@PM4PyServices.app.route("/removeFilter", methods=["POST"])
+def remove_filter():
+    """
+    Removes a filter from the process
+
+    Returns
+    -------------
+    dictio
+        Success, or not
+    """
+    # reads the session
+    session = request.args.get('session', type=str)
+    # reads the requested process name
+    process = request.args.get('process', default='receipt', type=str)
+
+    if check_session_validity(session):
+        user = get_user_from_session(session)
+        if check_user_log_visibility(user, process):
+            # reads the specific filter to add
+            filter = request.json['filter']
+            # reads all the filters
+            all_filters = request.json['all_filters']
+
+            print("REMOVE FILTER")
+            print(filter)
+            print(all_filters)
+
+            new_handler = get_handler_for_process_and_session(process, session)
+            set_handler_for_process_and_session(process, session, new_handler)
+
+            return jsonify({"status": "OK"})
+
+    return jsonify({"status": "FAIL"})
