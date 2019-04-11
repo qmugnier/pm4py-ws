@@ -103,6 +103,17 @@ class ParquetHandler(object):
             new_handler.add_filter0(filter)
         return new_handler
 
+    def add_filter0(self, filter):
+        """
+        Technical, void, method to add a filter
+
+        Parameters
+        ------------
+        filter
+            Filter to add
+        """
+        self.filters_chain.append(filter)
+
     def build_from_csv(self, path, parameters=None):
         """
         Builds the handler from the specified path to CSV file
