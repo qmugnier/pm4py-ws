@@ -1,4 +1,9 @@
+from pm4py.algo.filtering.log.attributes import attributes_filter
+from pm4py.algo.filtering.log.end_activities import end_activities_filter
+from pm4py.algo.filtering.log.start_activities import start_activities_filter
 from pm4py.algo.filtering.log.variants import variants_filter
+from pm4py.objects.conversion.log import factory as conversion_factory
+from pm4py.objects.log.exporter.xes.versions.etree_xes_exp import export_log_as_string
 from pm4py.objects.log.importer.xes import factory as xes_importer
 from pm4py.objects.log.util import insert_classifier
 from pm4py.objects.log.util import xes
@@ -12,13 +17,7 @@ from pm4pyws.handlers.xes.process_schema import factory as process_schema_factor
 from pm4pyws.handlers.xes.sna import get_sna as sna_obtainer
 from pm4pyws.handlers.xes.statistics import events_per_time, case_duration
 from pm4pyws.util import casestats
-from pm4py.objects.log.exporter.xes.versions.etree_xes_exp import export_log_as_string
-from pm4py.objects.conversion.log import factory as conversion_factory
-from pm4py.algo.filtering.log.start_activities import start_activities_filter
-from pm4py.algo.filtering.log.end_activities import end_activities_filter
-from pm4py.algo.filtering.log.attributes import attributes_filter
 
-import tempfile
 
 class XesHandler(object):
     def __init__(self):
@@ -373,3 +372,22 @@ class XesHandler(object):
             List of attributes
         """
         return attributes_filter.get_all_event_attributes_from_log(self.log)
+
+    def get_attribute_values(self, attribute_key, parameters=None):
+        """
+        Gets the attribute values from the log
+
+        Returns
+        -------------
+        attribute_values
+            List of values
+        """
+        if parameters is None:
+            parameters = {}
+        parameters[constants.PARAMETER_CONSTANT_ACTIVITY_KEY] = self.activity_key
+        parameters[constants.PARAMETER_CONSTANT_ATTRIBUTE_KEY] = attribute_key
+        initial_dict = attributes_filter.get_attribute_values(self.log, attribute_key, parameters=parameters)
+        return_dict = {}
+        for key in initial_dict:
+            return_dict[str(key)] = int(initial_dict[key])
+        return return_dict

@@ -1,6 +1,11 @@
 from pm4py.algo.filtering.common.filtering_constants import CASE_CONCEPT_NAME
+from pm4py.algo.filtering.pandas.attributes import attributes_filter
+from pm4py.algo.filtering.pandas.end_activities import end_activities_filter
+from pm4py.algo.filtering.pandas.start_activities import start_activities_filter
 from pm4py.algo.filtering.pandas.variants import variants_filter
+from pm4py.objects.conversion.log import factory as conv_factory
 from pm4py.objects.log.adapters.pandas import csv_import_adapter
+from pm4py.objects.log.exporter.xes.versions import etree_xes_exp
 from pm4py.objects.log.importer.parquet import factory as parquet_importer
 from pm4py.objects.log.util import xes
 from pm4py.statistics.traces.pandas import case_statistics
@@ -12,10 +17,6 @@ from pm4pyws.handlers.parquet.process_schema import factory as process_schema_fa
 from pm4pyws.handlers.parquet.sna import get_sna as sna_obtainer
 from pm4pyws.handlers.parquet.statistics import case_duration, events_per_time
 from pm4pyws.util import casestats
-from pm4py.objects.conversion.log import factory as conv_factory
-from pm4py.objects.log.exporter.xes.versions import etree_xes_exp
-from pm4py.algo.filtering.pandas.start_activities import start_activities_filter
-from pm4py.algo.filtering.pandas.end_activities import end_activities_filter
 
 
 class ParquetHandler(object):
@@ -331,3 +332,17 @@ class ParquetHandler(object):
         """
         return list(self.dataframe.columns)
 
+    def get_attribute_values(self, attribute_key, parameters=None):
+        """
+        Gets the attribute values from the log
+
+        Returns
+        -------------
+        attribute_values
+            List of values
+        """
+        initial_dict = attributes_filter.get_attribute_values(self.dataframe, attribute_key, parameters=parameters)
+        return_dict = {}
+        for key in initial_dict:
+            return_dict[str(key)] = int(initial_dict[key])
+        return return_dict
