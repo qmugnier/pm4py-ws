@@ -42,8 +42,9 @@ def get_handler_for_process_and_session(process, session):
     if process in LogsHandlers.handlers:
         if session not in LogsHandlers.session_handlers:
             LogsHandlers.session_handlers[session] = {}
-        if process not in LogsHandlers.session_handlers:
+        if process not in LogsHandlers.session_handlers[session]:
             LogsHandlers.session_handlers[session][process] = LogsHandlers.handlers[process]
+        #print(LogsHandlers.session_handlers[session][process].filters_chain)
         return LogsHandlers.session_handlers[session][process]
     return None
 
@@ -899,7 +900,6 @@ def add_filter():
 
             new_handler = get_handler_for_process_and_session(process, session).add_filter(filter, all_filters)
             set_handler_for_process_and_session(process, session, new_handler)
-
             return jsonify({"status": "OK"})
 
     return jsonify({"status": "FAIL"})

@@ -29,9 +29,9 @@ class ParquetHandler(object):
         # sets the current dataframe to None
         self.dataframe = None
         # sets the first ancestor (in the filtering chain) to None
-        self.first_ancestor = None
+        self.first_ancestor = self
         # sets the last ancestor (in the filtering chain) to None
-        self.last_ancestor = None
+        self.last_ancestor = self
         # sets the filter chain
         self.filters_chain = []
         # sets the variant dataframe (useful in variants retrieval)
@@ -52,6 +52,7 @@ class ParquetHandler(object):
         ancestor
             Ancestor
         """
+        self.first_ancestor = ancestor.first_ancestor
         self.last_ancestor = ancestor
         self.filters_chain = ancestor.filters_chain
         self.dataframe = ancestor.dataframe
@@ -78,8 +79,6 @@ class ParquetHandler(object):
         self.calculate_variants_number()
         self.calculate_cases_number()
         self.calculate_events_number()
-        self.first_ancestor = self
-        self.last_ancestor = self
 
     def remove_filter(self, filter, all_filters):
         """
@@ -174,8 +173,6 @@ class ParquetHandler(object):
         self.calculate_variants_number()
         self.calculate_cases_number()
         self.calculate_events_number()
-        self.first_ancestor = self
-        self.last_ancestor = self
 
     def build_variants_df(self, parameters=None):
         """
