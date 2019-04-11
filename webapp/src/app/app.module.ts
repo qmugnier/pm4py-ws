@@ -105,7 +105,7 @@ const appRoutes: Routes = [
       { enableTracing: true, onSameUrlNavigation: 'reload' } // <-- debugging purposes only
     )  ],
   entryComponents: [StartActivitiesFilterComponent],
-  providers: [],
+  providers: [FiltersComponent],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
