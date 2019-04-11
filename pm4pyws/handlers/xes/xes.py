@@ -59,10 +59,6 @@ class XesHandler(object):
         self.filters_chain = ancestor.filters_chain
         self.log = ancestor.log
         self.activity_key = ancestor.activity_key
-        self.build_variants()
-        self.calculate_variants_number()
-        self.calculate_cases_number()
-        self.calculate_events_number()
 
     def remove_filter(self, filter, all_filters):
         """
@@ -106,6 +102,10 @@ class XesHandler(object):
         new_handler.copy_from_ancestor(self.first_ancestor)
         for filter in all_filters:
             new_handler.add_filter0(filter)
+        new_handler.build_variants()
+        new_handler.calculate_events_number()
+        new_handler.calculate_cases_number()
+        new_handler.calculate_variants_number()
         return new_handler
 
     def add_filter0(self, filter):
