@@ -31,6 +31,8 @@ class ParquetHandler(object):
         self.first_ancestor = None
         # sets the last ancestor (in the filtering chain) to None
         self.last_ancestor = None
+        # sets the filter chain
+        self.filters_chain = []
         # sets the variant dataframe (useful in variants retrieval)
         self.variants_df = None
         # number of variants
@@ -39,6 +41,24 @@ class ParquetHandler(object):
         self.cases_number = 0
         # number of events
         self.events_number = 0
+
+    def copy_from_ancestor(self, ancestor):
+        """
+        Copies from ancestor
+
+        Parameters
+        -------------
+        ancestor
+            Ancestor
+        """
+        self.last_ancestor = ancestor
+        self.filters_chain = ancestor.filters_chain
+        self.log = ancestor.log
+        self.activity_key = ancestor.activity_key
+        self.build_variants_df()
+        self.calculate_variants_number()
+        self.calculate_cases_number()
+        self.calculate_events_number()
 
     def build_from_path(self, path, parameters=None):
         """
@@ -60,6 +80,28 @@ class ParquetHandler(object):
         self.calculate_events_number()
         self.first_ancestor = self
         self.last_ancestor = self
+
+    def add_filter(self, filter, all_filters):
+        """
+        Adds a filter to the current handler
+
+        Parameters
+        -----------
+        filter
+            Filter to add
+        all_filters
+            All the filters that were added
+
+        Returns
+        ------------
+        new_handler
+            New handler
+        """
+        new_handler = ParquetHandler()
+        new_handler.copy_from_ancestor(self.first_ancestor)
+        for filter in all_filters:
+            new_handler.add_filter0(filter)
+        return new_handler
 
     def build_from_csv(self, path, parameters=None):
         """

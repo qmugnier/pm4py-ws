@@ -327,5 +327,4 @@ export class Pm4pyService {
 
     return this.http.get(completeUrl, {params: parameters});
   }
-
 }
