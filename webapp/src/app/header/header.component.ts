@@ -5,6 +5,7 @@ import {HttpParams} from "@angular/common/http";
 import {DomSanitizer} from "@angular/platform-browser";
 import {Pm4pyService} from "../pm4py-service.service";
 import {MatDialog} from '@angular/material';
+import {FiltersComponent} from "../filters/filters.component";
 import {StartActivitiesFilterComponent} from "../start-activities-filter/start-activities-filter.component";
 
 @Component({
@@ -24,16 +25,18 @@ export class HeaderComponent implements OnInit {
   isNotLogin : boolean = true;
   loginEnabled : boolean = true;
   public dialog : MatDialog;
+  filtersProcess : FiltersComponent;
 
   userId: string;
 
   public logsListHelpString: string = "This page contains a list of logs loaded in the system. To open one of them click on the name of the log.";
 
 
-  constructor(private _route: Router, private _sanitizer: DomSanitizer, private pm4pyServ: Pm4pyService, public _dialog: MatDialog) {
+  constructor(private _route: Router, private _sanitizer: DomSanitizer, private pm4pyServ: Pm4pyService, public _dialog: MatDialog, private _filtersProcess : FiltersComponent) {
     /**
      * Constructor (initialize the title and the help of the single page)
      */
+    this.filtersProcess = _filtersProcess;
     this.pm4pyService = pm4pyServ;
     this.sanitizer = _sanitizer;
     this.dialog = _dialog;
