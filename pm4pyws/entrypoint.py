@@ -932,7 +932,7 @@ def remove_filter():
             print(filter)
             print(all_filters)
 
-            new_handler = get_handler_for_process_and_session(process, session)
+            new_handler = get_handler_for_process_and_session(process, session).remove_filter(filter, all_filters)
             set_handler_for_process_and_session(process, session, new_handler)
 
             return jsonify({"status": "OK"})

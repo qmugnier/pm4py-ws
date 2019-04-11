@@ -17,6 +17,7 @@ from pm4pyws.handlers.parquet.process_schema import factory as process_schema_fa
 from pm4pyws.handlers.parquet.sna import get_sna as sna_obtainer
 from pm4pyws.handlers.parquet.statistics import case_duration, events_per_time
 from pm4pyws.util import casestats
+from pm4pyws.handlers.parquet.filtering import factory as filtering_factory
 
 
 class ParquetHandler(object):
@@ -53,8 +54,7 @@ class ParquetHandler(object):
         """
         self.last_ancestor = ancestor
         self.filters_chain = ancestor.filters_chain
-        self.log = ancestor.log
-        self.activity_key = ancestor.activity_key
+        self.dataframe = ancestor.dataframe
         self.build_variants_df()
         self.calculate_variants_number()
         self.calculate_cases_number()
@@ -80,6 +80,28 @@ class ParquetHandler(object):
         self.calculate_events_number()
         self.first_ancestor = self
         self.last_ancestor = self
+
+    def remove_filter(self, filter, all_filters):
+        """
+        Removes a filter from the current handler
+
+        Parameters
+        -----------
+        filter
+            Filter to remove
+        all_filters
+            All the filters that are still there
+
+        Returns
+        ------------
+        new_handler
+            New handler
+        """
+        new_handler = ParquetHandler()
+        new_handler.copy_from_ancestor(self.first_ancestor)
+        for filter in all_filters:
+            new_handler.add_filter0(filter)
+        return new_handler
 
     def add_filter(self, filter, all_filters):
         """
@@ -112,6 +134,7 @@ class ParquetHandler(object):
         filter
             Filter to add
         """
+        self.dataframe = filtering_factory.apply(self.dataframe, filter)
         self.filters_chain.append(filter)
 
     def build_from_csv(self, path, parameters=None):

@@ -42,11 +42,19 @@ export class FilterServiceService {
 
   addFilter(filter_type : string, filter_value : any) {
     let httpParams : HttpParams = new HttpParams();
-    let process : string = localStorage.getItem("process");
-    this.filtersPerProcess[process].push([filter_type, filter_value]);
+    this.thisProcess  = localStorage.getItem("process");
+    console.log(this.filtersPerProcess);
+    if (this.filtersPerProcess == null) {
+      this.filtersPerProcess = new Object();
+    }
+    console.log(this.filtersPerProcess);
+    if (!(this.thisProcess in this.filtersPerProcess)) {
+      this.filtersPerProcess[this.thisProcess] = [];
+    }
+    this.filtersPerProcess[this.thisProcess].push([filter_type, filter_value]);
     localStorage.setItem("filtersPerProcess", JSON.stringify(this.filtersPerProcess));
 
-    this.addFilterPOST([filter_type, filter_value], this.filtersPerProcess[process], httpParams).subscribe(data => {
+    this.addFilterPOST([filter_type, filter_value], this.filtersPerProcess[this.thisProcess], httpParams).subscribe(data => {
       console.log("SUCCESS!");
       console.log(this.filtersPerProcess);
       window.location.reload();
