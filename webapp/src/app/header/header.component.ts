@@ -6,6 +6,7 @@ import {DomSanitizer} from "@angular/platform-browser";
 import {Pm4pyService} from "../pm4py-service.service";
 import {MatDialog} from '@angular/material';
 import {StartActivitiesFilterComponent} from "../start-activities-filter/start-activities-filter.component";
+import {EndActivitiesFilterComponent} from "../end-activities-filter/end-activities-filter.component";
 import {FilterServiceService} from "../filter-service.service";
 
 @Component({
@@ -210,6 +211,10 @@ export class HeaderComponent implements OnInit {
 
   startActivitiesFilter() {
     this.dialog.open(StartActivitiesFilterComponent);
+  }
+
+  endActivitiesFilter() {
+    this.dialog.open(EndActivitiesFilterComponent);
   }
 
 }

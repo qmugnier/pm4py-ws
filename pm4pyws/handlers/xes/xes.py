@@ -29,9 +29,9 @@ class XesHandler(object):
         # sets the current log to None
         self.log = None
         # sets the first ancestor (in the filtering chain) to None
-        self.first_ancestor = None
+        self.first_ancestor = self
         # sets the last ancestor (in the filtering chain) to None
-        self.last_ancestor = None
+        self.last_ancestor = self
         # sets the filter chain
         self.filters_chain = []
         # classifier
@@ -54,6 +54,7 @@ class XesHandler(object):
         ancestor
             Ancestor
         """
+        self.first_ancestor = ancestor.first_ancestor
         self.last_ancestor = ancestor
         self.filters_chain = ancestor.filters_chain
         self.log = ancestor.log
@@ -119,7 +120,9 @@ class XesHandler(object):
         parameters = {}
         parameters[constants.PARAMETER_CONSTANT_ACTIVITY_KEY] = self.activity_key
         parameters[constants.PARAMETER_CONSTANT_ATTRIBUTE_KEY] = self.activity_key
+        print("BEFORE", len(self.log))
         self.log = filtering_factory.apply(self.log, filter, parameters=parameters)
+        print("AFTER", len(self.log))
         self.filters_chain.append(filter)
 
     def build_from_path(self, path, parameters=None):
@@ -154,8 +157,6 @@ class XesHandler(object):
         self.calculate_variants_number()
         self.calculate_cases_number()
         self.calculate_events_number()
-        self.first_ancestor = self
-        self.last_ancestor = self
 
     def build_variants(self, parameters=None):
         """

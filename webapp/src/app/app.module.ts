@@ -45,6 +45,7 @@ import { TransientComponent } from './transient/transient.component';
 import { AlignmentsComponent } from './alignments/alignments.component';
 import { LoginComponent } from './login/login.component';
 import { StartActivitiesFilterComponent } from './start-activities-filter/start-activities-filter.component';
+import { EndActivitiesFilterComponent } from './end-activities-filter/end-activities-filter.component';
 
 const appRoutes: Routes = [
   { path: 'process', component: AppComponent },
@@ -74,7 +75,8 @@ const appRoutes: Routes = [
     TransientComponent,
     AlignmentsComponent,
     LoginComponent,
-    StartActivitiesFilterComponent
+    StartActivitiesFilterComponent,
+    EndActivitiesFilterComponent
   ],
   imports: [
     BrowserModule,
@@ -106,7 +108,7 @@ const appRoutes: Routes = [
       appRoutes,
       { enableTracing: true, onSameUrlNavigation: 'reload' } // <-- debugging purposes only
     )  ],
-  entryComponents: [StartActivitiesFilterComponent],
+  entryComponents: [StartActivitiesFilterComponent, EndActivitiesFilterComponent],
   providers: [],
   bootstrap: [AppComponent]
 })
