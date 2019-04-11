@@ -279,4 +279,53 @@ export class Pm4pyService {
     return this.http.get(completeUrl, {params: httpParams});
   }
 
+  getStartActivities(parameters : HttpParams) {
+    let process = localStorage.getItem("process");
+    let sessionId = localStorage.getItem("sessionId");
+
+    parameters = parameters.set("process", process);
+    parameters = parameters.set("session", sessionId);
+
+    var completeUrl : string = this.webservicePath + "getStartActivities";
+
+    return this.http.get(completeUrl, {params: parameters});
+  }
+
+  getEndActivities(parameters : HttpParams) {
+    let process = localStorage.getItem("process");
+    let sessionId = localStorage.getItem("sessionId");
+
+    parameters = parameters.set("process", process);
+    parameters = parameters.set("session", sessionId);
+
+    var completeUrl : string = this.webservicePath + "getEndActivities";
+
+    return this.http.get(completeUrl, {params: parameters});
+  }
+
+  getAttributesList(parameters : HttpParams) {
+    let process = localStorage.getItem("process");
+    let sessionId = localStorage.getItem("sessionId");
+
+    parameters = parameters.set("process", process);
+    parameters = parameters.set("session", sessionId);
+
+    var completeUrl : string = this.webservicePath + "getAttributesList";
+
+    return this.http.get(completeUrl, {params: parameters});
+  }
+
+  getAttributeValues(attributeKey : string, parameters : HttpParams) {
+    let process = localStorage.getItem("process");
+    let sessionId = localStorage.getItem("sessionId");
+
+    parameters = parameters.set("process", process);
+    parameters = parameters.set("session", sessionId);
+    parameters = parameters.set("attribute_key", attributeKey);
+
+    var completeUrl: string = this.webservicePath + "getAttributeValues";
+
+    return this.http.get(completeUrl, {params: parameters});
+  }
+
 }
