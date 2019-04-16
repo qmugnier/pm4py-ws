@@ -49,6 +49,7 @@ import { EndActivitiesFilterComponent } from './end-activities-filter/end-activi
 
 const appRoutes: Routes = [
   { path: 'process', component: AppComponent },
+  { path: 'process2', component: AppComponent },
   { path: 'sna', component: AppComponent },
   { path: 'cases', component: AppComponent },
   { path: 'statistics', component: AppComponent },

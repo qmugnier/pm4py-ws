@@ -2,6 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {DomSanitizer, SafeResourceUrl, SafeUrl} from '@angular/platform-browser';
 import {Pm4pyService} from '../pm4py-service.service';
 import {HttpParams} from "@angular/common/http";
+import {Router, RoutesRecognized} from "@angular/router";
 
 @Component({
   selector: 'app-process-model',
@@ -36,15 +37,27 @@ export class ProcessModelComponent implements OnInit {
   public isLoading: boolean;
   public enableConformanceChecking: boolean = false;
 
-  constructor(private _sanitizer: DomSanitizer, private pm4pyServ: Pm4pyService) {
+  constructor(private _sanitizer: DomSanitizer, private pm4pyServ: Pm4pyService, private router : Router) {
     /**
      * Constructor
      */
     this.sanitizer = _sanitizer;
     this.pm4pyService = pm4pyServ;
     // calls the retrieval of the process schema from the service
-    this.populateProcessSchema();
-    this.getLogSummary();
+    // this.populateProcessSchema();
+    // this.getLogSummary();
+
+    this.populateProcessSchema(); this.getLogSummary();
+
+    this.router.events.subscribe((next) => {
+      if (next instanceof RoutesRecognized) {
+        console.log(next.url);
+        if (next.url.startsWith("/process")) {
+          this.populateProcessSchema();
+          this.getLogSummary();
+        }
+      }
+    });
   }
 
   public populateProcessSchema() {

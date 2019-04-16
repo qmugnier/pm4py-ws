@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {Router} from "@angular/router";
+import {Router, RoutesRecognized} from "@angular/router";
 import { environment } from '../../environments/environment';
 import {HttpParams} from "@angular/common/http";
 import {DomSanitizer} from "@angular/platform-browser";
@@ -57,19 +57,17 @@ export class HeaderComponent implements OnInit {
           this.processProvided = false;
           this.title = "PM4Py WI - List of Logs";
           this.helpString = this.logsListHelpString;
-        }
-        else if (this.router.url == "/login") {
+        } else if (this.router.url == "/login") {
           this.title = "PM4Py WI - Login";
           this.helpString = "Insert your username and password to enter the application";
           this.processProvided = false;
           this.enableDownload = false;
           this.enableUpload = false;
           this.isNotLogin = false;
-        }
-        else {
+        } else {
           this.processProvided = true;
           this.isNotLogin = true;
-          if (this.router.url === "/process") {
+          if (this.router.url === "/process" || this.router.url === "/process2") {
             this.title = "PM4Py WI - Process Discovery" + " (" + process_name + ")";
             this.helpString = "This page shows the process discovered by our algorithms on the given log. You can change the discovery algorithm" +
               "by going on the 'Type of model' selection. You can also choose the level of simplicity of the output model (an automatic filtering is done). You can" +
@@ -105,14 +103,13 @@ export class HeaderComponent implements OnInit {
           this.enableDownload = false;
           this.enableUpload = false;
           this.isNotLogin = false;
-        }
-        else {
+        } else {
           this.title = "PM4Py WI - List of Logs";
           this.isNotLogin = true;
           this.helpString = this.logsListHelpString;
         }
+        this.checkSession();
       }
-      this.checkSession();
     });
   }
 

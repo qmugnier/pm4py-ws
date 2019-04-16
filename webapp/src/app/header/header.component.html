@@ -45,7 +45,7 @@
   <span *ngIf="processProvided == true"><a routerLink="/simulation" alt="Simulation"><img src="../../assets/simulation.svg" /></a></span>
   <span *ngIf="processProvided == true"><a routerLink="/statistics" alt="Statistics"><img src="../../assets/statistics.svg" /></a></span>
   <span>&nbsp;&nbsp;</span>
-  <span *ngIf="processProvided == true" [matMenuTriggerFor]="filtersMenu">
+  <span *ngIf="processProvided == true && router.url.startsWith('/process')" [matMenuTriggerFor]="filtersMenu">
     <img src="../../assets/filter.svg" alt="Help" />
   </span>
     <span style="flex: 1 1 auto;"></span>
