@@ -1,6 +1,6 @@
 <header class="page-header font-small green">
   <mat-chip-list #chipList>
-    <mat-chip *ngFor="let filter of getFilters()" [selectable]="true"
+    <mat-chip *ngFor="let filter of filters" [selectable]="true"
               [removable]="true" (removed)="filterService.remove(filter)">
       {{filter[0]}}
       <mat-icon matChipRemove *ngIf="true">cancel</mat-icon>
