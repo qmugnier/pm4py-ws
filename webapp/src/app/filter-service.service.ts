@@ -13,17 +13,7 @@ export class FilterServiceService {
 
   constructor(private http: HttpClient) {
     this.webservicePath = environment.webServicePath;
-    this.filtersPerProcess = localStorage.getItem("filtersPerProcess");
-    if (this.filtersPerProcess == null) {
-      this.filtersPerProcess = new Object();
-    }
-    else {
-      this.filtersPerProcess = JSON.parse(this.filtersPerProcess);
-    }
-    this.thisProcess = localStorage.getItem("process");
-    if (!(this.thisProcess in this.filtersPerProcess)) {
-      this.filtersPerProcess[this.thisProcess] = [];
-    }
+    this.retrieveFiltersFromLocalStorage();
   }
 
   retrieveFiltersFromLocalStorage() {
@@ -74,6 +64,7 @@ export class FilterServiceService {
   }
 
   getFilters() {
+    this.retrieveFiltersFromLocalStorage();
     return this.filtersPerProcess[this.thisProcess];
   }
 
