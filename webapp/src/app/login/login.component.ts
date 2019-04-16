@@ -27,7 +27,7 @@ export class LoginComponent implements OnInit {
       this.router.navigateByUrl('/logsList');
     }
 
-    localStorage.removeItem("sessionId");
+    //localStorage.removeItem("sessionId");
 
     this.username = "";
     this.password = "";
