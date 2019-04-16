@@ -72,6 +72,9 @@ class ParquetHandler(object):
             parameters = {}
         self.dataframe = parquet_importer.apply(path)
         self.build_variants_df()
+        self.calculate_events_number()
+        self.calculate_variants_number()
+        self.calculate_cases_number()
 
     def remove_filter(self, filter, all_filters):
         """
