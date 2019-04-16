@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import {HttpParams} from "@angular/common/http";
 import {environment} from "../environments/environment";
 import {HttpClient} from '@angular/common/http';
+import {Router} from "@angular/router";
 
 @Injectable({
   providedIn: 'root'
@@ -11,7 +12,7 @@ export class FilterServiceService {
   thisProcess : string;
   webservicePath: string;
 
-  constructor(private http: HttpClient) {
+  constructor(private http: HttpClient, private router : Router) {
     this.webservicePath = environment.webServicePath;
     this.retrieveFiltersFromLocalStorage();
   }
@@ -47,7 +48,12 @@ export class FilterServiceService {
     this.addFilterPOST([filter_type, filter_value], this.filtersPerProcess[this.thisProcess], httpParams).subscribe(data => {
       console.log("SUCCESS!");
       console.log(this.filtersPerProcess);
-      window.location.reload();
+      if (this.router.url === "/process") {
+        this.router.navigateByUrl("/process2");
+      }
+      else {
+        this.router.navigateByUrl("/process");
+      }
     })
   }
 
@@ -59,7 +65,12 @@ export class FilterServiceService {
     this.removeFilterPOST(filter, this.filtersPerProcess[this.thisProcess], httpParams).subscribe(data => {
       console.log("REMOVED!");
       console.log(filter);
-      window.location.reload();
+      if (this.router.url === "/process") {
+        this.router.navigateByUrl("/process2");
+      }
+      else {
+        this.router.navigateByUrl("/process");
+      }
     })
   }
 
