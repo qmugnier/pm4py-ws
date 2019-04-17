@@ -203,7 +203,7 @@ export class HeaderComponent implements OnInit {
     localStorage.removeItem("process");
     localStorage.removeItem("sessionId");
     this.router.navigateByUrl("/login");
-    window.location.reload();
+    //window.location.reload();
   }
 
   startActivitiesFilter() {
