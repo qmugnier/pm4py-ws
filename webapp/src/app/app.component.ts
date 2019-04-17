@@ -27,14 +27,21 @@ export class AppComponent implements OnInit {
         this.sessionId_provided = true;
       }
       let process_name: string = localStorage.getItem("process");
-      if (process_name != null) {
+      if (this.router.url == "/login") {
+        this.process_provided = false;
+        this.sessionId_provided = false;
+      }
+      else if (process_name != null) {
         if (this.router.url == "/login") {
           localStorage.removeItem("sessionId");
           this.process_provided = false;
+          this.sessionId_provided = false;
         } else if (this.router.url === "/logsList") {
           this.process_provided = false;
+          this.sessionId_provided = true;
         } else {
           this.process_provided = true;
+          this.sessionId_provided = true;
         }
       } else {
         this.process_provided = false;
