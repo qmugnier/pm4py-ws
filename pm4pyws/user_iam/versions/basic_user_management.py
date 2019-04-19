@@ -3,6 +3,9 @@ import uuid
 
 
 class BasicUserManagement(object):
+    def __init__(self):
+        self.user_db = "users.db"
+
     def do_login(self, user, password):
         """
         Logs in a user and returns a session id
@@ -19,7 +22,7 @@ class BasicUserManagement(object):
         session_id
             Session ID
         """
-        conn_users = sqlite3.connect('users.db')
+        conn_users = sqlite3.connect(self.user_db)
         curs_users = conn_users.cursor()
         curs_users.execute("SELECT USER_ID FROM USERS WHERE USER_ID = ? AND PASSWORD = ?", (user, password))
         results = curs_users.fetchone()
@@ -46,7 +49,7 @@ class BasicUserManagement(object):
             Boolean value
         """
         validity = False
-        conn_users = sqlite3.connect('users.db')
+        conn_users = sqlite3.connect(self.user_db)
         curs_users = conn_users.cursor()
         sid = str(session_id)
         curs_users.execute("SELECT USER_ID FROM SESSIONS WHERE SESSION_ID = ? AND SESSION_ID = ?", (sid, sid))
@@ -71,7 +74,7 @@ class BasicUserManagement(object):
             User ID
         """
         user = None
-        conn_users = sqlite3.connect('users.db')
+        conn_users = sqlite3.connect(self.user_db)
         curs_users = conn_users.cursor()
         sid = str(session_id)
         curs_users.execute("SELECT USER_ID FROM SESSIONS WHERE SESSION_ID = ? AND SESSION_ID = ?", (sid, sid))
