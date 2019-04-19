@@ -23,25 +23,36 @@ export class AppComponent implements OnInit {
     this.router = _router;
     this.route = _route;
     this.router.events.subscribe((val) => {
+      if (!environment.enableLogin) {
+        this.sessionId_provided = true;
+      }
       if (environment.enableLogin && localStorage.getItem("sessionId") != null) {
         this.sessionId_provided = true;
       }
       let process_name: string = localStorage.getItem("process");
       if (this.router.url == "/login") {
         this.process_provided = false;
-        this.sessionId_provided = false;
+        if (environment.enableLogin) {
+          this.sessionId_provided = false;
+        }
       }
       else if (process_name != null) {
         if (this.router.url == "/login") {
           localStorage.removeItem("sessionId");
           this.process_provided = false;
-          this.sessionId_provided = false;
+          if (environment.enableLogin) {
+            this.sessionId_provided = false;
+          }
         } else if (this.router.url === "/logsList") {
           this.process_provided = false;
-          this.sessionId_provided = true;
+          if (environment.enableLogin) {
+            this.sessionId_provided = true;
+          }
         } else {
           this.process_provided = true;
-          this.sessionId_provided = true;
+          if (environment.enableLogin) {
+            this.sessionId_provided = true;
+          }
         }
       } else {
         this.process_provided = false;
