@@ -199,9 +199,6 @@ export class HeaderComponent implements OnInit {
         this.enableUpload = environment.enableUpload && sessionJson["can_upload"] && this.isNotLogin;
       }
 
-      console.log("SESSIONJSON");
-      console.log(sessionJson);
-
       if ("can_download" in sessionJson) {
         this.enableDownload = environment.enableDownload && sessionJson["can_download"] && this.isNotLogin;
       }
