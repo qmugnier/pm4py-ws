@@ -13,6 +13,17 @@ class BasicLogSessionHandler(object):
         self.handlers = {}
         self.session_handlers = {}
 
+    def get_handlers(self):
+        """
+        Gets the current set of handlers
+
+        Returns
+        -----------
+        handlers
+            Handlers
+        """
+        return self.handlers
+
     def get_handler_for_process_and_session(self, process, session):
         """
         Gets an handler for a given process and session
@@ -51,10 +62,10 @@ class BasicLogSessionHandler(object):
         handler
             Handler
         """
-        if process in self.LogsHandlers.handlers:
-            if session not in self.LogsHandlers.session_handlers:
-                self.LogsHandlers.session_handlers[session] = {}
-            self.LogsHandlers.session_handlers[session][process] = handler
+        if process in self.handlers:
+            if session not in self.session_handlers:
+                self.session_handlers[session] = {}
+            self.session_handlers[session][process] = handler
 
     def check_is_admin(self, user):
         """

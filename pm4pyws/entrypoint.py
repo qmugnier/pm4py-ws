@@ -383,10 +383,13 @@ def get_logs_list():
     if check_session_validity(session):
         user = get_user_from_session(session)
 
-        all_keys = Commons.handlers.keys()
+        all_keys = lh.get_handlers().keys()
+
+        print("BBB")
 
         for key in all_keys:
             if lh.check_user_log_visibility(user, key):
+                print("AAAA")
                 available_keys.append(key)
 
     return jsonify({"logs": available_keys})
