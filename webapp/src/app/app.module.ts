@@ -54,6 +54,7 @@ const appRoutes: Routes = [
   { path: 'cases', component: AppComponent },
   { path: 'statistics', component: AppComponent },
   { path: 'logsList', component: AppComponent },
+  { path: 'logsList2', component: AppComponent },
   { path: 'simulation', component: TransientComponent },
   { path: 'alignments', component: AlignmentsComponent },
   { path: 'login', component: LoginComponent },

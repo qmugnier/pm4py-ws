@@ -52,7 +52,7 @@ export class HeaderComponent implements OnInit {
       if (process_name != null) {
         this.title = "PM4Py WI";
         this.helpString = "";
-        if (this.router.url === "/logsList") {
+        if (this.router.url === "/logsList" || this.router.url === "/logsList2") {
           this.isNotLogin = true;
           this.processProvided = false;
           this.title = "PM4Py WI - List of Logs";
@@ -165,7 +165,13 @@ export class HeaderComponent implements OnInit {
         this.pm4pyService.uploadLog(data, new HttpParams()).subscribe(data => {
           let responseJson : JSON = data as JSON;
           if (responseJson["status"] === "OK") {
-            window.location.reload();
+            if (this.router.url === "/logsList") {
+              this.router.navigateByUrl("/logsList2");
+            }
+            else {
+              this.router.navigateByUrl("/logsList");
+            }
+            //window.location.reload();
           }
           else {
             alert("Something has gone wrong in the upload!");
