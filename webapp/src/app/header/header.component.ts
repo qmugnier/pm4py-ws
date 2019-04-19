@@ -108,8 +108,8 @@ export class HeaderComponent implements OnInit {
           this.isNotLogin = true;
           this.helpString = this.logsListHelpString;
         }
-        this.checkSession();
       }
+      this.checkSession();
     });
   }
 
@@ -198,6 +198,9 @@ export class HeaderComponent implements OnInit {
       if ("can_upload" in sessionJson) {
         this.enableUpload = environment.enableUpload && sessionJson["can_upload"] && this.isNotLogin;
       }
+
+      console.log("SESSIONJSON");
+      console.log(sessionJson);
 
       if ("can_download" in sessionJson) {
         this.enableDownload = environment.enableDownload && sessionJson["can_download"] && this.isNotLogin;
