@@ -1,0 +1,202 @@
+import sqlite3
+
+from pm4pyws.configuration import Configuration
+from pm4pyws.handlers.parquet.parquet import ParquetHandler
+from pm4pyws.handlers.xes.xes import XesHandler
+
+
+class BasicLogSessionHandler(object):
+    def __init__(self):
+        # path to the database
+        self.database_path = "event_logs.db"
+
+        self.handlers = {}
+        self.session_handlers = {}
+
+    def get_handler_for_process_and_session(self, process, session):
+        """
+        Gets an handler for a given process and session
+
+        Parameters
+        -------------
+        process
+            Process
+        session
+            Session
+
+        Returns
+        -------------
+        handler
+            Handler
+        """
+        if process in self.handlers:
+            if session not in self.session_handlers:
+                self.session_handlers[session] = {}
+            if process not in self.session_handlers[session]:
+                self.session_handlers[session][process] = self.handlers[process]
+            # print(LogsHandlers.session_handlers[session][process].filters_chain)
+            return self.session_handlers[session][process]
+        return None
+
+    def set_handler_for_process_and_session(self, process, session, handler):
+        """
+        Sets the handler for the current process and session
+
+        Parameters
+        -------------
+        process
+            Process
+        session
+            Session
+        handler
+            Handler
+        """
+        if process in self.LogsHandlers.handlers:
+            if session not in self.LogsHandlers.session_handlers:
+                self.LogsHandlers.session_handlers[session] = {}
+            self.LogsHandlers.session_handlers[session][process] = handler
+
+    def check_is_admin(self, user):
+        """
+        Checks if the user is an administrator
+
+        Parameters
+        -------------
+        user
+            User
+
+        Returns
+        -------------
+        boolean
+            Boolean value
+        """
+        if Configuration.enable_session:
+            conn_logs = sqlite3.connect(self.database_path)
+            curs_logs = conn_logs.cursor()
+            curs_logs.execute("SELECT USER_ID FROM ADMINS WHERE USER_ID = ? AND USER_ID = ?", (user, user))
+            results = curs_logs.fetchone()
+            if results is not None:
+                return True
+            return False
+        return True
+
+    def manage_upload(self, user, basename, filepath):
+        """
+        Manages an event log that is uploaded
+
+        Parameters
+        ------------
+        user
+            Current user
+        basename
+            Name of the log
+        filepath
+            Log path
+        """
+
+        self.handlers[basename] = XesHandler()
+        self.handlers[basename].build_from_path(filepath)
+        conn_logs = sqlite3.connect(self.database_path)
+        curs_logs = conn_logs.cursor()
+        curs_logs.execute("INSERT INTO EVENT_LOGS VALUES (?,?)", (basename, filepath))
+        curs_logs.execute("INSERT INTO USER_LOG_VISIBILITY VALUES (?,?)", (user, basename))
+        curs_logs.execute("INSERT INTO USER_LOG_DOWNLOADABLE VALUES (?,?)", (user, basename))
+        conn_logs.commit()
+        conn_logs.close()
+
+    def check_user_log_visibility(self, user, process):
+        """
+        Checks if the user has visibility on the given process
+
+        Parameters
+        -------------
+        user
+            User
+        process
+            Process
+        """
+        if Configuration.enable_session:
+            conn_logs = sqlite3.connect(self.database_path)
+            curs_logs = conn_logs.cursor()
+            curs_logs.execute("SELECT USER_ID FROM USER_LOG_VISIBILITY WHERE USER_ID = ? AND LOG_NAME = ?",
+                              (user, process))
+            results = curs_logs.fetchone()
+            if results is not None:
+                return True
+            return self.check_is_admin(user)
+        return True
+
+    def check_user_enabled_upload(self, user):
+        """
+        Checks if the user is enabled to upload a log
+
+        Parameters
+        ------------
+        user
+            User
+
+        Returns
+        ------------
+        boolean
+            Boolean value
+        """
+        if Configuration.enable_session:
+            conn_logs = sqlite3.connect(self.database_path)
+            curs_logs = conn_logs.cursor()
+            curs_logs.execute("SELECT USER_ID FROM USER_UPLOADABLE WHERE USER_ID = ? AND USER_ID = ?", (user, user))
+            results = curs_logs.fetchone()
+            if results is not None:
+                return True
+            return self.check_is_admin(user)
+        return True
+
+    def check_user_enabled_download(self, user, process):
+        """
+        Checks if the user is enabled to download a log
+
+        Parameters
+        ------------
+        user
+            User
+        process
+            Process
+
+        Returns
+        ------------
+        boolean
+            Boolean value
+        """
+        if Configuration.enable_session:
+            conn_logs = sqlite3.connect(self.database_path)
+            curs_logs = conn_logs.cursor()
+            curs_logs.execute("SELECT USER_ID FROM USER_LOG_DOWNLOADABLE WHERE USER_ID = ? AND LOG_NAME = ?",
+                              (user, process))
+            results = curs_logs.fetchone()
+            if results is not None:
+                return True
+            return self.check_is_admin(user)
+        return True
+
+    def load_log_static(self, log_name, file_path, parameters=None):
+        """
+        Loads an event log inside the known handlers
+
+        Parameters
+        ------------
+        log_name
+            Log name
+        file_path
+            Full path (in the services machine) to the log
+        parameters
+            Possible parameters
+        """
+        if log_name not in self.handlers:
+            if file_path.endswith(".parquet"):
+                self.handlers[log_name] = ParquetHandler()
+                self.handlers[log_name].build_from_path(file_path, parameters=parameters)
+            elif file_path.endswith(".csv"):
+                self.handlers[log_name] = ParquetHandler()
+                self.handlers[log_name].build_from_csv(file_path, parameters=parameters)
+            elif file_path.endswith(".xes") or file_path.endswith(".xes.gz"):
+                self.handlers[log_name] = XesHandler()
+                self.handlers[log_name].build_from_path(file_path, parameters=parameters)
