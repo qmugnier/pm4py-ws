@@ -1,7 +1,6 @@
 import base64
 import os
 import random
-import sqlite3
 import string
 import traceback
 from threading import Semaphore
@@ -9,63 +8,16 @@ from threading import Semaphore
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 
+from pm4pyws.basic_log_session_handling import BasicLogSessionHandler
 from pm4pyws.basic_user_management import BasicUserManagement
 from pm4pyws.configuration import Configuration
-from pm4pyws.handlers.parquet.parquet import ParquetHandler
-from pm4pyws.handlers.xes.xes import XesHandler
 
 um = BasicUserManagement()
+lh = BasicLogSessionHandler()
 
 
-class LogsHandlers:
-    handlers = {}
-    session_handlers = {}
+class Commons:
     semaphore_matplot = Semaphore(1)
-
-
-def get_handler_for_process_and_session(process, session):
-    """
-    Gets an handler for a given process and session
-
-    Parameters
-    -------------
-    process
-        Process
-    session
-        Session
-
-    Returns
-    -------------
-    handler
-        Handler
-    """
-    if process in LogsHandlers.handlers:
-        if session not in LogsHandlers.session_handlers:
-            LogsHandlers.session_handlers[session] = {}
-        if process not in LogsHandlers.session_handlers[session]:
-            LogsHandlers.session_handlers[session][process] = LogsHandlers.handlers[process]
-        #print(LogsHandlers.session_handlers[session][process].filters_chain)
-        return LogsHandlers.session_handlers[session][process]
-    return None
-
-
-def set_handler_for_process_and_session(process, session, handler):
-    """
-    Sets the handler for the current process and session
-
-    Parameters
-    -------------
-    process
-        Process
-    session
-        Session
-    handler
-        Handler
-    """
-    if process in LogsHandlers.handlers:
-        if session not in LogsHandlers.session_handlers:
-            LogsHandlers.session_handlers[session] = {}
-        LogsHandlers.session_handlers[session][process] = handler
 
 
 def do_login(user, password):
@@ -127,131 +79,6 @@ def get_user_from_session(session_id):
     return None
 
 
-def check_is_admin(user):
-    """
-    Checks if the user is an administrator
-
-    Parameters
-    -------------
-    user
-        User
-
-    Returns
-    -------------
-    boolean
-        Boolean value
-    """
-    if Configuration.enable_session:
-        conn_logs = sqlite3.connect('event_logs.db')
-        curs_logs = conn_logs.cursor()
-        curs_logs.execute("SELECT USER_ID FROM ADMINS WHERE USER_ID = ? AND USER_ID = ?", (user, user))
-        results = curs_logs.fetchone()
-        if results is not None:
-            return True
-        return False
-    return True
-
-
-def check_user_log_visibility(user, process):
-    """
-    Checks if the user has visibility on the given process
-
-    Parameters
-    -------------
-    user
-        User
-    process
-        Process
-    """
-    if Configuration.enable_session:
-        conn_logs = sqlite3.connect('event_logs.db')
-        curs_logs = conn_logs.cursor()
-        curs_logs.execute("SELECT USER_ID FROM USER_LOG_VISIBILITY WHERE USER_ID = ? AND LOG_NAME = ?", (user, process))
-        results = curs_logs.fetchone()
-        if results is not None:
-            return True
-        return check_is_admin(user)
-    return True
-
-
-def check_user_enabled_upload(user):
-    """
-    Checks if the user is enabled to upload a log
-
-    Parameters
-    ------------
-    user
-        User
-
-    Returns
-    ------------
-    boolean
-        Boolean value
-    """
-    if Configuration.enable_session:
-        conn_logs = sqlite3.connect('event_logs.db')
-        curs_logs = conn_logs.cursor()
-        curs_logs.execute("SELECT USER_ID FROM USER_UPLOADABLE WHERE USER_ID = ? AND USER_ID = ?", (user, user))
-        results = curs_logs.fetchone()
-        if results is not None:
-            return True
-        return check_is_admin(user)
-    return True
-
-
-def check_user_enabled_download(user, process):
-    """
-    Checks if the user is enabled to download a log
-
-    Parameters
-    ------------
-    user
-        User
-    process
-        Process
-
-    Returns
-    ------------
-    boolean
-        Boolean value
-    """
-    if Configuration.enable_session:
-        conn_logs = sqlite3.connect('event_logs.db')
-        curs_logs = conn_logs.cursor()
-        curs_logs.execute("SELECT USER_ID FROM USER_LOG_DOWNLOADABLE WHERE USER_ID = ? AND LOG_NAME = ?",
-                          (user, process))
-        results = curs_logs.fetchone()
-        if results is not None:
-            return True
-        return check_is_admin(user)
-    return True
-
-
-def load_log_static(log_name, file_path, parameters=None):
-    """
-    Loads an event log inside the known handlers
-
-    Parameters
-    ------------
-    log_name
-        Log name
-    file_path
-        Full path (in the services machine) to the log
-    parameters
-        Possible parameters
-    """
-    if log_name not in LogsHandlers.handlers:
-        if file_path.endswith(".parquet"):
-            LogsHandlers.handlers[log_name] = ParquetHandler()
-            LogsHandlers.handlers[log_name].build_from_path(file_path, parameters=parameters)
-        elif file_path.endswith(".csv"):
-            LogsHandlers.handlers[log_name] = ParquetHandler()
-            LogsHandlers.handlers[log_name].build_from_csv(file_path, parameters=parameters)
-        elif file_path.endswith(".xes") or file_path.endswith(".xes.gz"):
-            LogsHandlers.handlers[log_name] = XesHandler()
-            LogsHandlers.handlers[log_name].build_from_path(file_path, parameters=parameters)
-
-
 class PM4PyServices:
     app = Flask(__name__, static_url_path='', static_folder='../webapp/dist/webapp')
     app.add_url_rule(app.static_url_path + '/<path:filename>', endpoint='static',
@@ -271,7 +98,7 @@ class PM4PyServices:
         parameters
             Possible parameters
         """
-        load_log_static(log_name, file_path, parameters=parameters)
+        lh.load_log_static(log_name, file_path, parameters=parameters)
 
     def serve(self, host="0.0.0.0", port="5000", threaded=True):
         self.app.run(host=host, port=port, threaded=threaded)
@@ -297,21 +124,26 @@ def get_process_schema():
     process = request.args.get('process', default='receipt', type=str)
     if check_session_validity(session):
         user = get_user_from_session(session)
-        if check_user_log_visibility(user, process):
-            # reads the decoration
-            decoration = request.args.get('decoration', default='freq', type=str)
-            # reads the typeOfModel
-            type_of_model = request.args.get('typeOfModel', default='dfg', type=str)
-            # reads the simplicity
-            simplicity = request.args.get('simplicity', default=0.6, type=float)
-            variant = type_of_model + "_" + decoration
-            parameters = {"decreasingFactor": simplicity}
-            base64, model, format, this_handler = get_handler_for_process_and_session(process, session).get_schema(
-                variant=variant,
-                parameters=parameters)
-            if model is not None:
-                model = model.decode('utf-8')
-            dictio = {"base64": base64.decode('utf-8'), "model": model, "format": format, "handler": this_handler}
+        if lh.check_user_log_visibility(user, process):
+            Commons.semaphore_matplot.acquire()
+            try:
+                # reads the decoration
+                decoration = request.args.get('decoration', default='freq', type=str)
+                # reads the typeOfModel
+                type_of_model = request.args.get('typeOfModel', default='dfg', type=str)
+                # reads the simplicity
+                simplicity = request.args.get('simplicity', default=0.6, type=float)
+                variant = type_of_model + "_" + decoration
+                parameters = {"decreasingFactor": simplicity}
+                base64, model, format, this_handler = lh.get_handler_for_process_and_session(process, session).get_schema(
+                    variant=variant,
+                    parameters=parameters)
+                if model is not None:
+                    model = model.decode('utf-8')
+                dictio = {"base64": base64.decode('utf-8'), "model": model, "format": format, "handler": this_handler}
+            except:
+                pass
+            Commons.semaphore_matplot.release()
     ret = jsonify(dictio)
     return ret
 
@@ -335,15 +167,15 @@ def get_case_duration():
     dictio = {}
     if check_session_validity(session):
         user = get_user_from_session(session)
-        if check_user_log_visibility(user, process):
-            LogsHandlers.semaphore_matplot.acquire()
+        if lh.check_user_log_visibility(user, process):
+            Commons.semaphore_matplot.acquire()
             try:
-                base64 = get_handler_for_process_and_session(process, session).get_case_duration_svg()
+                base64 = lh.get_handler_for_process_and_session(process, session).get_case_duration_svg()
                 dictio = {"base64": base64.decode('utf-8')}
             except:
                 traceback.print_exc()
                 dictio = {"base64": ""}
-            LogsHandlers.semaphore_matplot.release()
+            Commons.semaphore_matplot.release()
 
     ret = jsonify(dictio)
     return ret
@@ -369,15 +201,15 @@ def get_events_per_time():
 
     if check_session_validity(session):
         user = get_user_from_session(session)
-        if check_user_log_visibility(user, process):
-            LogsHandlers.semaphore_matplot.acquire()
+        if lh.check_user_log_visibility(user, process):
+            Commons.semaphore_matplot.acquire()
             try:
-                base64 = get_handler_for_process_and_session(process, session).get_events_per_time_svg()
+                base64 = lh.get_handler_for_process_and_session(process, session).get_events_per_time_svg()
                 dictio = {"base64": base64.decode('utf-8')}
             except:
                 traceback.print_exc()
                 dictio = {"base64": ""}
-            LogsHandlers.semaphore_matplot.release()
+            Commons.semaphore_matplot.release()
 
     ret = jsonify(dictio)
 
@@ -403,10 +235,10 @@ def get_sna():
 
         if check_session_validity(session):
             user = get_user_from_session(session)
-            if check_user_log_visibility(user, process):
+            if lh.check_user_log_visibility(user, process):
                 metric = request.args.get('metric', default='handover', type=str)
                 threshold = request.args.get('threshold', default=0.0, type=float)
-                sna = get_handler_for_process_and_session(process, session).get_sna(variant=metric, parameters={
+                sna = lh.get_handler_for_process_and_session(process, session).get_sna(variant=metric, parameters={
                     "weight_threshold": threshold})
     except:
         traceback.print_exc()
@@ -434,8 +266,8 @@ def get_all_variants():
 
     if check_session_validity(session):
         user = get_user_from_session(session)
-        if check_user_log_visibility(user, process):
-            variants = get_handler_for_process_and_session(process, session).get_variant_statistics()
+        if lh.check_user_log_visibility(user, process):
+            variants = lh.get_handler_for_process_and_session(process, session).get_variant_statistics()
             dictio = {"variants": variants}
 
     ret = jsonify(dictio)
@@ -462,11 +294,11 @@ def get_all_cases():
 
     if check_session_validity(session):
         user = get_user_from_session(session)
-        if check_user_log_visibility(user, process):
+        if lh.check_user_log_visibility(user, process):
             parameters = {}
             if variant is not None:
                 parameters["variant"] = variant
-            cases_list = get_handler_for_process_and_session(process, session).get_case_statistics(
+            cases_list = lh.get_handler_for_process_and_session(process, session).get_case_statistics(
                 parameters=parameters)
             dictio = {"cases": cases_list}
     ret = jsonify(dictio)
@@ -491,9 +323,9 @@ def get_events():
 
     if check_session_validity(session):
         user = get_user_from_session(session)
-        if check_user_log_visibility(user, process):
+        if lh.check_user_log_visibility(user, process):
             caseid = request.args.get('caseid', type=str)
-            events = get_handler_for_process_and_session(process, session).get_events(caseid)
+            events = lh.get_handler_for_process_and_session(process, session).get_events(caseid)
             i = 0
             while i < len(events):
                 keys = list(events[i].keys())
@@ -525,7 +357,7 @@ def load_log_from_path():
                 log_path = request.json["log_path"]
                 parameters = request.json["parameters"] if "parameters" in request.json else None
                 print("log_name = ", log_name, "log_path = ", log_path)
-                load_log_static(log_name, log_path, parameters=parameters)
+                lh.load_log_static(log_name, log_path, parameters=parameters)
                 return "OK"
         except:
             traceback.print_exc()
@@ -551,10 +383,10 @@ def get_logs_list():
     if check_session_validity(session):
         user = get_user_from_session(session)
 
-        all_keys = LogsHandlers.handlers.keys()
+        all_keys = Commons.handlers.keys()
 
         for key in all_keys:
-            if check_user_log_visibility(user, key):
+            if lh.check_user_log_visibility(user, key):
                 available_keys.append(key)
 
     return jsonify({"logs": available_keys})
@@ -580,11 +412,16 @@ def do_transient_analysis():
 
     if check_session_validity(session):
         user = get_user_from_session(session)
-        if check_user_log_visibility(user, process):
-            delay = request.args.get('delay', default=86400, type=float)
+        if lh.check_user_log_visibility(user, process):
+            Commons.semaphore_matplot.acquire()
+            try:
+                delay = request.args.get('delay', default=86400, type=float)
 
-            base64 = get_handler_for_process_and_session(process, session).get_transient(delay)
-            dictio = {"base64": base64.decode('utf-8')}
+                base64 = lh.get_handler_for_process_and_session(process, session).get_transient(delay)
+                dictio = {"base64": base64.decode('utf-8')}
+            except:
+                pass
+            Commons.semaphore_matplot.release()
 
     ret = jsonify(dictio)
     return ret
@@ -609,15 +446,15 @@ def get_log_summary():
 
     if check_session_validity(session):
         user = get_user_from_session(session)
-        if check_user_log_visibility(user, process):
-            this_variants_number = get_handler_for_process_and_session(process, session).variants_number
-            this_cases_number = get_handler_for_process_and_session(process, session).cases_number
-            this_events_number = get_handler_for_process_and_session(process, session).events_number
+        if lh.check_user_log_visibility(user, process):
+            this_variants_number = lh.get_handler_for_process_and_session(process, session).variants_number
+            this_cases_number = lh.get_handler_for_process_and_session(process, session).cases_number
+            this_events_number = lh.get_handler_for_process_and_session(process, session).events_number
 
-            ancestor_variants_number = get_handler_for_process_and_session(process,
+            ancestor_variants_number = lh.get_handler_for_process_and_session(process,
                                                                            session).first_ancestor.variants_number
-            ancestor_cases_number = get_handler_for_process_and_session(process, session).first_ancestor.cases_number
-            ancestor_events_number = get_handler_for_process_and_session(process, session).first_ancestor.events_number
+            ancestor_cases_number = lh.get_handler_for_process_and_session(process, session).first_ancestor.cases_number
+            ancestor_events_number = lh.get_handler_for_process_and_session(process, session).first_ancestor.events_number
 
             dictio = {"this_variants_number": this_variants_number, "this_cases_number": this_cases_number,
                       "this_events_number": this_events_number, "ancestor_variants_number": ancestor_variants_number,
@@ -645,9 +482,9 @@ def download_xes_log():
     if Configuration.enable_download:
         if check_session_validity(session):
             user = get_user_from_session(session)
-            if check_user_log_visibility(user, process):
-                if check_user_enabled_download(user, process):
-                    content = get_handler_for_process_and_session(process, session).download_xes_log()
+            if lh.check_user_log_visibility(user, process):
+                if lh.check_user_enabled_download(user, process):
+                    content = lh.get_handler_for_process_and_session(process, session).download_xes_log()
                     return jsonify({"content": content.decode('utf-8')})
         return jsonify({"content": ""})
 
@@ -669,9 +506,9 @@ def download_csv_log():
     if Configuration.enable_download:
         if check_session_validity(session):
             user = get_user_from_session(session)
-            if check_user_log_visibility(user, process):
-                if check_user_enabled_download(user, process):
-                    content = get_handler_for_process_and_session(process, session).download_csv_log()
+            if lh.check_user_log_visibility(user, process):
+                if lh.check_user_enabled_download(user, process):
+                    content = lh.get_handler_for_process_and_session(process, session).download_csv_log()
                     return jsonify({"content": content})
     return jsonify({"content": ""})
 
@@ -692,8 +529,8 @@ def get_start_activities():
     process = request.args.get('process', default='receipt', type=str)
     if check_session_validity(session):
         user = get_user_from_session(session)
-        if check_user_log_visibility(user, process):
-            dictio = get_handler_for_process_and_session(process, session).get_start_activities()
+        if lh.check_user_log_visibility(user, process):
+            dictio = lh.get_handler_for_process_and_session(process, session).get_start_activities()
             for entry in dictio:
                 dictio[entry] = int(dictio[entry])
             list_act = sorted([(x, y) for x, y in dictio.items()], key=lambda x: x[1], reverse=True)
@@ -717,8 +554,8 @@ def get_end_activities():
     process = request.args.get('process', default='receipt', type=str)
     if check_session_validity(session):
         user = get_user_from_session(session)
-        if check_user_log_visibility(user, process):
-            dictio = get_handler_for_process_and_session(process, session).get_end_activities()
+        if lh.check_user_log_visibility(user, process):
+            dictio = lh.get_handler_for_process_and_session(process, session).get_end_activities()
             for entry in dictio:
                 dictio[entry] = int(dictio[entry])
             list_act = sorted([(x, y) for x, y in dictio.items()], key=lambda x: x[1], reverse=True)
@@ -734,8 +571,8 @@ def get_attributes_list():
     process = request.args.get('process', default='receipt', type=str)
     if check_session_validity(session):
         user = get_user_from_session(session)
-        if check_user_log_visibility(user, process):
-            attributes_list = sorted(list(get_handler_for_process_and_session(process, session).get_attributes_list()))
+        if lh.check_user_log_visibility(user, process):
+            attributes_list = sorted(list(lh.get_handler_for_process_and_session(process, session).get_attributes_list()))
             return jsonify({"attributes_list": attributes_list})
     return jsonify({"attributes_list": []})
 
@@ -750,8 +587,8 @@ def get_attribute_values():
     attribute_key = request.args.get('attribute_key', type=str)
     if check_session_validity(session):
         user = get_user_from_session(session)
-        if check_user_log_visibility(user, process):
-            dictio = get_handler_for_process_and_session(process, session).get_attribute_values(attribute_key)
+        if lh.check_user_log_visibility(user, process):
+            dictio = lh.get_handler_for_process_and_session(process, session).get_attribute_values(attribute_key)
             list_values = sorted([(x, y) for x, y in dictio.items()], key=lambda x: x[1], reverse=True)
             return jsonify({"attributeValues": list_values})
     return jsonify({"attributeValues": []})
@@ -784,11 +621,11 @@ def check_session_service():
 
         if check_session_validity(session):
             user = get_user_from_session(session)
-            is_admin = check_is_admin(user)
-            can_upload = check_user_enabled_upload(user)
+            is_admin = lh.check_is_admin(user)
+            can_upload = lh.check_user_enabled_upload(user)
             if process is not None and not process == "null":
-                log_visibility = check_user_log_visibility(user, process)
-                can_download = check_user_enabled_download(user, process)
+                log_visibility = lh.check_user_log_visibility(user, process)
+                can_download = lh.check_user_enabled_download(user, process)
                 return jsonify(
                     {"status": "OK", "sessionEnabled": True, "session": session, "user": user, "is_admin": is_admin,
                      "can_upload": can_upload, "log_visibility": log_visibility, "can_download": can_download})
@@ -812,7 +649,7 @@ def upload_log():
     if Configuration.enable_session:
         if check_session_validity(session):
             user = get_user_from_session(session)
-            if check_user_enabled_upload(user):
+            if lh.check_user_enabled_upload(user):
                 try:
                     filename = request.json["filename"]
                     base64_content = request.json["base64"]
@@ -825,15 +662,8 @@ def upload_log():
                         F = open(filepath, "w")
                         F.write(stru)
                         F.close()
-                        LogsHandlers.handlers[basename] = XesHandler()
-                        LogsHandlers.handlers[basename].build_from_path(filepath)
-                        conn_logs = sqlite3.connect('event_logs.db')
-                        curs_logs = conn_logs.cursor()
-                        curs_logs.execute("INSERT INTO EVENT_LOGS VALUES (?,?)", (basename, filepath))
-                        curs_logs.execute("INSERT INTO USER_LOG_VISIBILITY VALUES (?,?)", (user, basename))
-                        curs_logs.execute("INSERT INTO USER_LOG_DOWNLOADABLE VALUES (?,?)", (user, basename))
-                        conn_logs.commit()
-                        conn_logs.close()
+                        lh.manage_upload(user, basename, filepath)
+
                         return jsonify({"status": "OK"})
                 except:
                     # traceback.print_exc()
@@ -861,11 +691,17 @@ def get_alignments():
 
     if check_session_validity(session):
         user = get_user_from_session(session)
-        if check_user_log_visibility(user, process):
-            petri_string = request.json["model"]
-            svg_on_petri, svg_table = get_handler_for_process_and_session(process, session).get_alignments(petri_string,
-                                                                                                           parameters={})
-            dictio = {"petri": svg_on_petri.decode('utf-8'), "table": svg_table.decode('utf-8')}
+        if lh.check_user_log_visibility(user, process):
+            Commons.semaphore_matplot.acquire()
+            try:
+                petri_string = request.json["model"]
+                svg_on_petri, svg_table = lh.get_handler_for_process_and_session(process, session).get_alignments(
+                    petri_string,
+                    parameters={})
+                dictio = {"petri": svg_on_petri.decode('utf-8'), "table": svg_table.decode('utf-8')}
+            except:
+                pass
+            Commons.semaphore_matplot.release()
 
     ret = jsonify(dictio)
 
@@ -889,18 +725,14 @@ def add_filter():
 
     if check_session_validity(session):
         user = get_user_from_session(session)
-        if check_user_log_visibility(user, process):
+        if lh.check_user_log_visibility(user, process):
             # reads the specific filter to add
             filter = request.json['filter']
             # reads all the filters
             all_filters = request.json['all_filters']
 
-            print("ADD FILTER")
-            print(filter)
-            print(all_filters)
-
-            new_handler = get_handler_for_process_and_session(process, session).add_filter(filter, all_filters)
-            set_handler_for_process_and_session(process, session, new_handler)
+            new_handler = lh.get_handler_for_process_and_session(process, session).add_filter(filter, all_filters)
+            lh.set_handler_for_process_and_session(process, session, new_handler)
             return jsonify({"status": "OK"})
 
     return jsonify({"status": "FAIL"})
@@ -923,18 +755,14 @@ def remove_filter():
 
     if check_session_validity(session):
         user = get_user_from_session(session)
-        if check_user_log_visibility(user, process):
+        if lh.check_user_log_visibility(user, process):
             # reads the specific filter to add
             filter = request.json['filter']
             # reads all the filters
             all_filters = request.json['all_filters']
 
-            print("REMOVE FILTER")
-            print(filter)
-            print(all_filters)
-
-            new_handler = get_handler_for_process_and_session(process, session).remove_filter(filter, all_filters)
-            set_handler_for_process_and_session(process, session, new_handler)
+            new_handler = lh.get_handler_for_process_and_session(process, session).remove_filter(filter, all_filters)
+            lh.set_handler_for_process_and_session(process, session, new_handler)
 
             return jsonify({"status": "OK"})
 
