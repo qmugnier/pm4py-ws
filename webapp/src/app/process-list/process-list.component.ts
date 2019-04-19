@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {Pm4pyService} from "../pm4py-service.service";
 import {HttpParams} from "@angular/common/http";
-import {Router} from "@angular/router";
+import {Router, RoutesRecognized} from "@angular/router";
 
 @Component({
   selector: 'app-process-list',
@@ -22,6 +22,14 @@ export class ProcessListComponent implements OnInit {
     this.router = _route;
 
     this.getProcessList();
+
+    this.router.events.subscribe((next) => {
+      if (next instanceof RoutesRecognized) {
+        if (next.url.startsWith("/logsList")) {
+          this.getProcessList();
+        }
+      }
+    });
   }
 
   getProcessList() {

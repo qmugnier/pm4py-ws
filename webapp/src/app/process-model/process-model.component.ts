@@ -51,7 +51,6 @@ export class ProcessModelComponent implements OnInit {
 
     this.router.events.subscribe((next) => {
       if (next instanceof RoutesRecognized) {
-        console.log(next.url);
         if (next.url.startsWith("/process")) {
           this.populateProcessSchema();
           this.getLogSummary();
