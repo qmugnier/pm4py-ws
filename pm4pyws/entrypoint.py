@@ -8,12 +8,12 @@ from threading import Semaphore
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 
-from pm4pyws.basic_log_session_handling import BasicLogSessionHandler
-from pm4pyws.basic_user_management import BasicUserManagement
 from pm4pyws.configuration import Configuration
+from pm4pyws.session_manager import factory as session_manager_factory
+from pm4pyws.user_iam import factory as user_iam_factory
 
-um = BasicUserManagement()
-lh = BasicLogSessionHandler()
+lh = session_manager_factory.apply()
+um = user_iam_factory.apply()
 
 
 class Commons:
@@ -135,7 +135,8 @@ def get_process_schema():
                 simplicity = request.args.get('simplicity', default=0.6, type=float)
                 variant = type_of_model + "_" + decoration
                 parameters = {"decreasingFactor": simplicity}
-                base64, model, format, this_handler = lh.get_handler_for_process_and_session(process, session).get_schema(
+                base64, model, format, this_handler = lh.get_handler_for_process_and_session(process,
+                                                                                             session).get_schema(
                     variant=variant,
                     parameters=parameters)
                 if model is not None:
@@ -385,11 +386,8 @@ def get_logs_list():
 
         all_keys = lh.get_handlers().keys()
 
-        print("BBB")
-
         for key in all_keys:
             if lh.check_user_log_visibility(user, key):
-                print("AAAA")
                 available_keys.append(key)
 
     return jsonify({"logs": available_keys})
@@ -455,9 +453,10 @@ def get_log_summary():
             this_events_number = lh.get_handler_for_process_and_session(process, session).events_number
 
             ancestor_variants_number = lh.get_handler_for_process_and_session(process,
-                                                                           session).first_ancestor.variants_number
+                                                                              session).first_ancestor.variants_number
             ancestor_cases_number = lh.get_handler_for_process_and_session(process, session).first_ancestor.cases_number
-            ancestor_events_number = lh.get_handler_for_process_and_session(process, session).first_ancestor.events_number
+            ancestor_events_number = lh.get_handler_for_process_and_session(process,
+                                                                            session).first_ancestor.events_number
 
             dictio = {"this_variants_number": this_variants_number, "this_cases_number": this_cases_number,
                       "this_events_number": this_events_number, "ancestor_variants_number": ancestor_variants_number,
@@ -575,7 +574,8 @@ def get_attributes_list():
     if check_session_validity(session):
         user = get_user_from_session(session)
         if lh.check_user_log_visibility(user, process):
-            attributes_list = sorted(list(lh.get_handler_for_process_and_session(process, session).get_attributes_list()))
+            attributes_list = sorted(
+                list(lh.get_handler_for_process_and_session(process, session).get_attributes_list()))
             return jsonify({"attributes_list": attributes_list})
     return jsonify({"attributes_list": []})
 
