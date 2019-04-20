@@ -44,6 +44,7 @@ export class LoginComponent implements OnInit {
 
       if (resultJson["status"] == "OK") {
         localStorage.setItem("sessionId", resultJson["sessionId"]);
+        localStorage.removeItem("filtersPerProcess");
         this.router.navigateByUrl('/logsList');
       }
       else {
