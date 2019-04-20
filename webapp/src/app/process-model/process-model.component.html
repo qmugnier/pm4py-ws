@@ -13,11 +13,11 @@
     </div>
     <div class="p-1">
       Simplicity:
-      <mat-slider min="0.01" max="1.00" step="0.005" [value]="simplicity" (change)="sliderIsChanged($event)"></mat-slider>
+      <mat-slider min="0.01" max="1.00" step="0.005" [(value)]="simplicity" (change)="sliderIsChanged($event)"></mat-slider>
     </div>
     <div class="p-1">
         Type of model:<br />
-        <mat-select placeholder="Type of model" (ngModel)="typeOfModel" [value]="typeOfModel" (selectionChange)="typeOfModelIsChanged($event)">
+        <mat-select placeholder="Type of model" [(value)]="typeOfModel" (selectionChange)="typeOfModelIsChanged($event)">
           <mat-option value="dfg">DFG</mat-option>
           <mat-option value="tree">Process Tree (Inductive)</mat-option>
           <mat-option value="inductive">Petri (Inductive)</mat-option>
@@ -26,7 +26,7 @@
     </div>
     <div class="p-2">
       Decoration:<br />
-      <mat-radio-group (ngModel)="decoration" (change)="decorationIsChanged($event)" [value]="decoration">
+      <mat-radio-group (change)="decorationIsChanged($event)" [value]="decoration">
         <mat-radio-button value="freq">Frequency</mat-radio-button>
         <mat-radio-button value="perf">Performance</mat-radio-button>
       </mat-radio-group>
