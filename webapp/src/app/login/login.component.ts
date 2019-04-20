@@ -37,6 +37,13 @@ export class LoginComponent implements OnInit {
   ngOnInit() {
   }
 
+  keyDownFunction(event) {
+    if(event.keyCode == 13) {
+      this.login();
+      // rest of your code
+    }
+  }
+
   login() {
     this.pm4pyService.loginService(this.username, this.password).subscribe(data => {
       let resultJson : JSON = data as JSON;
