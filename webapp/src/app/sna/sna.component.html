@@ -6,7 +6,7 @@
     </div>
     <div class="p-2">
       Metric selection:<br />
-      <mat-select placeholder="Metric" (ngModel)="metric" [value]="metric" (selectionChange)="metricChanged($event)">
+      <mat-select placeholder="Metric" [(value)]="metric" (selectionChange)="metricChanged($event)">
         <mat-option value="handover">Handover of Work</mat-option>
         <mat-option value="working_together">Working Together</mat-option>
         <mat-option value="subcontracting">Subcontracting</mat-option>
