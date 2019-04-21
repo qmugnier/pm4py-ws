@@ -1,3 +1,8 @@
+A demo is publicly available at address (be careful!):
+
+http://194.32.77.109:5000/index.html
+
+
 HOW TO INSTALL FROM PIP:
 
 
