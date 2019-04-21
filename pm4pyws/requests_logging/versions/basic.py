@@ -16,21 +16,6 @@ class BasicLoggingHandler(LoggingHandler):
 
         LoggingHandler.__init__(self)
 
-    def log_exception_method(self, method_name, exception_str, request=None):
-        """
-        Log an exception happening inside a method
-
-        Parameters
-        ------------
-        method_name
-            Name of the method
-        exception_str
-            String describing the exception
-        request
-            (If provided) Flask HTTP request content
-        """
-        pass
-
     def debug(self, msg):
         """
         Logs a debug message
