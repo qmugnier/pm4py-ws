@@ -1,10 +1,13 @@
 import sqlite3
 import uuid
 
+from pm4pyws.user_iam.interface.user_management import UserManagement
 
-class BasicUserManagement(object):
-    def __init__(self):
+
+class BasicUserManagement(UserManagement):
+    def __init__(self, ex):
         self.user_db = "users.db"
+        UserManagement.__init__(self, ex)
 
     def do_login(self, user, password):
         """

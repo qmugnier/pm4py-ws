@@ -5,12 +5,14 @@ BASIC_LOG_SESSION_HANDLING = "basic_log_session_handling"
 VERSIONS = {BASIC_LOG_SESSION_HANDLING: BasicLogSessionHandler}
 
 
-def apply(variant=BASIC_LOG_SESSION_HANDLING):
+def apply(ex, variant=BASIC_LOG_SESSION_HANDLING):
     """
     Gets the session handler according to the variant
 
     Parameters
     -----------
+    ex
+        Exception handler
     variant
         Variant
 
@@ -19,4 +21,4 @@ def apply(variant=BASIC_LOG_SESSION_HANDLING):
     session_handler
         Session handler
     """
-    return VERSIONS[variant]()
+    return VERSIONS[variant](ex)

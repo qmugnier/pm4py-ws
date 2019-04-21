@@ -40,7 +40,9 @@ setup(
               'pm4pyws.handlers.parquet.process_schema.heuristics_freq',
               'pm4pyws.handlers.parquet.process_schema.heuristics_perf',
               'pm4pyws.handlers.parquet.process_schema.alpha_performance', 'pm4pyws.user_iam',
-              'pm4pyws.user_iam.versions', 'pm4pyws.session_manager', 'pm4pyws.session_manager.versions'],
+              'pm4pyws.user_iam.versions', 'pm4pyws.user_iam.interface', 'pm4pyws.session_manager',
+              'pm4pyws.session_manager.versions', 'pm4pyws.session_manager.interface', 'pm4pyws.requests_logging',
+              'pm4pyws.requests_logging.versions', 'pm4pyws.requests_logging.interface'],
     url='http://www.pm4py.org',
     license='GPL 3.0',
     install_requires=[
