@@ -5,12 +5,14 @@ BASIC_USER_MANAGEMENT = "basic_user_management"
 VERSIONS = {BASIC_USER_MANAGEMENT: BasicUserManagement}
 
 
-def apply(variant=BASIC_USER_MANAGEMENT):
+def apply(ex, variant=BASIC_USER_MANAGEMENT):
     """
     Gets the user manager according to the variant
 
     Parameters
     -----------
+    ex
+        Exception handler
     variant
         Variant
 
@@ -19,4 +21,4 @@ def apply(variant=BASIC_USER_MANAGEMENT):
     user_manager
         User manager
     """
-    return VERSIONS[variant]()
+    return VERSIONS[variant](ex)

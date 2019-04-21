@@ -1,1 +1,2 @@
-from pm4pyws.session_manager import factory, versions
+from pm4pyws.session_manager import factory, versions, interface
+
