@@ -22,6 +22,4 @@ def apply(log, filter, parameters=None):
     if parameters is None:
         parameters = {}
 
-    print("LOG START ACTIVITIES FILTER")
-
     return start_activities_filter.apply(log, filter[1], parameters=parameters)

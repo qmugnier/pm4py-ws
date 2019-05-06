@@ -1,9 +1,9 @@
-from pm4py.algo.filtering.log.end_activities import end_activities_filter
+from pm4py.algo.filtering.log.variants import variants_filter
 
 
 def apply(log, filter, parameters=None):
     """
-    Apply a filter to the current log (end activities filter)
+    Apply a filter to the current log (variants filter)
 
     Parameters
     ------------
@@ -22,4 +22,4 @@ def apply(log, filter, parameters=None):
     if parameters is None:
         parameters = {}
 
-    return end_activities_filter.apply(log, filter[1], parameters=parameters)
+    return variants_filter.apply(log, filter[1], parameters=parameters)

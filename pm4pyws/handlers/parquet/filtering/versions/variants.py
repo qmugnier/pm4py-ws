@@ -1,9 +1,9 @@
-from pm4py.algo.filtering.pandas.start_activities import start_activities_filter
+from pm4py.algo.filtering.pandas.variants import variants_filter
 
 
 def apply(dataframe, filter, parameters=None):
     """
-    Apply a filter to the current log (start activities filter)
+    Apply a filter to the current log (variants filter)
 
     Parameters
     ------------
@@ -22,4 +22,4 @@ def apply(dataframe, filter, parameters=None):
     if parameters is None:
         parameters = {}
 
-    return start_activities_filter.apply(dataframe, filter[1], parameters=parameters)
+    return variants_filter.apply(dataframe, filter[1], parameters=parameters)
