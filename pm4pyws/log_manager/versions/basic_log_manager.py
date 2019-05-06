@@ -108,8 +108,15 @@ class BasicLogSessionHandler(LogHandler):
             Log path
         """
 
-        self.handlers[basename] = XesHandler()
-        self.handlers[basename].build_from_path(filepath)
+        if filepath.endswith(".parquet"):
+            self.handlers[basename] = ParquetHandler()
+            self.handlers[basename].build_from_path(filepath)
+        elif filepath.endswith(".csv"):
+            self.handlers[basename] = ParquetHandler()
+            self.handlers[basename].build_from_csv(filepath)
+        else:
+            self.handlers[basename] = XesHandler()
+            self.handlers[basename].build_from_path(filepath)
         conn_logs = sqlite3.connect(self.database_path)
         curs_logs = conn_logs.cursor()
         curs_logs.execute("INSERT INTO EVENT_LOGS VALUES (?,?)", (basename, filepath))

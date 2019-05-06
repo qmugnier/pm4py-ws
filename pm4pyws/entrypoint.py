@@ -662,7 +662,8 @@ def upload_log():
                     extension = filename.split(".")[1]
                     base64_content = base64_content.split(";base64,")[1]
                     stru = base64.b64decode(base64_content).decode('utf-8')
-                    if extension.lower() == "xes":
+
+                    if extension.lower() == "xes" or extension.lower() == "csv" or extension.lower() == "parquet":
                         filepath = os.path.join("logs", basename + "." + extension)
                         F = open(filepath, "w")
                         F.write(stru)
@@ -671,7 +672,7 @@ def upload_log():
 
                         return jsonify({"status": "OK"})
                 except:
-                    # traceback.print_exc()
+                    traceback.print_exc()
                     pass
 
     return jsonify({"status": "FAIL"})
