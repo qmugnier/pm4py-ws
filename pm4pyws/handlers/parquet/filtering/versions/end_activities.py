@@ -22,6 +22,4 @@ def apply(dataframe, filter, parameters=None):
     if parameters is None:
         parameters = {}
 
-    print("PARQUET END ACTIVITIES FILTER")
-
     return end_activities_filter.apply(dataframe, filter[1], parameters=parameters)
