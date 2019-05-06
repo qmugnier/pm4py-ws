@@ -1,4 +1,5 @@
-from pm4pyws.handlers.xes.filtering.versions import start_activities, end_activities
+from pm4pyws.handlers.xes.filtering.versions import start_activities, end_activities, attributes_pos_trace, \
+    attributes_neg_trace
 
 
 def apply(log, filter, parameters=None):
@@ -26,5 +27,9 @@ def apply(log, filter, parameters=None):
         return start_activities.apply(log, filter, parameters=parameters)
     elif filter[0] == "end_activities":
         return end_activities.apply(log, filter, parameters=parameters)
+    elif filter[0] == "attributes_pos_trace":
+        return attributes_pos_trace.apply(log, filter, parameters=parameters)
+    elif filter[0] == "attributes_neg_trace":
+        return attributes_neg_trace.apply(log, filter, parameters=parameters)
 
     return log
