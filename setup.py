@@ -49,7 +49,8 @@ setup(
         'pm4py',
         'Flask',
         'flask-cors',
-        'requests'
+        'requests',
+        'python-keycloak'
     ],
     project_urls={
         'Documentation': 'http://pm4py.pads.rwth-aachen.de/documentation/',
