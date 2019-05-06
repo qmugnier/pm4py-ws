@@ -157,7 +157,7 @@ export class HeaderComponent implements OnInit {
     let filename : string = $event.target.files[0].name;
     let filetype : string = $event.target.files[0].type;
     let extension : string = filename.split(".")[1];
-    if (extension === "xes") {
+    if (extension === "xes" || extension === "csv") {
       reader.readAsDataURL($event.target.files[0]);
       reader.onload = () => {
         let base64: string = reader.result.toString();
