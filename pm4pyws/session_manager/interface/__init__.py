@@ -1,1 +1,1 @@
-from pm4pyws.session_manager.interface import session_handler
+from pm4pyws.session_manager.interface import log_manager

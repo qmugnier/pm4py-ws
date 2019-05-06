@@ -1,4 +1,4 @@
-class SessionHandler(object):
+class LogHandler(object):
     def __init__(self, ex):
         # exception handler
         self.ex = ex

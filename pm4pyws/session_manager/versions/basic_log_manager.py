@@ -3,10 +3,10 @@ import sqlite3
 from pm4pyws.configuration import Configuration
 from pm4pyws.handlers.parquet.parquet import ParquetHandler
 from pm4pyws.handlers.xes.xes import XesHandler
-from pm4pyws.session_manager.interface.session_handler import SessionHandler
+from pm4pyws.session_manager.interface.log_manager import LogHandler
 
 
-class BasicLogSessionHandler(SessionHandler):
+class BasicLogSessionHandler(LogHandler):
     def __init__(self, ex):
         # path to the database
         self.database_path = "event_logs.db"
@@ -14,7 +14,7 @@ class BasicLogSessionHandler(SessionHandler):
         self.handlers = {}
         self.session_handlers = {}
 
-        SessionHandler.__init__(self, ex)
+        LogHandler.__init__(self, ex)
 
     def get_handlers(self):
         """
