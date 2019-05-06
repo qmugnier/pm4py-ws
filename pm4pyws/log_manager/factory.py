@@ -1,4 +1,4 @@
-from pm4pyws.session_manager.versions.basic_log_manager import BasicLogSessionHandler
+from pm4pyws.log_manager.versions.basic_log_manager import BasicLogSessionHandler
 
 BASIC_LOG_SESSION_HANDLING = "basic_log_session_handling"
 

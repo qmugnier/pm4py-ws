@@ -3,7 +3,7 @@ import sqlite3
 from pm4pyws.configuration import Configuration
 from pm4pyws.handlers.parquet.parquet import ParquetHandler
 from pm4pyws.handlers.xes.xes import XesHandler
-from pm4pyws.session_manager.interface.log_manager import LogHandler
+from pm4pyws.log_manager.interface.log_manager import LogHandler
 
 
 class BasicLogSessionHandler(LogHandler):
