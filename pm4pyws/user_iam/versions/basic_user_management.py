@@ -5,7 +5,7 @@ from pm4pyws.user_iam.interface.user_management import UserManagement
 
 
 class BasicUserManagement(UserManagement):
-    def __init__(self, ex):
+    def __init__(self, ex, parameters=None):
         self.user_db = "users.db"
         UserManagement.__init__(self, ex)
 
