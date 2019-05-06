@@ -1,5 +1,5 @@
 from pm4pyws.handlers.xes.filtering.versions import start_activities, end_activities, attributes_pos_trace, \
-    attributes_neg_trace
+    attributes_neg_trace, attributes_pos_events, attributes_neg_events
 
 
 def apply(log, filter, parameters=None):
@@ -31,5 +31,9 @@ def apply(log, filter, parameters=None):
         return attributes_pos_trace.apply(log, filter, parameters=parameters)
     elif filter[0] == "attributes_neg_trace":
         return attributes_neg_trace.apply(log, filter, parameters=parameters)
+    elif filter[0] == "attributes_pos_events":
+        return attributes_pos_events.apply(log, filter, parameters=parameters)
+    elif filter[0] == "attributes_neg_events":
+        return attributes_neg_events.apply(log, filter, parameters=parameters)
 
     return log
