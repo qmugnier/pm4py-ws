@@ -12,7 +12,7 @@ class LogHandler(object):
         handlers
             Handlers
         """
-        raise Exception("session_handler get_handlers not implemented!")
+        raise Exception("log_manager get_handlers not implemented!")
 
     def get_handler_for_process_and_session(self, process, session):
         """
@@ -30,8 +30,7 @@ class LogHandler(object):
         handler
             Handler
         """
-        raise Exception("session_handler get_handler_for_process_and_session not implemented!")
-
+        raise Exception("log_manager get_handler_for_process_and_session not implemented!")
 
     def set_handler_for_process_and_session(self, process, session, handler):
         """
@@ -46,8 +45,7 @@ class LogHandler(object):
         handler
             Handler
         """
-        raise Exception("session_handler set_handler_for_process_and_session not implemented!")
-
+        raise Exception("log_manager set_handler_for_process_and_session not implemented!")
 
     def check_is_admin(self, user):
         """
@@ -63,7 +61,7 @@ class LogHandler(object):
         boolean
             Boolean value
         """
-        raise Exception("session_handler check_is_admin not implemented!")
+        raise Exception("log_manager check_is_admin not implemented!")
 
     def manage_upload(self, user, basename, filepath):
         """
@@ -78,7 +76,7 @@ class LogHandler(object):
         filepath
             Log path
         """
-        raise Exception("session_handler manage_upload not implemented!")
+        raise Exception("log_manager manage_upload not implemented!")
 
     def check_user_log_visibility(self, user, process):
         """
@@ -91,8 +89,7 @@ class LogHandler(object):
         process
             Process
         """
-        raise Exception("session_handler check_user_log_visibility not implemented!")
-
+        raise Exception("log_manager check_user_log_visibility not implemented!")
 
     def check_user_enabled_upload(self, user):
         """
@@ -108,8 +105,7 @@ class LogHandler(object):
         boolean
             Boolean value
         """
-        raise Exception("session_handler check_user_enabled_upload not implemented!")
-
+        raise Exception("log_manager check_user_enabled_upload not implemented!")
 
     def check_user_enabled_download(self, user, process):
         """
@@ -127,8 +123,7 @@ class LogHandler(object):
         boolean
             Boolean value
         """
-        raise Exception("session_handler check_user_enabled_download not implemented!")
-
+        raise Exception("log_manager check_user_enabled_download not implemented!")
 
     def load_log_static(self, log_name, file_path, parameters=None):
         """
@@ -143,5 +138,30 @@ class LogHandler(object):
         parameters
             Possible parameters
         """
-        raise Exception("session_handler load_log_static not implemented!")
+        raise Exception("log_manager load_log_static not implemented!")
 
+    def save_object_memory(self, key, value):
+        """
+        Saves an object into the objects memory
+
+        Parameters
+        ------------
+        key
+            Key
+        value
+            Value
+        """
+        raise Exception("log_manager save_object_memory not implemented!")
+
+    def get_object_memory(self, key):
+        """
+        Gets an object from the objects memory
+
+        Parameters
+        ------------
+        key
+            Key
+        value
+            Value
+        """
+        raise Exception("log_manager get_object_memory not implemented!")

@@ -45,6 +45,17 @@ class XesHandler(object):
         # number of events
         self.events_number = 0
 
+    def get_filters_chain_repr(self):
+        """
+        Gets the representation of the current filters chain
+
+        Returns
+        -----------
+        stri
+            Representation of the current filters chain
+        """
+        return str(self.filters_chain)
+
     def copy_from_ancestor(self, ancestor):
         """
         Copies from ancestor

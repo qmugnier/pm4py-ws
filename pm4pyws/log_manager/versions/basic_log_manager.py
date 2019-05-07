@@ -5,6 +5,8 @@ from pm4pyws.handlers.parquet.parquet import ParquetHandler
 from pm4pyws.handlers.xes.xes import XesHandler
 from pm4pyws.log_manager.interface.log_manager import LogHandler
 
+import time
+
 
 class BasicLogSessionHandler(LogHandler):
     def __init__(self, ex):
@@ -13,6 +15,9 @@ class BasicLogSessionHandler(LogHandler):
 
         self.handlers = {}
         self.session_handlers = {}
+
+        self.objects_memory = {}
+        self.objects_timestamp = {}
 
         LogHandler.__init__(self, ex)
 
@@ -221,3 +226,32 @@ class BasicLogSessionHandler(LogHandler):
             elif file_path.endswith(".xes") or file_path.endswith(".xes.gz"):
                 self.handlers[log_name] = XesHandler()
                 self.handlers[log_name].build_from_path(file_path, parameters=parameters)
+
+    def save_object_memory(self, key, value):
+        """
+        Saves an object into the objects memory
+
+        Parameters
+        ------------
+        key
+            Key
+        value
+            Value
+        """
+        self.objects_memory[key] = value
+        self.objects_timestamp[key] = time.time()
+
+    def get_object_memory(self, key):
+        """
+        Gets an object from the objects memory
+
+        Parameters
+        ------------
+        key
+            Key
+        value
+            Value
+        """
+        if key in self.objects_memory:
+            return self.objects_memory[key]
+        return None
