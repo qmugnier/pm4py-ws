@@ -65,7 +65,7 @@ class ParquetHandler(object):
         """
         self.first_ancestor = ancestor.first_ancestor
         self.last_ancestor = ancestor
-        self.filters_chain = ancestor.filters_chain
+        #self.filters_chain = ancestor.filters_chain
         self.dataframe = ancestor.dataframe
 
     def build_from_path(self, path, parameters=None):
