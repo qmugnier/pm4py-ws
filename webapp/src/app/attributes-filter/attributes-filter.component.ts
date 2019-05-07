@@ -16,18 +16,25 @@ export class AttributesFilterComponent implements OnInit {
   public selectedAttribute : string;
   public attributeValues : string[];
   public selectedAttributeValues : string[];
+  public filteringMethod : string;
 
   constructor(private _sanitizer: DomSanitizer, private pm4pyServ: Pm4pyService, public filterService : FilterServiceService) {
     this.sanitizer = _sanitizer;
     this.pm4pyService = pm4pyServ;
     this.selectedAttributeValues = [];
     this.selectedAttribute = "concept:name";
+    this.filteringMethod = "attributes_pos_trace";
     this.filterService = filterService;
     this.getAttributesList();
     this.getAttributeValues();
   }
 
   ngOnInit() {
+  }
+
+  selectedAttributeChanged(event: any) {
+    this.selectedAttribute = event.value;
+    this.getAttributeValues();
   }
 
   getAttributesList() {
@@ -60,6 +67,6 @@ export class AttributesFilterComponent implements OnInit {
   }
 
   applyFilter() {
-    this.filterService.addFilter("attributes_pos_trace", [this.selectedAttribute, this.selectedAttributeValues]);
+    this.filterService.addFilter(this.filteringMethod, [this.selectedAttribute, this.selectedAttributeValues]);
   }
 }
