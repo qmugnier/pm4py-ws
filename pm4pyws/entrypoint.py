@@ -137,10 +137,20 @@ def get_process_schema():
                 simplicity = request.args.get('simplicity', default=0.6, type=float)
                 variant = type_of_model + "_" + decoration
                 parameters = {"decreasingFactor": simplicity}
-                base64, model, format, this_handler = lh.get_handler_for_process_and_session(process,
-                                                                                             session).get_schema(
-                    variant=variant,
-                    parameters=parameters)
+                handler = lh.get_handler_for_process_and_session(process, session)
+                filters_chain = handler.get_filters_chain_repr()
+                ps_repr = process+"@@"+variant+"@@"+str(simplicity)+"@@"+filters_chain
+                saved_obj = lh.get_object_memory(ps_repr)
+                if saved_obj is not None:
+                    base64 = saved_obj[0]
+                    model = saved_obj[1]
+                    format = saved_obj[2]
+                    this_handler = saved_obj[3]
+                else:
+                    base64, model, format, this_handler = handler.get_schema(
+                        variant=variant,
+                        parameters=parameters)
+                    lh.save_object_memory(ps_repr, [base64, model, format, this_handler])
                 if model is not None:
                     model = model.decode('utf-8')
                 dictio = {"base64": base64.decode('utf-8'), "model": model, "format": format, "handler": this_handler}
