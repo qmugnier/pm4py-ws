@@ -28,16 +28,14 @@ export class VariantsFilterComponent implements OnInit {
   getVariants() {
     let params: HttpParams = new HttpParams();
     this.pm4pyService.getAllVariants(params).subscribe(data => {
-      this.pm4pyJsonVariants = data as JSON;
-      this.variants = this.pm4pyJsonVariants["variants"];
+      let pm4pyJsonVariants : JSON = data as JSON;
+      this.variants = pm4pyJsonVariants["variants"];
       let i : number = 0;
       while (i < this.variants.length) {
         let keys : string[] = Object.keys(this.variants[i]);
         this.variants[i] = {"variant": this.variants[i]["variant"], "count": this.variants[i][keys[0]]};
         i++;
       }
-      this.variantsLoading = false;this.isLoading = this.variantsLoading || this.casesLoading;
-      this.dataSourceVariants.data = this.variants;
       console.log(this.variants);
     });
   }

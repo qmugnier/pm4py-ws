@@ -9,6 +9,7 @@ import {StartActivitiesFilterComponent} from "../start-activities-filter/start-a
 import {EndActivitiesFilterComponent} from "../end-activities-filter/end-activities-filter.component";
 import {VariantsFilterComponent} from "../variants-filter/variants-filter.component";
 import {FilterServiceService} from "../filter-service.service";
+import {AttributesFilterComponent} from "../attributes-filter/attributes-filter.component";
 
 @Component({
   selector: 'app-header',
@@ -223,6 +224,10 @@ export class HeaderComponent implements OnInit {
 
   variantsFilter() {
     this.dialog.open(VariantsFilterComponent);
+  }
+
+  attributesFilter() {
+    this.dialog.open(AttributesFilterComponent);
   }
 
 }
