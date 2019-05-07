@@ -35,5 +35,7 @@ def apply(log, filter, parameters=None):
         return attributes_pos_events.apply(log, filter, parameters=parameters)
     elif filter[0] == "attributes_neg_events":
         return attributes_neg_events.apply(log, filter, parameters=parameters)
+    elif filter[0] == "variants":
+        return variants.apply(log, filter, parameters=parameters)
 
     return log

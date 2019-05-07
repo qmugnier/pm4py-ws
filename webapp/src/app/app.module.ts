@@ -46,6 +46,7 @@ import { AlignmentsComponent } from './alignments/alignments.component';
 import { LoginComponent } from './login/login.component';
 import { StartActivitiesFilterComponent } from './start-activities-filter/start-activities-filter.component';
 import { EndActivitiesFilterComponent } from './end-activities-filter/end-activities-filter.component';
+import { VariantsFilterComponent } from './variants-filter/variants-filter.component';
 
 const appRoutes: Routes = [
   { path: 'process', component: AppComponent },
@@ -78,7 +79,8 @@ const appRoutes: Routes = [
     AlignmentsComponent,
     LoginComponent,
     StartActivitiesFilterComponent,
-    EndActivitiesFilterComponent
+    EndActivitiesFilterComponent,
+    VariantsFilterComponent
   ],
   imports: [
     BrowserModule,
@@ -110,7 +112,7 @@ const appRoutes: Routes = [
       appRoutes,
       { enableTracing: true, onSameUrlNavigation: 'reload' } // <-- debugging purposes only
     )  ],
-  entryComponents: [StartActivitiesFilterComponent, EndActivitiesFilterComponent],
+  entryComponents: [StartActivitiesFilterComponent, EndActivitiesFilterComponent, VariantsFilterComponent],
   providers: [],
   bootstrap: [AppComponent]
 })

@@ -35,5 +35,7 @@ def apply(dataframe, filter, parameters=None):
         return attributes_pos_events.apply(dataframe, filter, parameters=parameters)
     elif filter[0] == "attributes_neg_events":
         return attributes_neg_events.apply(dataframe, filter, parameters=parameters)
+    elif filter[0] == "variants":
+        return variants.apply(dataframe, filter, parameters=parameters)
 
     return dataframe

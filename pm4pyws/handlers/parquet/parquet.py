@@ -137,7 +137,9 @@ class ParquetHandler(object):
         filter
             Filter to add
         """
-        self.dataframe = filtering_factory.apply(self.dataframe, filter)
+        parameters = {}
+        parameters["variants_df"] = self.variants_df
+        self.dataframe = filtering_factory.apply(self.dataframe, filter, parameters=parameters)
         self.filters_chain.append(filter)
 
     def build_from_csv(self, path, parameters=None):
