@@ -135,9 +135,8 @@ class XesHandler(object):
         parameters = {}
         parameters[constants.PARAMETER_CONSTANT_ACTIVITY_KEY] = self.activity_key
         parameters[constants.PARAMETER_CONSTANT_ATTRIBUTE_KEY] = self.activity_key
-        print("BEFORE", len(self.log))
+        parameters["variants"] = self.variants
         self.log = filtering_factory.apply(self.log, filter, parameters=parameters)
-        print("AFTER", len(self.log))
         self.filters_chain.append(filter)
 
     def build_from_path(self, path, parameters=None):

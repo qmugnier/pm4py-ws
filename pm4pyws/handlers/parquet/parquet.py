@@ -240,6 +240,9 @@ class ParquetHandler(object):
         format
             Format of the process schema (e.g. PNML)
         """
+        if parameters is None:
+            parameters = {}
+        parameters["variants_df"] = self.variants_df
         return process_schema_factory.apply(self.dataframe, variant=variant, parameters=parameters)
 
     def get_case_duration_svg(self, parameters=None):
