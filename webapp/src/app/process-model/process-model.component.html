@@ -2,7 +2,7 @@
   <mat-spinner></mat-spinner>
 </div>
 <div fxLayout="row" [hidden]="isLoading == true" (mousewheel)="mouseWheel($event)">
-  <div fxFlex="25%">
+  <div fxFlex="17%">
     <div class="p-2">
       Variants: <b>{{thisVariantsNumber}}</b>
       <mat-progress-bar mode="determinate" value="{{ratioVariantsNumber}}"></mat-progress-bar>
@@ -35,7 +35,7 @@
       <button mat-button routerLink="/alignments">Conformance Checking</button>
     </div>
   </div>
-  <div id="imageProcessModelDiv" fxFlex="75%" style="overflow: auto" >
+  <div id="imageProcessModelDiv" fxFlex="83%" style="overflow: auto" >
     <img id="imageProcessModelImage" [src]="processModelBase64Sanitized">
   </div>
 </div>
