@@ -149,7 +149,7 @@ class ParquetHandler(object):
             Filter to add
         """
         parameters = {}
-        parameters["variants_df"] = self.variants_df
+        #parameters["variants_df"] = self.variants_df
         self.dataframe = filtering_factory.apply(self.dataframe, filter, parameters=parameters)
         self.filters_chain.append(filter)
 

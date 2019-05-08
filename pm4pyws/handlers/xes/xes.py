@@ -135,7 +135,7 @@ class XesHandler(object):
         parameters = {}
         parameters[constants.PARAMETER_CONSTANT_ACTIVITY_KEY] = self.activity_key
         parameters[constants.PARAMETER_CONSTANT_ATTRIBUTE_KEY] = self.activity_key
-        parameters["variants"] = self.variants
+        #parameters["variants"] = self.variants
         self.log = filtering_factory.apply(self.log, filter, parameters=parameters)
         self.filters_chain.append(filter)
 
