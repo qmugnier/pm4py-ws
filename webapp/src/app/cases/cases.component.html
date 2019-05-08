@@ -2,9 +2,9 @@
   <mat-spinner></mat-spinner>
 </div>
 <div id="container0" class="container" fxLayout="row" fxLayoutAlign="center" fxFlexFill style="height: 100%; width: 100%" [hidden]="isLoading == true">
-  <app-left-component ngFlex="17%">
+  <app-left-component fxFlex="15%">
   </app-left-component>
-  <div ngFlex="83%">
+  <div fxFlex="85%">
     <div id="casesContainer" [hidden]="isLoading == true">
       <span>Events: <b>{{thisEventsNumber}}</b></span>
       <span>&nbsp;&nbsp;&nbsp;&nbsp;</span>
