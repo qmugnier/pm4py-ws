@@ -14,15 +14,10 @@ import {Router} from "@angular/router";
   styleUrls: ['./left-component.component.scss']
 })
 export class LeftComponentComponent implements OnInit {
-  filterService : FilterServiceService;
   router: Router;
-  public dialog : MatDialog;
   public processProvided: boolean;
 
-  constructor(public _dialog: MatDialog, public _filterService : FilterServiceService, private _route: Router) {
-    this.filterService = _filterService;
-    this.filterService.retrieveFiltersFromLocalStorage();
-    this.dialog = _dialog;
+  constructor(private _route: Router) {
     this.router = _route;
     this.router.events.subscribe((val) => {
       let process_name: string = localStorage.getItem("process");
@@ -55,21 +50,4 @@ export class LeftComponentComponent implements OnInit {
       this.processProvided = false;
     }
   }
-
-  startActivitiesFilter() {
-    this.dialog.open(StartActivitiesFilterComponent);
-  }
-
-  endActivitiesFilter() {
-    this.dialog.open(EndActivitiesFilterComponent);
-  }
-
-  variantsFilter() {
-    this.dialog.open(VariantsFilterComponent);
-  }
-
-  attributesFilter() {
-    this.dialog.open(AttributesFilterComponent);
-  }
-
 }
