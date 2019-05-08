@@ -1,11 +1,18 @@
 <div *ngIf="isLoading == true">
   <mat-spinner></mat-spinner>
 </div>
-<div fxLayout="row" [hidden]="isLoading == true">
-  <div fxFlex="50%" style="overflow: hidden">
-    <img [src]="eventsPerTimeSvgSanitized" style='height: 360px'>
+<div id="container0" class="container" fxLayout="row" fxLayoutAlign="center" fxFlexFill style="height: 100%; width: 100%" [hidden]="isLoading == true">
+  <div fxFlex="13%">
+    <app-left-component></app-left-component>
   </div>
-  <div fxFlex="50%" style="overflow: hidden">
-    <img [src]="caseDurationSvgSanitized" style='height: 360px'>
+  <div fxFlex="87%">
+    <div fxLayout="row" [hidden]="isLoading == true">
+      <div fxFlex="50%" style="overflow: hidden">
+        <img [src]="eventsPerTimeSvgSanitized" style='height: 360px'>
+      </div>
+      <div fxFlex="50%" style="overflow: hidden">
+        <img [src]="caseDurationSvgSanitized" style='height: 360px'>
+      </div>
+    </div>
   </div>
 </div>
