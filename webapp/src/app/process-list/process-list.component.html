@@ -1,7 +1,7 @@
 <p>Select the process you wish to analyze:</p>
 &nbsp;
 <mat-action-list>
-  <mat-list-item *ngFor="let log of logsList" (click)="logClicked(log)">
-    <h3 matLine> {{log}} </h3>
+  <mat-list-item *ngFor="let log of logsList" (click)="logClicked(log)" style="max-height: 40px">
+    <span style="font-size: 10px"> {{log}} </span>
   </mat-list-item>
 </mat-action-list>

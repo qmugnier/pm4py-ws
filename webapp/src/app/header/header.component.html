@@ -1,4 +1,4 @@
-<mat-toolbar color="accent">
+<mat-toolbar color="accent" style="min-height: 33px; max-height: 33px">
   <mat-menu #appMenu="matMenu">
     {{helpString}}
   </mat-menu>
@@ -55,7 +55,7 @@
     <img src="../../assets/filter.svg" alt="Help" />
   </span>
     <span style="flex: 1 1 auto;"></span>
-  <span>{{title}}</span>
+  <span style="font-size: 12px">{{title}}</span>
 </mat-toolbar>
 <input hidden type="file" #uploader
        (change)="uploadFile($event)"/>
