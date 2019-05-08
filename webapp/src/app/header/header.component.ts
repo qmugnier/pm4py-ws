@@ -4,12 +4,6 @@ import { environment } from '../../environments/environment';
 import {HttpParams} from "@angular/common/http";
 import {DomSanitizer} from "@angular/platform-browser";
 import {Pm4pyService} from "../pm4py-service.service";
-import {MatDialog} from '@angular/material';
-import {StartActivitiesFilterComponent} from "../start-activities-filter/start-activities-filter.component";
-import {EndActivitiesFilterComponent} from "../end-activities-filter/end-activities-filter.component";
-import {VariantsFilterComponent} from "../variants-filter/variants-filter.component";
-import {FilterServiceService} from "../filter-service.service";
-import {AttributesFilterComponent} from "../attributes-filter/attributes-filter.component";
 
 @Component({
   selector: 'app-header',
@@ -27,23 +21,18 @@ export class HeaderComponent implements OnInit {
   pm4pyService: Pm4pyService;
   isNotLogin : boolean = true;
   loginEnabled : boolean = true;
-  filterService : FilterServiceService;
-  public dialog : MatDialog;
 
   userId: string;
 
   public logsListHelpString: string = "This page contains a list of logs loaded in the system. To open one of them click on the name of the log.";
 
 
-  constructor(private _route: Router, private _sanitizer: DomSanitizer, private pm4pyServ: Pm4pyService, public _dialog: MatDialog, public _filterService : FilterServiceService) {
+  constructor(private _route: Router, private _sanitizer: DomSanitizer, private pm4pyServ: Pm4pyService) {
     /**
      * Constructor (initialize the title and the help of the single page)
      */
-    this.filterService = _filterService;
-    this.filterService.retrieveFiltersFromLocalStorage();
     this.pm4pyService = pm4pyServ;
     this.sanitizer = _sanitizer;
-    this.dialog = _dialog;
     this.enableDownload = environment.enableDownload;
     this.enableUpload = environment.enableUpload;
     this.title = "PM4Py WI";
@@ -212,22 +201,6 @@ export class HeaderComponent implements OnInit {
     localStorage.removeItem("sessionId");
     this.router.navigateByUrl("/login");
     //window.location.reload();
-  }
-
-  startActivitiesFilter() {
-    this.dialog.open(StartActivitiesFilterComponent);
-  }
-
-  endActivitiesFilter() {
-    this.dialog.open(EndActivitiesFilterComponent);
-  }
-
-  variantsFilter() {
-    this.dialog.open(VariantsFilterComponent);
-  }
-
-  attributesFilter() {
-    this.dialog.open(AttributesFilterComponent);
   }
 
 }
