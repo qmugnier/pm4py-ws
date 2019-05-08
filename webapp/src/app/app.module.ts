@@ -49,6 +49,7 @@ import { EndActivitiesFilterComponent } from './end-activities-filter/end-activi
 import { VariantsFilterComponent } from './variants-filter/variants-filter.component';
 import { AttributesFilterComponent } from './attributes-filter/attributes-filter.component';
 import { LeftComponentComponent } from './left-component/left-component.component';
+import { AllFiltersComponent } from './all-filters/all-filters.component';
 
 const appRoutes: Routes = [
   { path: 'process', component: AppComponent },
@@ -84,7 +85,8 @@ const appRoutes: Routes = [
     EndActivitiesFilterComponent,
     VariantsFilterComponent,
     AttributesFilterComponent,
-    LeftComponentComponent
+    LeftComponentComponent,
+    AllFiltersComponent
   ],
   imports: [
     BrowserModule,
