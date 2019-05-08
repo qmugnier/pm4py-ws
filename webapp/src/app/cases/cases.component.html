@@ -2,8 +2,11 @@
   <mat-spinner></mat-spinner>
 </div>
 <div id="container0" class="container" fxLayout="row" fxLayoutAlign="center" fxFlexFill style="height: 100%; width: 100%" [hidden]="isLoading == true">
-  <app-left-component fxFlex="15%">
+  <app-left-component fxFlex="14%" class="isLeftPanel">
   </app-left-component>
+  <div fxFlex="1%">
+    &nbsp;
+  </div>
   <div fxFlex="85%">
     <div id="casesContainer" [hidden]="isLoading == true">
       <span>Events: <b>{{thisEventsNumber}}</b></span>
@@ -55,7 +58,7 @@
           </table>
         </div>
       </div>
-      <div class="table-container" id="tableEvents" [style.width.px]="width"  [style.height.px]="height" [hidden]="caseIsSelected == false">
+      <div class="table-container" id="tableEvents" [style.width.px]="width"  [style.height.px]="height">
         <div fxLayout="row">
           <table mat-table matSort [dataSource]="dataSourceEvents" class="mat-elevation-z8" fxFlex="100%">
             <ng-container matColumnDef="concept:name">

@@ -175,7 +175,7 @@ export class CasesComponent implements OnInit, AfterViewInit {
   }
 
   setTableSize() {
-    this.height = Math.floor(0.22 * window.innerHeight);
+    this.height = Math.floor(0.25 * window.innerHeight);
     this.width = Math.floor(0.81 * window.innerWidth);
 
     console.log(this.width);
