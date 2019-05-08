@@ -2,20 +2,6 @@
   <mat-menu #appMenu="matMenu">
     {{helpString}}
   </mat-menu>
-  <mat-menu #filtersMenu="matMenu">
-    <button mat-menu-item (click)="startActivitiesFilter()">
-      Start activities filter
-    </button>
-    <button mat-menu-item (click)="endActivitiesFilter()">
-      End activities filter
-    </button>
-    <button mat-menu-item (click)="variantsFilter()">
-      Variants filter
-    </button>
-    <button mat-menu-item (click)="attributesFilter()">
-      Attributes filter
-    </button>
-  </mat-menu>
   <mat-menu #uploadMenu="matMenu">
     <button mat-menu-item (click)="uploader.click()">
       Upload
@@ -45,16 +31,10 @@
   <span *ngIf="processProvided == true && enableDownload == true" [matMenuTriggerFor]="downloadMenu">
     <img src="../../assets/down.svg" alt="Download" />
   </span>
-  <span *ngIf="processProvided == true"><a routerLink="/process" alt="Process"><img src="../../assets/process_model.svg" /></a></span>
-  <span *ngIf="processProvided == true"><a routerLink="/cases" alt="Cases"><img src="../../assets/cases.svg" /></a></span>
-  <span *ngIf="processProvided == true"><a routerLink="/sna" alt="SNA"><img src="../../assets/sna_icon.svg" /></a></span>
-  <span *ngIf="processProvided == true"><a routerLink="/simulation" alt="Simulation"><img src="../../assets/simulation.svg" /></a></span>
-  <span *ngIf="processProvided == true"><a routerLink="/statistics" alt="Statistics"><img src="../../assets/statistics.svg" /></a></span>
-  <span>&nbsp;&nbsp;</span>
-  <span *ngIf="processProvided == true && router.url.startsWith('/process')" [matMenuTriggerFor]="filtersMenu">
-    <img src="../../assets/filter.svg" alt="Help" />
-  </span>
-    <span style="flex: 1 1 auto;"></span>
+
+  <app-left-component></app-left-component>
+
+  <span style="flex: 1 1 auto;"></span>
   <span style="font-size: 12px">{{title}}</span>
 </mat-toolbar>
 <input hidden type="file" #uploader
