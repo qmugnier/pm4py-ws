@@ -3,6 +3,7 @@
 </div>
 <div fxLayout="row" [hidden]="isLoading == true" (mousewheel)="mouseWheel($event)">
   <div fxFlex="17%">
+    <app-left-component></app-left-component>
     <div class="p-2">
       Variants: <b>{{thisVariantsNumber}}</b>
       <mat-progress-bar mode="determinate" value="{{ratioVariantsNumber}}"></mat-progress-bar>

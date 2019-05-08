@@ -3,6 +3,7 @@
 </div>
 <div fxLayout="row" [hidden]="isLoading == true" (mousewheel)="mouseWheel($event)">
   <div fxFlex="17%">
+    <app-left-component></app-left-component>
     <div class="p-1">Use slider to select delay:</div>
     <div class="p-1"><mat-slider min="6.00" max="17.00" step="0.01" [value]="delay" (change)="sliderIsChanged($event)"></mat-slider></div>
     <div class="p-2">
