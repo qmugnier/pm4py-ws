@@ -1,6 +1,6 @@
 <mat-toolbar color="accent" style="min-height: 33px; max-height: 33px; border-radius: 7px;">
   <mat-menu #appMenu="matMenu">
-    {{helpString}}
+    <span style="color: #FFFFFF">{{helpString}}</span>
   </mat-menu>
   <mat-menu #uploadMenu="matMenu">
     <button mat-menu-item (click)="uploader.click()">
