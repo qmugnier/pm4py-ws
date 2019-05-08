@@ -115,8 +115,8 @@ export class ProcessModelComponent implements OnInit {
     /**
      * Sets the correct size of the image decribing the process schema
      */
-    let targetHeight: number = (document.getElementById("container0").offsetHeight * 0.74);
-    let targetWidth: number = (document.getElementById("container0").offsetWidth * 0.72);
+    let targetHeight: number = (document.getElementById("container0").offsetHeight * 0.78);
+    let targetWidth: number = (document.getElementById("container0").offsetWidth * 0.79);
 
     (<HTMLImageElement>document.getElementById("imageProcessModelImage")).height = targetHeight;
     (<HTMLImageElement>document.getElementById("imageProcessModelImage")).width = targetWidth;

@@ -62,7 +62,7 @@ export class SnaComponent implements OnInit {
     /**
      * Do the resizing of the div to the target height
      */
-    let targetHeight: number = (document.getElementById("container0").offsetHeight * 0.74);
+    let targetHeight: number = (document.getElementById("container0").offsetHeight * 0.78);
 
     document.getElementById("divSna").style.height = ""+targetHeight+"px";
   }
