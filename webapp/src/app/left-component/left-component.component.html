@@ -1,7 +1,7 @@
-<span *ngIf="processProvided == true"><a routerLink="/process" alt="Process"><img src="../../assets/process_model.svg" /></a></span>
-<span *ngIf="processProvided == true"><a routerLink="/cases" alt="Cases"><img src="../../assets/cases.svg" /></a></span>
-<span *ngIf="processProvided == true"><a routerLink="/sna" alt="SNA"><img src="../../assets/sna_icon.svg" /></a></span>
-<span *ngIf="processProvided == true"><a routerLink="/simulation" alt="Simulation"><img src="../../assets/simulation.svg" /></a></span>
-<span *ngIf="processProvided == true"><a routerLink="/statistics" alt="Statistics"><img src="../../assets/statistics.svg" /></a></span>
+<span *ngIf="processProvided == true">&nbsp;&nbsp;<a routerLink="/process" alt="Process"><img src="../../assets/process_model.svg" /> Process</a></span><br />
+<span *ngIf="processProvided == true">&nbsp;&nbsp;<a routerLink="/cases" alt="Cases"><img src="../../assets/cases.svg" /> Cases</a></span><br />
+<span *ngIf="processProvided == true">&nbsp;&nbsp;<a routerLink="/sna" alt="SNA"><img src="../../assets/sna_icon.svg" /> S.N.A.</a></span><br />
+<span *ngIf="processProvided == true">&nbsp;&nbsp;<a routerLink="/simulation" alt="Simulation"><img src="../../assets/simulation.svg" /> Simulation</a></span><br />
+<span *ngIf="processProvided == true">&nbsp;&nbsp;<a routerLink="/statistics" alt="Statistics"><img src="../../assets/statistics.svg" /> Statistics</a></span><br />
 <span>&nbsp;&nbsp;</span>
 <app-all-filters *ngIf="processProvided == true && router.url.startsWith('/process')"></app-all-filters>
