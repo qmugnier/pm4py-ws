@@ -20,6 +20,6 @@ def get_statistics(df, parameters=None):
     if parameters is None:
         parameters = {}
 
-    variants_statistics = case_statistics.get_variant_statistics(df)
+    variants_statistics = case_statistics.get_variant_statistics_with_case_duration(df)
 
     return variants_statistics

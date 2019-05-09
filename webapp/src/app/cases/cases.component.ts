@@ -144,7 +144,7 @@ export class CasesComponent implements OnInit, AfterViewInit {
       let i : number = 0;
       while (i < this.variants.length) {
         let keys : string[] = Object.keys(this.variants[i]);
-        this.variants[i] = {"variant": this.variants[i]["variant"], "count": this.variants[i][keys[0]]};
+        this.variants[i] = {"variant": this.variants[i]["variant"], "count": this.variants[i]["count"]};
         i++;
       }
       this.variantsLoading = false;

@@ -200,7 +200,7 @@ class ParquetHandler(object):
         parameters
             Possible parameters of the algorithm
         """
-        self.variants_df = case_statistics.get_variants_df(self.dataframe, parameters=parameters)
+        self.variants_df = case_statistics.get_variants_df_with_case_duration(self.dataframe, parameters=parameters)
 
     def calculate_variants_number(self):
         """
