@@ -31,7 +31,7 @@ export class CasesComponent implements OnInit, AfterViewInit {
   variants : any[];
   cases : any[];
   events : any[];
-  displayedColumnsVariants : string[] = ["variant", "count"];
+  displayedColumnsVariants : string[] = ["variant", "count", "caseDuration"];
   displayedColumnsCases : string[] = ["caseId", "caseDuration", "startTime", "endTime"];
   displayedColumnsEvents : string[] = ["concept:name", "org:resource", "time:timestamp", "lifecycle:transition"];
 
@@ -144,7 +144,7 @@ export class CasesComponent implements OnInit, AfterViewInit {
       let i : number = 0;
       while (i < this.variants.length) {
         let keys : string[] = Object.keys(this.variants[i]);
-        this.variants[i] = {"variant": this.variants[i]["variant"], "count": this.variants[i]["count"]};
+        this.variants[i] = {"variant": this.variants[i]["variant"], "count": this.variants[i]["count"], "caseDuration": this.variants[i]["caseDuration"]};
         i++;
       }
       this.variantsLoading = false;
