@@ -1,6 +1,27 @@
 import { NgModule } from "@angular/core";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 
+import { MatSliderModule } from '@angular/material';
+import { MatToolbarModule } from '@angular/material';
+import { MatProgressBarModule } from '@angular/material';
+import { MatButtonModule } from '@angular/material';
+import { MatFormFieldModule } from '@angular/material';
+import { MatOptionModule } from '@angular/material';
+import { MatSelectModule } from '@angular/material';
+import { MatRadioModule } from '@angular/material';
+import { MatListModule } from '@angular/material';
+import { MatProgressSpinnerModule } from '@angular/material';
+import { MatMenuModule } from '@angular/material';
+import { MatIconModule } from '@angular/material';
+import { MatTableModule } from '@angular/material';
+import { MatSortModule } from '@angular/material';
+import { MatTabsModule } from '@angular/material';
+import { MatCardModule } from '@angular/material';
+import { MatDialogModule } from '@angular/material';
+import { MatInputModule } from '@angular/material';
+import { MatChipsModule } from '@angular/material';
+import { FormsModule } from '@angular/forms';
+
 import { NgbModule } from "@ng-bootstrap/ng-bootstrap";
 import { AppRoutingModule } from "./app-routing.module";
 import { SharedModule } from "./shared/shared.module";
@@ -24,6 +45,7 @@ import { FullLayoutComponent } from "./layouts/full/full-layout.component";
 import { DragulaService } from "ng2-dragula";
 import { AuthService } from "./shared/auth/auth.service";
 import { AuthGuard } from "./shared/auth/auth-guard.service";
+import { ProcessModelComponent } from './process-model/process-model.component';
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   suppressScrollX: true,
@@ -35,13 +57,33 @@ export function createTranslateLoader(http: HttpClient) {
 }
 
 @NgModule({
-  declarations: [AppComponent, FullLayoutComponent, ContentLayoutComponent],
+  declarations: [AppComponent, FullLayoutComponent, ContentLayoutComponent, ProcessModelComponent],
   imports: [
     BrowserAnimationsModule,
     StoreModule.forRoot({}),
     AppRoutingModule,
     SharedModule,
     HttpClientModule,
+    MatSliderModule,
+    MatToolbarModule,
+    MatProgressBarModule,
+    MatButtonModule,
+    MatFormFieldModule,
+    MatOptionModule,
+    MatSelectModule,
+    MatRadioModule,
+    MatDialogModule,
+    MatListModule,
+    MatMenuModule,
+    MatTableModule,
+    MatIconModule,
+    MatTabsModule,
+    MatSortModule,
+    MatCardModule,
+    MatChipsModule,
+    MatInputModule,
+    FormsModule,
+    MatProgressSpinnerModule,
     ToastrModule.forRoot(),
     NgbModule.forRoot(),
     TranslateModule.forRoot({

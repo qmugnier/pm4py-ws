@@ -8,11 +8,12 @@ import { Full_ROUTES } from "./shared/routes/full-layout.routes";
 import { CONTENT_ROUTES } from "./shared/routes/content-layout.routes";
 
 import { AuthGuard } from './shared/auth/auth-guard.service';
+import {ProcessModelComponent} from './process-model/process-model.component';
 
 const appRoutes: Routes = [
-  {
+  /*{
     path: '',
-    redirectTo: 'dashboard/dashboard1',
+    redirectTo: 'process-model',
     pathMatch: 'full',
   },
   { path: '', component: FullLayoutComponent, data: { title: 'full Views' }, children: Full_ROUTES, canActivate: [AuthGuard] },
@@ -20,6 +21,10 @@ const appRoutes: Routes = [
   { 
     path: '**', 
     redirectTo: 'pages/error'
+  }*/
+  {
+    path: '',
+    component: ProcessModelComponent
   }
 ];
 
