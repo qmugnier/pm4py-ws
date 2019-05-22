@@ -45,7 +45,6 @@ import { FullLayoutComponent } from "./layouts/full/full-layout.component";
 import { DragulaService } from "ng2-dragula";
 import { AuthService } from "./shared/auth/auth.service";
 import { AuthGuard } from "./shared/auth/auth-guard.service";
-import { ProcessModelComponent } from './process-model/process-model.component';
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   suppressScrollX: true,
@@ -57,7 +56,7 @@ export function createTranslateLoader(http: HttpClient) {
 }
 
 @NgModule({
-  declarations: [AppComponent, FullLayoutComponent, ContentLayoutComponent, ProcessModelComponent],
+  declarations: [AppComponent, FullLayoutComponent, ContentLayoutComponent],
   imports: [
     BrowserAnimationsModule,
     StoreModule.forRoot({}),
