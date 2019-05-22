@@ -13,9 +13,10 @@ import {
   MatToolbarModule
 } from '@angular/material';
 import {FormsModule} from '@angular/forms';
+import { CasesComponent } from './cases/cases.component';
 
 @NgModule({
-  declarations: [PmodelComponent],
+  declarations: [PmodelComponent, CasesComponent],
   imports: [
     CommonModule,
       RealWsRoutingModule,
