@@ -3,6 +3,7 @@ import { Routes, RouterModule } from '@angular/router';
 
 import { PmodelComponent } from './pmodel/pmodel.component';
 import { CasesComponent } from './cases/cases.component';
+import { StatisticsComponent } from './statistics/statistics.component'
 
 const routes: Routes = [
     {
@@ -20,6 +21,13 @@ const routes: Routes = [
                 component: CasesComponent,
                 data: {
                     title: 'CasesComponent'
+                }
+            },
+            {
+                path: 'statistics',
+                component: StatisticsComponent,
+                data: {
+                    title: 'StatisticsComponent'
                 }
             }
         ]

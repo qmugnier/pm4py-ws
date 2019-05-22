@@ -14,9 +14,10 @@ import {
 } from '@angular/material';
 import {FormsModule} from '@angular/forms';
 import { CasesComponent } from './cases/cases.component';
+import { StatisticsComponent } from './statistics/statistics.component';
 
 @NgModule({
-  declarations: [PmodelComponent, CasesComponent],
+  declarations: [PmodelComponent, CasesComponent, StatisticsComponent],
   imports: [
     CommonModule,
       RealWsRoutingModule,
