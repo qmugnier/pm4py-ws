@@ -11,21 +11,21 @@ import { AuthGuard } from './shared/auth/auth-guard.service';
 import {ProcessModelComponent} from './process-model/process-model.component';
 
 const appRoutes: Routes = [
-  /*{
+  {
     path: '',
-    redirectTo: 'process-model',
+    redirectTo: 'real-ws/pmodel',
     pathMatch: 'full',
   },
   { path: '', component: FullLayoutComponent, data: { title: 'full Views' }, children: Full_ROUTES, canActivate: [AuthGuard] },
   { path: '', component: ContentLayoutComponent, data: { title: 'content Views' }, children: CONTENT_ROUTES, canActivate: [AuthGuard] },
-  { 
+  /*{
     path: '**', 
     redirectTo: 'pages/error'
   }*/
-  {
+  /*{
     path: '',
     component: ProcessModelComponent
-  }
+  }*/
 ];
 
 @NgModule({
