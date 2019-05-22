@@ -117,11 +117,9 @@ export class PmodelComponent implements OnInit {
     /**
      * Sets the correct size of the image decribing the process schema
      */
-    /*let targetHeight: number = (document.getElementById("container0").offsetHeight * 0.78);
-    let targetWidth: number = (document.getElementById("container0").offsetWidth * 0.79);
+    let targetWidth: number = (window.innerWidth*0.65);
 
-    (<HTMLImageElement>document.getElementById("imageProcessModelImage")).height = targetHeight;
-    (<HTMLImageElement>document.getElementById("imageProcessModelImage")).width = targetWidth;*/
+    (<HTMLImageElement>document.getElementById("imageProcessModelImage")).width = targetWidth;
   }
 
   ngOnInit() {
