@@ -10,7 +10,7 @@ RUN apt-get -y install zip unzip
 
 RUN pip install -U pm4py Flask flask-cors requests python-keycloak
 COPY . /
-RUN cd /webapp && npm install && npm install --save-dev --unsafe-perm node-sass && npm install -g @angular/cli && ng build --prod
+RUN cd /webapp && npm install && npm install --save-dev --unsafe-perm node-sass && npm install -g @angular/cli && npm install -g @angular/cli && ng build --prod
 RUN python setup.py install
 
 ENTRYPOINT ["python", "main.py"]

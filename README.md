@@ -20,6 +20,7 @@ HOW TO BUILD ON SOURCES:
 First of all install ANGULAR:
 
 npm install -g @angular/cli
+npm install -g @angular/material
 
 
 PM4Py Web Services along with an Angular7 web interface
