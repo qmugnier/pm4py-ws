@@ -47,6 +47,30 @@
                             </a>
                         </div>
                     </li>
+                    <li class="nav-item" ngbDropdown [placement]="placement" *ngIf="isProcessModelPage">
+                        <a class="nav-link position-relative" id="filtering" ngbDropdownToggle>
+                            <i class="ft-filter font-medium-3 blue-grey darken-4"></i>
+                            <p class="d-none">Filtering</p>
+                        </a>
+                        <div ngbDropdownMenu aria-labelledby="dropdownBasic3" class="text-left">
+                            <a class="dropdown-item" href="javascript:;" (click)="startActivitiesFilter()">
+                                <i class="ft-filter mr-2"></i>
+                                <span>Start Activities Filter</span>
+                            </a>
+                            <a class="dropdown-item" href="javascript:;" (click)="endActivitiesFilter()">
+                                <i class="ft-filter mr-2"></i>
+                                <span>End Activities Filter</span>
+                            </a>
+                            <a class="dropdown-item" href="javascript:;" (click)="variantsFilter()">
+                                <i class="ft-filter mr-2"></i>
+                                <span>Variants Filter</span>
+                            </a>
+                            <a class="dropdown-item" href="javascript:;" (click)="attributesFilter()">
+                                <i class="ft-filter mr-2"></i>
+                                <span>Attributes Filter</span>
+                            </a>
+                        </div>
+                    </li>
                     <li class="nav-item mr-2  d-none d-lg-block">
                         <a href="javascript:;" class="nav-link" id="navbar-fullscreen" appToggleFullscreen (click)="ToggleClass()">                            
                             <i class="{{toggleClass}} font-medium-3 blue-grey darken-4"></i>
