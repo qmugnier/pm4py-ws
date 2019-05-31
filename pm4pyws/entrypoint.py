@@ -82,7 +82,7 @@ def get_user_from_session(session_id):
 
 
 class PM4PyServices:
-    app = Flask(__name__, static_url_path='', static_folder='../webapp/dist')
+    app = Flask(__name__, static_url_path='', static_folder='../webapp2/dist')
     app.add_url_rule(app.static_url_path + '/<path:filename>', endpoint='static',
                      view_func=app.send_static_file)
     CORS(app)
