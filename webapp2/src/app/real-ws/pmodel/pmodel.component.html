@@ -28,3 +28,5 @@
 <div id="imageContainer">
   <img id="imageProcessModelImage" [src]="processModelBase64Sanitized">
 </div>
+<input hidden type="file" #uploader
+       (change)="uploadFile($event)"/>

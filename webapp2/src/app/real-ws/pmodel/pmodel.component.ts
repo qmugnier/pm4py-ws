@@ -179,4 +179,7 @@ export class PmodelComponent implements OnInit {
         }
     }
 
+    uploadFile($event) {
+
+    }
 }
