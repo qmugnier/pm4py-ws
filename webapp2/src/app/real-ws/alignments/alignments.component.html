@@ -1,3 +1,8 @@
-<p>
-  alignments works!
-</p>
+<mat-tab-group mat-align-tabs="start" [hidden]="isLoading == true">
+  <mat-tab label="Projection">
+    <img id="projectionImageImg" [src]="projectionImage">
+  </mat-tab>
+  <mat-tab label="Table">
+    <img id="tableImageImg" [src]="tableImage">
+  </mat-tab>
+</mat-tab-group>
