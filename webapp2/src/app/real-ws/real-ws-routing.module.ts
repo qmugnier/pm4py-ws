@@ -8,6 +8,7 @@ import { LoginComponentComponent } from './login-component/login-component.compo
 import { PlistComponent } from './plist/plist.component';
 import { SnaComponent } from './sna/sna.component';
 import { TransientComponent } from './transient/transient.component';
+import { AlignmentsComponent } from './alignments/alignments.component';
 
 const routes: Routes = [
     {
@@ -76,7 +77,13 @@ const routes: Routes = [
                     title: 'Transient Analysis'
                 }
             },
-
+            {
+                path: 'alignments',
+                component: AlignmentsComponent,
+                data: {
+                    title: 'Alignments'
+                }
+            },
         ]
     }
 ];
