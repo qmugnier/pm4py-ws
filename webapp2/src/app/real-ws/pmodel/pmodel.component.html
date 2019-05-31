@@ -21,6 +21,9 @@
     <mat-option value="inductive">Petri (Inductive)</mat-option>
     <mat-option value="heuristics">Heuristics Net</mat-option>
   </mat-select>
+  <span *ngIf="enableConformanceChecking">
+    <button mat-button routerLink="/real-ws/alignments"><span style="font-size: 10px">Conformance Checking</span></button>
+  </span>
 </div>
 <div id="imageContainer">
   <img id="imageProcessModelImage" [src]="processModelBase64Sanitized">
