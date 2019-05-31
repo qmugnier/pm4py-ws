@@ -86,9 +86,16 @@ export class AuthenticationServiceService {
                 this.enableDownload = false;
             }
 
-            if (this.authenticated == false) {
+            if (this.authenticated == false && environment.enableLogin) {
                 console.log("not authenticated");
                 //this.router.navigateByUrl("/real-ws/login");
+            }
+            else {
+                let processInLocalStorage = localStorage.getItem("process");
+                if (processInLocalStorage == null) {
+                    console.log("process in local storage is empty!");
+                    this.router.navigateByUrl("/real-ws/plist");
+                }
             }
 
             return this.getAllAuthenticationParameters();
