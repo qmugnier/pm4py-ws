@@ -43,14 +43,13 @@ export class PmodelComponent implements OnInit {
         /**
          * Constructor
          */
-        localStorage.setItem('process', 'receipt');
 
         this.sanitizer = _sanitizer;
         this.pm4pyService = pm4pyServ;
         this.authenticationService = authService;
 
         this.authenticationService.checkAuthentication().subscribe(data => {
-            console.log(data);
+            //console.log(data);
         });
         // calls the retrieval of the process schema from the service
         // this.populateProcessSchema();

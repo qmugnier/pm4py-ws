@@ -63,7 +63,6 @@ export class CasesComponent implements OnInit, AfterViewInit {
     /**
      * Constructor
      */
-    localStorage.setItem("process", "receipt");
 
     this.sanitizer = _sanitizer;
     this.pm4pyService = pm4pyServ;
