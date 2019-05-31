@@ -23,7 +23,14 @@ export class AuthenticationServiceService {
         this.resetAuthentication();
     }
 
+    doLogout() {
+        this.resetAuthentication();
+        localStorage.removeItem("process");
+        this.router.navigateByUrl("/real-ws/login");
+    }
+
     resetAuthentication() {
+        localStorage.removeItem("sessionId");
         this.authenticated = false;
         this.sessionId = '';
         this.userId = '';
@@ -64,6 +71,7 @@ export class AuthenticationServiceService {
             if ("user" in sessionJson) {
                 this.userId = sessionJson["user"];
                 this.isNotLogin = true;
+                this.authenticated = true;
             }
             else {
                 this.authenticated = false;
@@ -88,7 +96,7 @@ export class AuthenticationServiceService {
 
             if (this.authenticated == false && environment.enableLogin) {
                 console.log("not authenticated");
-                //this.router.navigateByUrl("/real-ws/login");
+                this.router.navigateByUrl("/real-ws/login");
             }
             else {
                 let processInLocalStorage = localStorage.getItem("process");

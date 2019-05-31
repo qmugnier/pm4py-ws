@@ -16,22 +16,25 @@ export class PlistComponent implements OnInit {
   router : Router;
   public logsList: string[];
 
-  constructor(private pm4pyServ: Pm4pyService, private _route : Router, private authenticationService: AuthenticationServiceService) {
+  constructor(private pm4pyServ: Pm4pyService, private _route : Router, private authService: AuthenticationServiceService) {
     /**
      * Constructor
      */
     this.pm4pyService = pm4pyServ;
     this.router = _route;
 
+    this.authService.checkAuthentication().subscribe(data => {
+    });
+
     this.getProcessList();
 
-    this.router.events.subscribe((next) => {
+    /*this.router.events.subscribe((next) => {
       if (next instanceof RoutesRecognized) {
         if (next.url.startsWith("/logsList")) {
           this.getProcessList();
         }
       }
-    });
+    });*/
   }
 
   getProcessList() {
@@ -58,9 +61,6 @@ export class PlistComponent implements OnInit {
      * Manages the click on a process
      */
     localStorage.setItem("process", log);
-
-    /*this.authenticationService.checkAuthentication().subscribe(data => {
-    });*/
 
     this.router.navigate(["/real-ws/pmodel"]);
   }
