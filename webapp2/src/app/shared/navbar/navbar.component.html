@@ -25,13 +25,13 @@
                             <p class="d-none">select log</p>
                         </a>
                     </li>
-                    <li class="nav-item mr-2  d-none d-lg-block" *ngIf="enableUpload && false">
-                        <a href="javascript:;" class="nav-link" id="navbar-upload-log" (click)="uploadLog()">
+                    <li class="nav-item mr-2  d-none d-lg-block" *ngIf="enableUpload">
+                        <a href="javascript:;" class="nav-link" id="navbar-upload-log" (click)="uploader.click()">
                             <i class="ft-arrow-up font-medium-3 blue-grey darken-4"></i>
                             <p class="d-none">upload log</p>
                         </a>
                     </li>
-                    <li class="nav-item" ngbDropdown [placement]="placement" *ngIf="enableDownload && false">
+                    <li class="nav-item" ngbDropdown [placement]="placement" *ngIf="enableDownload">
                         <a class="nav-link position-relative" id="downloadSomething" ngbDropdownToggle>
                             <i class="ft-arrow-down font-medium-3 blue-grey darken-4"></i>
                             <p class="d-none">Download</p>
@@ -154,4 +154,6 @@
         </div>
     </div>
 </nav>
+<input hidden type="file" #uploader
+       (change)="uploadFile($event)"/>
 <!-- Navbar (Header) Ends -->
