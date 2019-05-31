@@ -26,7 +26,7 @@ export class SnaComponent implements OnInit {
 
     this.authService.checkAuthentication().subscribe(data => {
     });
-    
+
     // gets the SNA representation
     this.populateSNA();
   }
