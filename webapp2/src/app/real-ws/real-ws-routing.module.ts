@@ -6,6 +6,8 @@ import { CasesComponent } from './cases/cases.component';
 import { StatisticsComponent } from './statistics/statistics.component';
 import { LoginComponentComponent } from './login-component/login-component.component';
 import { PlistComponent } from './plist/plist.component';
+import { SnaComponent } from './sna/sna.component';
+import { TransientComponent } from './transient/transient.component';
 
 const routes: Routes = [
     {
@@ -60,6 +62,21 @@ const routes: Routes = [
                     title: 'ProcessList'
                 }
             },
+            {
+                path: 'sna',
+                component: SnaComponent,
+                data: {
+                    title: 'SNA'
+                }
+            },
+            {
+                path: 'transient',
+                component: TransientComponent,
+                data: {
+                    title: 'Transient Analysis'
+                }
+            },
+            
         ]
     }
 ];
