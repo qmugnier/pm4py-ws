@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import {HttpParams} from "@angular/common/http";
 import {Pm4pyService} from "../../pm4py-service.service";
 import {DomSanitizer, SafeHtml, SafeResourceUrl, SafeUrl} from "@angular/platform-browser";
+import {AuthenticationServiceService} from '../../authentication-service.service';
 
 @Component({
   selector: 'app-sna',
@@ -16,12 +17,16 @@ export class SnaComponent implements OnInit {
   selectedArcsThreshold : number = 0.0;
   metric : string = "handover";
 
-  constructor(private _sanitizer: DomSanitizer, private pm4pyServ: Pm4pyService) {
+  constructor(private _sanitizer: DomSanitizer, private pm4pyServ: Pm4pyService, private authService: AuthenticationServiceService) {
     /**
      * Constructor
      */
     this.sanitizer = _sanitizer;
     this.pm4pyService = pm4pyServ;
+
+    this.authService.checkAuthentication().subscribe(data => {
+    });
+    
     // gets the SNA representation
     this.populateSNA();
   }
