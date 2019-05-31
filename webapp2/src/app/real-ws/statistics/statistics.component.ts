@@ -2,6 +2,8 @@ import {Component, OnInit} from '@angular/core';
 import {DomSanitizer, SafeResourceUrl} from "@angular/platform-browser";
 import {Pm4pyService} from "../../pm4py-service.service";
 import {HttpParams} from "@angular/common/http";
+import {AuthenticationServiceService} from '../../authentication-service.service';
+
 
 @Component({
   selector: 'app-statistics',
@@ -22,12 +24,15 @@ export class StatisticsComponent implements OnInit {
   public eventsPerTimeLoading: boolean = true;
   public caseDurationLoading: boolean = true;
 
-  constructor(private _sanitizer: DomSanitizer, private pm4pyServ: Pm4pyService) {
+  constructor(private _sanitizer: DomSanitizer, private pm4pyServ: Pm4pyService, private authService: AuthenticationServiceService) {
     /**
      * Constructor
      */
     this.sanitizer = _sanitizer;
     this.pm4pyService = pm4pyServ;
+
+    this.authService.checkAuthentication().subscribe(data => {
+    });
 
     // calls the construction of the events per time graph
     this.getEventsPerTime();
