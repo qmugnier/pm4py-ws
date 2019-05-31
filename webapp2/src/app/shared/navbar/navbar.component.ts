@@ -31,6 +31,9 @@ export class NavbarComponent implements OnInit, AfterViewInit, OnDestroy {
   public enableUpload : boolean;
   public thisProcess : string;
 
+  public isProcessModelPage : boolean;
+  public isPlistPage : boolean;
+
   constructor(public translate: TranslateService, private layoutService: LayoutService, private configService:ConfigService, private authService: AuthenticationServiceService, private _route : Router, private pm4pyServ: Pm4pyService) {
     const browserLang: string = translate.getBrowserLang();
     translate.use(browserLang.match(/en|es|pt|de/) ? browserLang : "en");
@@ -52,6 +55,9 @@ export class NavbarComponent implements OnInit, AfterViewInit, OnDestroy {
     this.enableUpload = false;
     this.thisProcess = null;
 
+    this.isProcessModelPage = false;
+    this.isPlistPage = false;
+
     this._route.events.subscribe((next) => {
       if (next instanceof RoutesRecognized) {
         if (next.url.startsWith("/real-ws/pmodel") || next.url.startsWith("/real-ws/plist") || next.url.startsWith("/real-ws/login")) {
@@ -67,6 +73,19 @@ export class NavbarComponent implements OnInit, AfterViewInit, OnDestroy {
             this.enableUpload = data.enableUpload;
             this.thisProcess = localStorage.getItem("process");
           });
+        }
+
+        if (next.url.startsWith("/real-ws/pmodel")) {
+          this.isProcessModelPage = true;
+          this.isPlistPage = false;
+        }
+        else if (next.url.startsWith("/real-ws/plist")) {
+          this.isProcessModelPage = false;
+          this.isPlistPage = true;
+        }
+        else {
+          this.isProcessModelPage = false;
+          this.isPlistPage = false;
         }
       }
     });

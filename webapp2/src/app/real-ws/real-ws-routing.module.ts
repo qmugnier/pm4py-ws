@@ -53,6 +53,13 @@ const routes: Routes = [
                     title: 'ProcessList'
                 }
             },
+            {
+                path: 'plist2',
+                component: PlistComponent,
+                data: {
+                    title: 'ProcessList'
+                }
+            },
         ]
     }
 ];
