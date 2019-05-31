@@ -17,9 +17,11 @@ import { CasesComponent } from './cases/cases.component';
 import { StatisticsComponent } from './statistics/statistics.component';
 import { LoginComponentComponent } from './login-component/login-component.component';
 import { PlistComponent } from './plist/plist.component';
+import { SnaComponent } from './sna/sna.component';
+import { TransientComponent } from './transient/transient.component';
 
 @NgModule({
-  declarations: [PmodelComponent, CasesComponent, StatisticsComponent, LoginComponentComponent, PlistComponent],
+  declarations: [PmodelComponent, CasesComponent, StatisticsComponent, LoginComponentComponent, PlistComponent, SnaComponent, TransientComponent],
   imports: [
     CommonModule,
       RealWsRoutingModule,
