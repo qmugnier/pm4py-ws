@@ -15,9 +15,10 @@ import {
 import {FormsModule} from '@angular/forms';
 import { CasesComponent } from './cases/cases.component';
 import { StatisticsComponent } from './statistics/statistics.component';
+import { LoginComponentComponent } from './login-component/login-component.component';
 
 @NgModule({
-  declarations: [PmodelComponent, CasesComponent, StatisticsComponent],
+  declarations: [PmodelComponent, CasesComponent, StatisticsComponent, LoginComponentComponent],
   imports: [
     CommonModule,
       RealWsRoutingModule,

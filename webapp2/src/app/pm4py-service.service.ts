@@ -211,18 +211,6 @@ export class Pm4pyService {
     return this.webservicePath;
   }
 
-  checkSessionService(parameters : HttpParams) {
-    let process = localStorage.getItem("process");
-    let sessionId = localStorage.getItem("sessionId");
-
-    parameters = parameters.set("process", process);
-    parameters = parameters.set("session", sessionId);
-
-    var completeUrl : string = this.webservicePath + "checkSessionService";
-
-    return this.http.get(completeUrl, {params: parameters});
-  }
-
   getAlignmentsVisualizations(model : string, parameters : HttpParams) {
     let process = localStorage.getItem("process");
     let sessionId = localStorage.getItem("sessionId");
