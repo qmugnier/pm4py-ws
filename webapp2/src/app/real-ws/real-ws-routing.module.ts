@@ -76,7 +76,7 @@ const routes: Routes = [
                     title: 'Transient Analysis'
                 }
             },
-            
+
         ]
     }
 ];

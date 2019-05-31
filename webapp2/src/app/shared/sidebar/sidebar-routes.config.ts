@@ -8,4 +8,5 @@ export const ROUTES: RouteInfo[] = [
             { path: '/real-ws/statistics', title: 'Aggregated stats', icon: 'ft-droplet', class: '', badge: '', badgeClass: '', isExternalLink: false, submenu: []},
         ]
     },
+    { path: '/real-ws/sna', title: 'SNA', icon: 'ft-share-2', class: '', badge: '', badgeClass: '', isExternalLink: false, submenu: []},
 ];
