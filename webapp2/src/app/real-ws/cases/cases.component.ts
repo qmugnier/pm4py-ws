@@ -5,6 +5,7 @@ import {HttpParams} from "@angular/common/http";
 import { MatTableDataSource } from '@angular/material/table';
 import { ViewChild } from '@angular/core';
 import { MatSort } from '@angular/material';
+import {AuthenticationServiceService} from '../../authentication-service.service';
 
 interface Variant {
   variant: string;
@@ -59,7 +60,7 @@ export class CasesComponent implements OnInit, AfterViewInit {
 
   @ViewChild(MatSort) casesSort: MatSort;
 
-  constructor(private _sanitizer: DomSanitizer, private pm4pyServ: Pm4pyService) {
+  constructor(private _sanitizer: DomSanitizer, private pm4pyServ: Pm4pyService, private authService: AuthenticationServiceService) {
     /**
      * Constructor
      */
@@ -71,6 +72,9 @@ export class CasesComponent implements OnInit, AfterViewInit {
     this.isLoading = false;
 
     this.variantSelected = null;
+
+    this.authService.checkAuthentication().subscribe(data => {
+    });
 
 
     this.getAllVariants();
