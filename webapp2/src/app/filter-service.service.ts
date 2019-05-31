@@ -48,11 +48,11 @@ export class FilterServiceService {
     this.addFilterPOST([filter_type, filter_value], this.filtersPerProcess[this.thisProcess], httpParams).subscribe(data => {
       console.log("SUCCESS!");
       console.log(this.filtersPerProcess);
-      if (this.router.url === "/process") {
-        this.router.navigateByUrl("/process2");
+      if (this.router.url === "/real-ws/pmodel") {
+        this.router.navigateByUrl("/real-ws/pmodel2");
       }
       else {
-        this.router.navigateByUrl("/process");
+        this.router.navigateByUrl("/real-ws/pmodel");
       }
     })
   }
