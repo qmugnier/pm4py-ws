@@ -31,12 +31,12 @@ export class VariantsFilterComponent implements OnInit {
     this.pm4pyService.getAllVariants(params).subscribe(data => {
       let pm4pyJsonVariants : JSON = data as JSON;
       this.variants = pm4pyJsonVariants["variants"];
-      let i : number = 0;
+      /*let i : number = 0;
       while (i < this.variants.length) {
         let keys : string[] = Object.keys(this.variants[i]);
-        this.variants[i] = {"variant": this.variants[i]["variant"], "count": this.variants[i][keys[0]]};
+        this.variants[i] = {"variant": this.variants[i]["variant"], "count": this.variants[i]["variant"]};
         i++;
-      }
+      }*/
       console.log(this.variants);
     });
   }
