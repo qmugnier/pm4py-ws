@@ -5,6 +5,8 @@ import { Subscription } from 'rxjs';
 import { ConfigService } from '../services/config.service';
 import {AuthenticationServiceService} from '../../authentication-service.service';
 import {Router, RoutesRecognized} from '@angular/router';
+import {HttpParams} from '@angular/common/http';
+import {Pm4pyService} from '../../pm4py-service.service';
 
 @Component({
   selector: "app-navbar",
@@ -29,7 +31,7 @@ export class NavbarComponent implements OnInit, AfterViewInit, OnDestroy {
   public enableUpload : boolean;
   public thisProcess : string;
 
-  constructor(public translate: TranslateService, private layoutService: LayoutService, private configService:ConfigService, private authService: AuthenticationServiceService, private _route : Router) {
+  constructor(public translate: TranslateService, private layoutService: LayoutService, private configService:ConfigService, private authService: AuthenticationServiceService, private _route : Router, private pm4pyServ: Pm4pyService) {
     const browserLang: string = translate.getBrowserLang();
     translate.use(browserLang.match(/en|es|pt|de/) ? browserLang : "en");
 
@@ -52,7 +54,7 @@ export class NavbarComponent implements OnInit, AfterViewInit, OnDestroy {
 
     this._route.events.subscribe((next) => {
       if (next instanceof RoutesRecognized) {
-        if (next.url.startsWith("/real-ws/pmodel") || next.url.startsWith("/real-ws/plist")) {
+        if (next.url.startsWith("/real-ws/pmodel") || next.url.startsWith("/real-ws/plist") || next.url.startsWith("/real-ws/login")) {
           this.authService.checkAuthentication().subscribe(data => {
             this.sessionId = data.sessionId;
             this.userId = data.userId;
@@ -121,5 +123,33 @@ export class NavbarComponent implements OnInit, AfterViewInit, OnDestroy {
 
   goToHome() {
     this._route.navigateByUrl("/real-ws/plist");
+  }
+
+  downloadCSV() {
+    let httpParams : HttpParams = new HttpParams();
+
+    this.pm4pyServ.downloadCsvLog(httpParams).subscribe(data => {
+      let csvJson : JSON = data as JSON;
+      this.downloadFile(csvJson['content'], 'text/csv');
+    });
+  }
+
+  downloadXES() {
+    let httpParams : HttpParams = new HttpParams();
+
+    this.pm4pyServ.downloadXesLog(httpParams).subscribe(data => {
+      let xesJson : JSON = data as JSON;
+      this.downloadFile(xesJson['content'], 'text/csv');
+    });
+  }
+
+  downloadFile(data: string, type: string) {
+    const blob = new Blob([data], { type: type });
+    const url= window.URL.createObjectURL(blob);
+    window.open(url);
+  }
+
+  uploadLog() {
+
   }
 }
