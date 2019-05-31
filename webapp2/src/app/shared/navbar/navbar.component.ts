@@ -7,6 +7,12 @@ import {AuthenticationServiceService} from '../../authentication-service.service
 import {Router, RoutesRecognized} from '@angular/router';
 import {HttpParams} from '@angular/common/http';
 import {Pm4pyService} from '../../pm4py-service.service';
+import {MatDialog} from '@angular/material';
+
+import {StartActivitiesFilterComponent} from "../../real-ws/start-activities-filter/start-activities-filter.component";
+import {EndActivitiesFilterComponent} from "../../real-ws/end-activities-filter/end-activities-filter.component";
+import {VariantsFilterComponent} from "../../real-ws/variants-filter/variants-filter.component";
+import {AttributesFilterComponent} from "../../real-ws/attributes-filter/attributes-filter.component";
 
 @Component({
   selector: "app-navbar",
@@ -34,7 +40,9 @@ export class NavbarComponent implements OnInit, AfterViewInit, OnDestroy {
   public isProcessModelPage : boolean;
   public isPlistPage : boolean;
 
-  constructor(public translate: TranslateService, private layoutService: LayoutService, private configService:ConfigService, private authService: AuthenticationServiceService, private _route : Router, private pm4pyServ: Pm4pyService) {
+  public dialog : MatDialog;
+
+  constructor(public translate: TranslateService, private layoutService: LayoutService, private configService:ConfigService, private authService: AuthenticationServiceService, private _route : Router, private pm4pyServ: Pm4pyService, public _dialog: MatDialog) {
     const browserLang: string = translate.getBrowserLang();
     translate.use(browserLang.match(/en|es|pt|de/) ? browserLang : "en");
 
@@ -47,6 +55,8 @@ export class NavbarComponent implements OnInit, AfterViewInit, OnDestroy {
           this.placement = "bottom-right";
         }
       });
+
+    this.dialog = _dialog;
 
     this.sessionId = null;
     this.userId = null;
@@ -202,5 +212,21 @@ export class NavbarComponent implements OnInit, AfterViewInit, OnDestroy {
     else {
       alert("unsupported file type for direct upload!")
     }
+  }
+
+  startActivitiesFilter() {
+    this.dialog.open(StartActivitiesFilterComponent);
+  }
+
+  endActivitiesFilter() {
+    this.dialog.open(EndActivitiesFilterComponent);
+  }
+
+  variantsFilter() {
+    this.dialog.open(VariantsFilterComponent);
+  }
+
+  attributesFilter() {
+    this.dialog.open(AttributesFilterComponent);
   }
 }
