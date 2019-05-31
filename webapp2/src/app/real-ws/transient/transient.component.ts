@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import {DomSanitizer, SafeResourceUrl} from "@angular/platform-browser";
 import {Pm4pyService} from "../../pm4py-service.service";
 import {HttpParams} from "@angular/common/http";
+import {AuthenticationServiceService} from '../../authentication-service.service';
 
 @Component({
   selector: 'app-transient',
@@ -20,9 +21,13 @@ export class TransientComponent implements OnInit {
   sanitizer: DomSanitizer;
   pm4pyService: Pm4pyService;
 
-  constructor(private _sanitizer: DomSanitizer, private pm4pyServ: Pm4pyService) {
+  constructor(private _sanitizer: DomSanitizer, private pm4pyServ: Pm4pyService, private authService: AuthenticationServiceService) {
     this.sanitizer = _sanitizer;
     this.pm4pyService = pm4pyServ;
+
+    this.authService.checkAuthentication().subscribe(data => {
+    });
+
     // calls the retrieval of the simulation from the service
     this.populateSimulation();
   }
