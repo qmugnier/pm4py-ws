@@ -25,6 +25,28 @@
                             <p class="d-none">select log</p>
                         </a>
                     </li>
+                    <li class="nav-item mr-2  d-none d-lg-block" *ngIf="enableUpload && false">
+                        <a href="javascript:;" class="nav-link" id="navbar-upload-log" (click)="uploadLog()">
+                            <i class="ft-arrow-up font-medium-3 blue-grey darken-4"></i>
+                            <p class="d-none">upload log</p>
+                        </a>
+                    </li>
+                    <li class="nav-item" ngbDropdown [placement]="placement" *ngIf="enableDownload && false">
+                        <a class="nav-link position-relative" id="downloadSomething" ngbDropdownToggle>
+                            <i class="ft-arrow-down font-medium-3 blue-grey darken-4"></i>
+                            <p class="d-none">Download</p>
+                        </a>
+                        <div ngbDropdownMenu aria-labelledby="dropdownBasic3" class="text-left">
+                            <a class="dropdown-item" href="javascript:;" (click)="downloadXES()">
+                                <i class="ft-arrow-down mr-2"></i>
+                                <span>Download XES</span>
+                            </a>
+                            <a class="dropdown-item" href="javascript:;" (click)="downloadCSV()">
+                                <i class="ft-arrow-down mr-2"></i>
+                                <span>Download CSV</span>
+                            </a>
+                        </div>
+                    </li>
                     <li class="nav-item mr-2  d-none d-lg-block">
                         <a href="javascript:;" class="nav-link" id="navbar-fullscreen" appToggleFullscreen (click)="ToggleClass()">                            
                             <i class="{{toggleClass}} font-medium-3 blue-grey darken-4"></i>
