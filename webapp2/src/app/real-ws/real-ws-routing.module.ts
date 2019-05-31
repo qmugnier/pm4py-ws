@@ -19,6 +19,13 @@ const routes: Routes = [
                 }
             },
             {
+                path: 'pmodel2',
+                component: PmodelComponent,
+                data: {
+                    title: 'PmodelComponent'
+                }
+            },
+            {
                 path: 'cases',
                 component: CasesComponent,
                 data: {

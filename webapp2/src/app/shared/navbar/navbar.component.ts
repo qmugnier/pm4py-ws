@@ -4,7 +4,7 @@ import { LayoutService } from '../services/layout.service';
 import { Subscription } from 'rxjs';
 import { ConfigService } from '../services/config.service';
 import {AuthenticationServiceService} from '../../authentication-service.service';
-import {Router} from '@angular/router';
+import {Router, RoutesRecognized} from '@angular/router';
 
 @Component({
   selector: "app-navbar",
@@ -22,6 +22,13 @@ export class NavbarComponent implements OnInit, AfterViewInit, OnDestroy {
 
   public config: any = {};
 
+  public sessionId : string;
+  public userId : string;
+  public isNotLogin : boolean;
+  public enableDownload : boolean;
+  public enableUpload : boolean;
+  public thisProcess : string;
+
   constructor(public translate: TranslateService, private layoutService: LayoutService, private configService:ConfigService, private authService: AuthenticationServiceService, private _route : Router) {
     const browserLang: string = translate.getBrowserLang();
     translate.use(browserLang.match(/en|es|pt|de/) ? browserLang : "en");
@@ -35,6 +42,28 @@ export class NavbarComponent implements OnInit, AfterViewInit, OnDestroy {
           this.placement = "bottom-right";
         }
       });
+
+    this.sessionId = null;
+    this.userId = null;
+    this.isNotLogin = false;
+    this.enableDownload = false;
+    this.enableUpload = false;
+    this.thisProcess = null;
+
+    this._route.events.subscribe((next) => {
+      if (next instanceof RoutesRecognized) {
+        if (next.url.startsWith("/real-ws/pmodel") || next.url.startsWith("/real-ws/plist")) {
+          this.authService.checkAuthentication().subscribe(data => {
+            this.sessionId = data.sessionId;
+            this.userId = data.userId;
+            this.isNotLogin = data.isNotLogin;
+            this.enableDownload = data.enableDownload;
+            this.enableUpload = data.enableUpload;
+            this.thisProcess = localStorage.getItem("process");
+          });
+        }
+      }
+    });
   }
 
   ngOnInit() {
