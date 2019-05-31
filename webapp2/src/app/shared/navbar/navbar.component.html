@@ -20,6 +20,15 @@
             <div class="collapse navbar-collapse" id="navbarSupportedContent" [ngbCollapse]="isCollapsed">
                 <ul class="navbar-nav">
                     <li class="nav-item mr-2  d-none d-lg-block">
+                        <mat-chip-list #chipList>
+                            <mat-chip *ngFor="let filter of filters" [selectable]="true"
+                                      [removable]="true" (removed)="filterService.remove(filter)">
+                                {{filter[0]}}
+                                <mat-icon matChipRemove *ngIf="true">cancel</mat-icon>
+                            </mat-chip>
+                        </mat-chip-list>
+                    </li>
+                    <li class="nav-item mr-2  d-none d-lg-block">
                         <a href="javascript:;" class="nav-link" id="navbar-select-log" (click)="goToHome()">
                             <i class="ft-grid font-medium-3 blue-grey darken-4"></i>
                             <p class="d-none">select log</p>

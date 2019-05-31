@@ -7,6 +7,8 @@ import {AuthenticationServiceService} from '../../authentication-service.service
 import {Router, RoutesRecognized} from '@angular/router';
 import {HttpParams} from '@angular/common/http';
 import {Pm4pyService} from '../../pm4py-service.service';
+import {FilterServiceService} from '../../filter-service.service';
+
 import {MatDialog} from '@angular/material';
 
 import {StartActivitiesFilterComponent} from "../../real-ws/start-activities-filter/start-activities-filter.component";
@@ -28,6 +30,8 @@ export class NavbarComponent implements OnInit, AfterViewInit, OnDestroy {
   @Output()
   toggleHideSidebar = new EventEmitter<Object>();
 
+  public filters : any;
+
   public config: any = {};
 
   public sessionId : string;
@@ -42,7 +46,7 @@ export class NavbarComponent implements OnInit, AfterViewInit, OnDestroy {
 
   public dialog : MatDialog;
 
-  constructor(public translate: TranslateService, private layoutService: LayoutService, private configService:ConfigService, private authService: AuthenticationServiceService, private _route : Router, private pm4pyServ: Pm4pyService, public _dialog: MatDialog) {
+  constructor(public translate: TranslateService, private layoutService: LayoutService, private configService:ConfigService, private authService: AuthenticationServiceService, private _route : Router, private pm4pyServ: Pm4pyService, public _dialog: MatDialog, private filterService: FilterServiceService) {
     const browserLang: string = translate.getBrowserLang();
     translate.use(browserLang.match(/en|es|pt|de/) ? browserLang : "en");
 
@@ -57,6 +61,11 @@ export class NavbarComponent implements OnInit, AfterViewInit, OnDestroy {
       });
 
     this.dialog = _dialog;
+
+    this.getFilters();
+    _route.events.subscribe((val) => {
+      this.getFilters();
+    });
 
     this.sessionId = null;
     this.userId = null;
@@ -123,6 +132,10 @@ export class NavbarComponent implements OnInit, AfterViewInit, OnDestroy {
     if (this.layoutSub) {
       this.layoutSub.unsubscribe();
     }
+  }
+
+  public getFilters() {
+    this.filters = this.filterService.getFilters();
   }
 
   ChangeLanguage(language: string) {
