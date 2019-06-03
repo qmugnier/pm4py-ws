@@ -1,0 +1,23 @@
+(0) Procedure to do once in a life-time:
+
+In the Anaconda3 folder under Lib\site-packages\PyInstaller\utils\hooks\qt.py
+modify the json_str as specified by https://stackoverflow.com/questions/52376313/converting-py-file-to-exe-cannot-find-existing-pyqt5-plugin-directories
+
+Indeed, QLibraryInfo isn't always valid until a QCoreApplication is instantiated.
+
+------------------------------
+
+(1) After installing pyinstaller, give the following instructions
+
+pyinstaller -wF main.py
+
+(2) and TERMINATE the installation
+
+(3) then, modify the file "main.spec" adding at the start
+
+import sys
+sys.setrecursionlimit(5000)
+
+(4) after that, run the application again (with the increased rec depth) with
+
+pyinstaller -wF main.spec
