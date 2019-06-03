@@ -19,6 +19,11 @@ class BasicLogSessionHandler(LogHandler):
         self.objects_memory = {}
         self.objects_timestamp = {}
 
+        conn_logs = sqlite3.connect(self.database_path)
+        curs_logs = conn_logs.cursor()
+        curs_logs.execute("DELETE FROM EVENT_LOGS WHERE IS_TEMPORARY = 1")
+        conn_logs.commit()
+
         LogHandler.__init__(self, ex)
 
     def get_handlers(self):
@@ -99,7 +104,7 @@ class BasicLogSessionHandler(LogHandler):
             return False
         return True
 
-    def manage_upload(self, user, basename, filepath):
+    def manage_upload(self, user, basename, filepath, is_temporary=False):
         """
         Manages an event log that is uploaded
 
@@ -124,7 +129,10 @@ class BasicLogSessionHandler(LogHandler):
             self.handlers[basename].build_from_path(filepath)
         conn_logs = sqlite3.connect(self.database_path)
         curs_logs = conn_logs.cursor()
-        curs_logs.execute("INSERT INTO EVENT_LOGS VALUES (?,?)", (basename, filepath))
+        if is_temporary:
+            curs_logs.execute("INSERT INTO EVENT_LOGS VALUES (?,?,1)", (basename, filepath))
+        else:
+            curs_logs.execute("INSERT INTO EVENT_LOGS VALUES (?,?,0)", (basename, filepath))
         curs_logs.execute("INSERT INTO USER_LOG_VISIBILITY VALUES (?,?)", (user, basename))
         curs_logs.execute("INSERT INTO USER_LOG_DOWNLOADABLE VALUES (?,?)", (user, basename))
         conn_logs.commit()

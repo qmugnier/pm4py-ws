@@ -3,3 +3,4 @@ class Configuration:
     enable_download = True
     enable_load_local_path = True
     enable_session = True
+    upload_as_temporary = False
