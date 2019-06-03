@@ -678,7 +678,10 @@ def upload_log():
                         F = open(filepath, "w")
                         F.write(stru)
                         F.close()
-                        lh.manage_upload(user, basename, filepath)
+                        if Configuration.upload_as_temporary:
+                            lh.manage_upload(user, basename, filepath, True)
+                        else:
+                            lh.manage_upload(user, basename, filepath, False)
 
                         return jsonify({"status": "OK"})
                 except:
