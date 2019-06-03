@@ -68,8 +68,10 @@ export class AuthenticationServiceService {
         return this.checkAuthentication0().map(data => {
             let sessionJson : JSON = data as JSON;
 
-            if ("user" in sessionJson) {
-                this.userId = sessionJson["user"];
+            if ("status" in sessionJson && sessionJson["status"] == "OK") {
+                if ("user" in sessionJson) {
+                    this.userId = sessionJson["user"];
+                }
                 this.isNotLogin = true;
                 this.authenticated = true;
             }
