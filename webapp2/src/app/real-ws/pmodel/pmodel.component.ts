@@ -180,6 +180,25 @@ export class PmodelComponent implements OnInit {
     }
 
     uploadFile($event) {
+        let reader = new FileReader();
+        let filename : string = $event.target.files[0].name;
+        let filetype : string = $event.target.files[0].type;
 
+        reader.readAsDataURL($event.target.files[0]);
+        reader.onload = () => {
+            let processModel: string = atob(reader.result.toString().split("ctet-stream;base64,")[1]);
+            localStorage.setItem("process_model", processModel);
+            this.router.navigateByUrl("/real-ws/alignments");
+        };
+    }
+
+    downloadModel($event) {
+        this.downloadFile(this.thisProcessModel, "text/csv");
+    }
+
+    downloadFile(data: string, type: string) {
+        const blob = new Blob([data], { type: type });
+        const url= window.URL.createObjectURL(blob);
+        window.open(url);
     }
 }
