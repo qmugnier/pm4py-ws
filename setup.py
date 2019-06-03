@@ -50,7 +50,8 @@ setup(
         'Flask',
         'flask-cors',
         'requests',
-        'python-keycloak'
+        'python-keycloak',
+        'pyinstaller'
     ],
     project_urls={
         'Documentation': 'http://pm4py.pads.rwth-aachen.de/documentation/',
