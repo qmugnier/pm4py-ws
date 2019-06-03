@@ -662,32 +662,32 @@ def generate_random_string(N):
 def upload_log():
     # reads the session
     session = request.args.get('session', type=str)
-    if Configuration.enable_session:
-        if check_session_validity(session):
-            user = get_user_from_session(session)
-            if lh.check_user_enabled_upload(user):
-                try:
-                    filename = request.json["filename"]
-                    base64_content = request.json["base64"]
-                    basename = filename.split(".")[0] + "_" + generate_random_string(4)
-                    extension = filename.split(".")[1]
-                    base64_content = base64_content.split(";base64,")[1]
-                    stru = base64.b64decode(base64_content).decode('utf-8')
+    if check_session_validity(session):
+        user = get_user_from_session(session)
+        if lh.check_user_enabled_upload(user):
+            try:
+                filename = request.json["filename"]
+                base64_content = request.json["base64"]
+                basename = filename.split(".")[0] + "_" + generate_random_string(4)
+                extension = filename.split(".")[1]
+                base64_content = base64_content.split(";base64,")[1]
+                stru = base64.b64decode(base64_content).decode('utf-8')
 
-                    if extension.lower() == "xes" or extension.lower() == "csv" or extension.lower() == "parquet":
-                        filepath = os.path.join("logs", basename + "." + extension)
-                        F = open(filepath, "w")
-                        F.write(stru)
-                        F.close()
-                        if Configuration.upload_as_temporary:
-                            lh.manage_upload(user, basename, filepath, True)
-                        else:
-                            lh.manage_upload(user, basename, filepath, False)
+                if extension.lower() == "xes" or extension.lower() == "csv" or extension.lower() == "parquet":
+                    filepath = os.path.join("logs", basename + "." + extension)
+                    F = open(filepath, "w")
+                    F.write(stru)
+                    F.close()
 
-                        return jsonify({"status": "OK"})
-                except:
-                    traceback.print_exc()
-                    pass
+                    if Configuration.upload_as_temporary:
+                        lh.manage_upload(user, basename, filepath, True)
+                    else:
+                        lh.manage_upload(user, basename, filepath, False)
+
+                    return jsonify({"status": "OK"})
+            except:
+                traceback.print_exc()
+                pass
 
     return jsonify({"status": "FAIL"})
 
