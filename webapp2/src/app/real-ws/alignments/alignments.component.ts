@@ -45,7 +45,17 @@ export class AlignmentsComponent implements OnInit {
       this.projectionImage = this.sanitizer.bypassSecurityTrustResourceUrl('data:image/svg+xml;base64,' + this.projectionString);
       this.tableImage = this.sanitizer.bypassSecurityTrustResourceUrl('data:image/svg+xml;base64,' + this.tableString);
       this.isLoading = false;
+      this.setImageCorrectSize();
     });
+  }
+
+  setImageCorrectSize() {
+    /**
+     * Sets the correct size of the image decribing the process schema
+     */
+    let targetWidth: number = (window.innerWidth * 0.65);
+
+    (<HTMLImageElement>document.getElementById('projectionImageImg')).width = targetWidth;
   }
 
 }
