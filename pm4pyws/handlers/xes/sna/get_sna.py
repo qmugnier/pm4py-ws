@@ -23,6 +23,8 @@ def apply(log, variant="handover", parameters=None):
     if parameters is None:
         parameters = {}
 
+    parameters["metric_normalization"] = True
+
     metric = sna_factory.apply(log, variant=variant, parameters=parameters)
     pyvis_repr = sna_vis_factory.apply(metric, variant="pyvis", parameters=parameters)
 
