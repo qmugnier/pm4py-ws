@@ -360,7 +360,14 @@ class XesHandler(object):
         parameters["sort_ascending"] = parameters["sort_ascending"] if "sort_ascending" in parameters else False
         parameters["variants"] = self.variants
         if "variant" in parameters:
-            filtered_log = variants_filter.apply(self.log, [parameters["variant"]], parameters=parameters)
+            var_to_filter = parameters["variant"]
+            # TODO: TECHNICAL DEBT
+            # quick turnaround for bug
+            var_to_filter = var_to_filter.replace(" start","+start")
+            var_to_filter = var_to_filter.replace(" START", "+START")
+            var_to_filter = var_to_filter.replace(" complete", "+complete")
+            var_to_filter = var_to_filter.replace(" COMPLETE", "+COMPLETE")
+            filtered_log = variants_filter.apply(self.log, [var_to_filter], parameters=parameters)
             return casestats.include_key_in_value_list(
                 case_statistics.get_cases_description(filtered_log, parameters=parameters))
         else:
