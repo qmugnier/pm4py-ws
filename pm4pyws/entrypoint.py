@@ -139,7 +139,7 @@ def get_process_schema():
                 parameters = {"decreasingFactor": simplicity}
                 handler = lh.get_handler_for_process_and_session(process, session)
                 filters_chain = handler.get_filters_chain_repr()
-                ps_repr = process+"@@"+variant+"@@"+str(simplicity)+"@@"+filters_chain
+                ps_repr = process + "@@" + variant + "@@" + str(simplicity) + "@@" + filters_chain
                 saved_obj = lh.get_object_memory(ps_repr)
                 if saved_obj is not None:
                     base64 = saved_obj[0]
@@ -650,7 +650,8 @@ def check_session_service():
         else:
             return jsonify({"status": "FAIL", "sessionEnabled": True})
 
-    return jsonify({"status": "OK", "sessionEnabled": False})
+    return jsonify(
+        {"status": "OK", "sessionEnabled": False, "can_download": True, "can_upload": True, "is_admin": True})
 
 
 def generate_random_string(N):
