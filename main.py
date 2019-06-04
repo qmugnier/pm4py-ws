@@ -2,6 +2,10 @@ import requests
 
 from pm4pyws.entrypoint import PM4PyServices
 
+# START HIDDEN IMPORTS
+import sklearn.neighbors.typedefs
+# END HIDDEN IMPORTS
+
 import sqlite3
 conn_event_logs = sqlite3.connect('event_logs.db')
 cursor_event_logs = conn_event_logs.cursor()
