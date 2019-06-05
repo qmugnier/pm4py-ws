@@ -3,7 +3,16 @@ import requests
 from pm4pyws.entrypoint import PM4PyServices
 
 # START HIDDEN IMPORTS
+from sklearn.neighbors import *
+from sklearn.utils import *
+from sklearn import *
 import sklearn.neighbors.typedefs
+import sklearn.utils._cython_blas
+import scipy._lib.messagestream
+import sklearn.tree
+import sklearn.neighbors.quad_tree
+import sklearn.tree._utils
+
 # END HIDDEN IMPORTS
 
 import sqlite3
