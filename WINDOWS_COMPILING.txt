@@ -9,4 +9,4 @@ Indeed, QLibraryInfo isn't always valid until a QCoreApplication is instantiated
 
 After installing pyinstaller, give the following instructions
 
-pyinstaller --additional-hooks-dir=. -wF main.py
+pyinstaller --additional-hooks-dir=. -wF main.spec
