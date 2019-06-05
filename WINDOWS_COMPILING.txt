@@ -7,17 +7,6 @@ Indeed, QLibraryInfo isn't always valid until a QCoreApplication is instantiated
 
 ------------------------------
 
-(1) After installing pyinstaller, give the following instructions
+After installing pyinstaller, give the following instructions
 
 pyinstaller --additional-hooks-dir=. -wF main.py
-
-(2) and TERMINATE the installation
-
-(3) then, modify the file "main.spec" adding at the start
-
-import sys
-sys.setrecursionlimit(5000)
-
-(4) after that, run the application again (with the increased rec depth) with
-
-pyinstaller --additional-hooks-dir=. -wF main.spec
