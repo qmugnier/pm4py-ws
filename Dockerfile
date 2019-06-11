@@ -9,6 +9,7 @@ RUN apt-get -y install python3-tk
 RUN apt-get -y install zip unzip
 
 RUN pip install -U pm4py Flask flask-cors requests python-keycloak
+RUN pip install -U pyinstaller PyQT5 setuptools
 COPY . /
 RUN cd /webapp2 && npm install && npm install --save-dev --unsafe-perm node-sass && npm install -g @angular/cli && npm install -g @angular/material && ng build --prod
 RUN python setup.py install
