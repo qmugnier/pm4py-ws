@@ -10,3 +10,9 @@ Indeed, QLibraryInfo isn't always valid until a QCoreApplication is instantiated
 After installing pyinstaller, give the following instructions
 
 pyinstaller --additional-hooks-dir=. main.spec
+
+------------------------------
+
+There is a problem between pyinstaller and the "pyvis" package.
+
+Hence, it is necessary to copy the entire "pyvis" folder of your Lib/site-packages (contained in the Python distribution) to "./dist/pyvis".
