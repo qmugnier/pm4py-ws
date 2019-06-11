@@ -13,6 +13,8 @@ from pm4pyws.log_manager import factory as session_manager_factory
 from pm4pyws.user_iam import factory as user_iam_factory
 from pm4pyws.requests_logging import factory as logging_factory
 
+import logging
+
 ex = logging_factory.apply()
 lh = session_manager_factory.apply(ex)
 um = user_iam_factory.apply(ex)
@@ -155,7 +157,7 @@ def get_process_schema():
                     model = model.decode('utf-8')
                 dictio = {"base64": base64.decode('utf-8'), "model": model, "format": format, "handler": this_handler}
             except:
-                pass
+                logging.error(traceback.format_exc())
             Commons.semaphore_matplot.release()
     ret = jsonify(dictio)
     return ret
@@ -186,7 +188,7 @@ def get_case_duration():
                 base64 = lh.get_handler_for_process_and_session(process, session).get_case_duration_svg()
                 dictio = {"base64": base64.decode('utf-8')}
             except:
-                traceback.print_exc()
+                logging.error(traceback.format_exc())
                 dictio = {"base64": ""}
             Commons.semaphore_matplot.release()
 
@@ -220,7 +222,7 @@ def get_events_per_time():
                 base64 = lh.get_handler_for_process_and_session(process, session).get_events_per_time_svg()
                 dictio = {"base64": base64.decode('utf-8')}
             except:
-                traceback.print_exc()
+                logging.error(traceback.format_exc())
                 dictio = {"base64": ""}
             Commons.semaphore_matplot.release()
 
@@ -254,7 +256,7 @@ def get_sna():
                 sna = lh.get_handler_for_process_and_session(process, session).get_sna(variant=metric, parameters={
                     "weight_threshold": threshold})
     except:
-        traceback.print_exc()
+        logging.error(traceback.format_exc())
         sna = ""
 
     return sna
@@ -373,7 +375,7 @@ def load_log_from_path():
                 lh.load_log_static(log_name, log_path, parameters=parameters)
                 return "OK"
         except:
-            traceback.print_exc()
+            logging.error(traceback.format_exc())
             return "FAIL"
     return "FAIL"
 
@@ -686,7 +688,7 @@ def upload_log():
 
                     return jsonify({"status": "OK"})
             except:
-                traceback.print_exc()
+                logging.error(traceback.format_exc())
                 pass
 
     return jsonify({"status": "FAIL"})

@@ -51,7 +51,9 @@ setup(
         'flask-cors',
         'requests',
         'python-keycloak',
-        'pyinstaller'
+        'pyinstaller',
+        'PyQT5',
+        'setuptools'
     ],
     project_urls={
         'Documentation': 'http://pm4py.pads.rwth-aachen.de/documentation/',

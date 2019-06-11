@@ -4,6 +4,7 @@ from pm4py.visualization.common.utils import get_base64_from_gviz
 from pm4py.visualization.petrinet import factory as pn_vis_factory
 from pm4py.algo.filtering.log.auto_filter import auto_filter
 from pm4py.algo.filtering.log.attributes import attributes_filter
+from pm4py.algo.conformance.tokenreplay.versions import token_replay
 
 from pm4pyws.util import constants
 
@@ -29,6 +30,12 @@ def apply(log, parameters=None):
     """
     if parameters is None:
         parameters = {}
+
+    # reduce the depth of the search done by token-based replay
+    token_replay.MAX_REC_DEPTH = 1
+    token_replay.MAX_IT_FINAL1 = 1
+    token_replay.MAX_IT_FINAL2 = 1
+    token_replay.MAX_REC_DEPTH_HIDTRANSENABL = 1
 
     log = attributes_filter.filter_log_on_max_no_activities(log, max_no_activities=constants.MAX_NO_ACTIVITIES,
                                                             parameters=parameters)
