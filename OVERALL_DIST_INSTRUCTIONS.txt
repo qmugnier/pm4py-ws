@@ -1,0 +1,51 @@
+The process comprises three different phases:
+
+0) Copying the essential deployment tools
+1) Compiling the Python web services to an executable (and fixing the output)
+2) Compiling the web app
+3) Compiling the Electron web app
+
+Let's assume that "./DIST_PMTK" is the final deployment folder
+
+----------------------------------------------------------------
+
+PHASE 0 - COPYING THE ESSENTIAL DEPLOYMENT TOOLS
+
+Copy the content of the folder "./dist-tools" to the final deployment folder "./DIST_PMTK"
+
+----------------------------------------------------------------
+
+PHASE 1 - COMPILING THE PYTHON WEB SERVICES TO AN EXECUTABLE
+
+Please follow the instructions contained in the file "WINDOWS_COMPILING.txt"
+
+At the end of the process, inside the "./dist" folder the compiled web service will be there.
+
+----------------------------------------------------------------
+
+PHASE 2 - COMPILING THE WEB APP
+
+On the other project (pmtk front-end) please provide the following command:
+
+ng build --prod
+
+Then, copy the dist/ folder (of the frontend) inside an empty folder "./dist/webapp2"
+(in such a way that the dist of the front end is at the path ./dist/webapp2/dist)
+
+
+
+
+At this point, after doing the previous steps, all content of "./dist" should be copied at the path "./DIST_PMTK/pmtk-services"
+
+-----------------------------------------------------------------
+
+PHASE 3 - COMPILING THE ELECTRON WEB APP
+
+On the other project (pmtk front-end) please enter the "electron" folder and follow the instructions contained in the INSTRUCTIONS.txt file.
+
+Then, copy the content of "pmtk-win32-x64" to "./DIST_PMTK/pmtk-electron"
+
+
+
+
+.. And it's over :)

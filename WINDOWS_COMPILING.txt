@@ -1,0 +1,18 @@
+(0) Procedure to do once in a life-time:
+
+In the Anaconda3 folder under Lib\site-packages\PyInstaller\utils\hooks\qt.py
+modify the json_str as specified by https://stackoverflow.com/questions/52376313/converting-py-file-to-exe-cannot-find-existing-pyqt5-plugin-directories
+
+Indeed, QLibraryInfo isn't always valid until a QCoreApplication is instantiated.
+
+------------------------------
+
+After installing pyinstaller, give the following instructions
+
+pyinstaller --additional-hooks-dir=. main.spec
+
+------------------------------
+
+There is a problem between pyinstaller and the "pyvis" package.
+
+Hence, it is necessary to copy the entire "pyvis" folder of your Lib/site-packages (contained in the Python distribution) to "./dist/pyvis".
