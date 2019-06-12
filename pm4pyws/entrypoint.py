@@ -437,8 +437,8 @@ def do_transient_analysis():
             try:
                 delay = request.args.get('delay', default=86400, type=float)
 
-                base64 = lh.get_handler_for_process_and_session(process, session).get_transient(delay)
-                dictio = {"base64": base64.decode('utf-8')}
+                base64, gviz = lh.get_handler_for_process_and_session(process, session).get_transient(delay)
+                dictio = {"base64": base64.decode('utf-8'), "gviz_base64": gviz.decode('utf-8')}
             except:
                 pass
             Commons.semaphore_matplot.release()
