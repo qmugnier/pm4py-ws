@@ -43,14 +43,16 @@ def apply(log, parameters=None):
     filtered_log = auto_filter.apply_auto_filter(log, parameters=parameters)
 
     activities_count = attributes_filter.get_attribute_values(filtered_log, activity_key)
+    start_activities_count = start_activities_filter.get_start_activities(filtered_log, parameters=parameters)
+    end_activities_count = end_activities_filter.get_end_activities(filtered_log, parameters=parameters)
     activities = list(activities_count.keys())
-    start_activities = list(start_activities_filter.get_start_activities(filtered_log, parameters=parameters).keys())
-    end_activities = list(end_activities_filter.get_end_activities(filtered_log, parameters=parameters).keys())
+    start_activities = list(start_activities_count.keys())
+    end_activities = list(end_activities_count.keys())
 
     dfg_freq = dfg_factory.apply(filtered_log, parameters=parameters)
     dfg_perf = dfg_factory.apply(filtered_log, variant="performance", parameters=parameters)
 
-    heu_net = HeuristicsNet(dfg_freq, performance_dfg=dfg_perf)
+    heu_net = HeuristicsNet(dfg_freq, performance_dfg=dfg_perf, activities=activities, start_activities=start_activities, end_activities=end_activities, activities_occurrences=activities_count)
 
     heu_net.calculate()
 

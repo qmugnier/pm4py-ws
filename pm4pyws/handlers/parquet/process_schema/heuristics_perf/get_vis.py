@@ -48,13 +48,15 @@ def apply(dataframe, parameters=None):
         constants.PARAMETER_CONSTANT_TIMESTAMP_KEY] if constants.PARAMETER_CONSTANT_TIMESTAMP_KEY in parameters else xes.DEFAULT_TIMESTAMP_KEY
 
     activities_count = attributes_filter.get_attribute_values(dataframe, xes.DEFAULT_NAME_KEY)
+    start_activities_count = start_activities_filter.get_start_activities(dataframe, parameters=parameters)
+    end_activities_count = end_activities_filter.get_end_activities(dataframe, parameters=parameters)
     activities = list(activities_count.keys())
-    start_activities = list(start_activities_filter.get_start_activities(dataframe, parameters=parameters).keys())
-    end_activities = list(end_activities_filter.get_end_activities(dataframe, parameters=parameters).keys())
+    start_activities = list(start_activities_count.keys())
+    end_activities = list(end_activities_count.keys())
 
     dfg_frequency, dfg_performance = df_statistics.get_dfg_graph(dataframe, case_id_glue=case_id_glue,
                                       activity_key=activity_key, timestamp_key=timestamp_key, measure="both")
-    heu_net = HeuristicsNet(dfg_frequency, performance_dfg=dfg_performance)
+    heu_net = HeuristicsNet(dfg_frequency, performance_dfg=dfg_performance, activities=activities, start_activities=start_activities, end_activities=end_activities, activities_occurrences=activities_count)
     heu_net.calculate()
 
     vis = heu_vis_factory.apply(heu_net, parameters={"format": "svg"})
