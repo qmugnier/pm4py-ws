@@ -1,6 +1,6 @@
 from pm4pyws.handlers.parquet.filtering.versions import start_activities, end_activities, attributes_pos_trace, \
     attributes_neg_trace, attributes_pos_events, attributes_neg_events, variants, timestamp_events, \
-    timestamp_trace_containing, timestamp_trace_intersecting
+    timestamp_trace_containing, timestamp_trace_intersecting, case_performance_filter
 
 
 def apply(dataframe, filter, parameters=None):
@@ -44,4 +44,7 @@ def apply(dataframe, filter, parameters=None):
         return timestamp_trace_containing.apply(dataframe, filter, parameters=parameters)
     elif filter[0] == "timestamp_trace_intersecting":
         return timestamp_trace_intersecting.apply(dataframe, filter, parameters=parameters)
+    elif filter[0] == "case_performance_filter":
+        return case_performance_filter.apply(dataframe, filter, parameters=parameters)
+
     return dataframe
