@@ -55,4 +55,4 @@ def apply(dataframe, parameters=None):
 
     gviz_base64 = base64.b64encode(str(gviz).encode('utf-8'))
 
-    return get_base64_from_gviz(gviz), export_petri_as_string(net, im, fm), ".pnml", "parquet"
+    return get_base64_from_gviz(gviz), export_petri_as_string(net, im, fm), ".pnml", "parquet", activities, start_activities, end_activities, gviz_base64

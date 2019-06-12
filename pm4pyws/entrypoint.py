@@ -148,14 +148,19 @@ def get_process_schema():
                     model = saved_obj[1]
                     format = saved_obj[2]
                     this_handler = saved_obj[3]
+                    activities = saved_obj[4]
+                    start_activities = saved_obj[5]
+                    end_activities = saved_obj[6]
+                    gviz_base64 = saved_obj[7]
                 else:
-                    base64, model, format, this_handler = handler.get_schema(
+                    base64, model, format, this_handler, activities, start_activities, end_activities, gviz_base64 = handler.get_schema(
                         variant=variant,
                         parameters=parameters)
-                    lh.save_object_memory(ps_repr, [base64, model, format, this_handler])
+                    lh.save_object_memory(ps_repr, [base64, model, format, this_handler, activities, start_activities, end_activities, gviz_base64])
                 if model is not None:
                     model = model.decode('utf-8')
-                dictio = {"base64": base64.decode('utf-8'), "model": model, "format": format, "handler": this_handler}
+                dictio = {"base64": base64.decode('utf-8'), "model": model, "format": format, "handler": this_handler, "activities": activities,
+                          "start_activities": start_activities, "end_activities": end_activities, "gviz_base64": gviz_base64.decode('utf-8')}
             except:
                 logging.error(traceback.format_exc())
             Commons.semaphore_matplot.release()
