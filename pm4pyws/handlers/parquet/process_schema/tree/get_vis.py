@@ -1,5 +1,5 @@
 from pm4py.algo.discovery.dfg.adapters.pandas import df_statistics
-from pm4py.algo.discovery.inductive import factory as inductive_miner
+from pm4py.algo.discovery.inductive.versions.dfg import imdfb as inductive_miner
 from pm4py.algo.filtering.pandas.auto_filter import auto_filter
 from pm4py.visualization.common.utils import get_base64_from_gviz
 from pm4py.visualization.process_tree import factory as pt_vis_factory
@@ -44,7 +44,7 @@ def apply(dataframe, parameters=None):
     end_activities = list(end_activities_filter.get_end_activities(dataframe, parameters=parameters).keys())
 
     dfg = df_statistics.get_dfg_graph(dataframe)
-    tree = inductive_miner.apply_tree_dfg(dfg, parameters=parameters)
+    tree = inductive_miner.apply_tree_dfg(dfg, parameters, activities=activities, start_activities=start_activities, end_activities=end_activities)
     gviz = pt_vis_factory.apply(tree, parameters={"format": "svg"})
 
     gviz_base64 = base64.b64encode(str(gviz).encode('utf-8'))

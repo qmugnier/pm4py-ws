@@ -1,5 +1,5 @@
 from pm4py.algo.discovery.dfg.adapters.pandas import df_statistics
-from pm4py.algo.discovery.inductive import factory as inductive_miner
+from pm4py.algo.discovery.inductive.versions.dfg import imdfb as inductive_miner
 from pm4py.algo.filtering.pandas.auto_filter import auto_filter
 from pm4py.objects.log.util import xes
 from pm4py.objects.petri.exporter.pnml import export_petri_as_string
@@ -46,7 +46,7 @@ def apply(dataframe, parameters=None):
     start_activities = list(start_activities_filter.get_start_activities(dataframe, parameters=parameters).keys())
     end_activities = list(end_activities_filter.get_end_activities(dataframe, parameters=parameters).keys())
 
-    net, im, fm = inductive_miner.apply_dfg(dfg, parameters=parameters)
+    net, im, fm = inductive_miner.apply_dfg(dfg, parameters, activities=activities, start_activities=start_activities, end_activities=end_activities)
     spaths = get_shortest_paths(net)
     aggregated_statistics = get_decorations_from_dfg_spaths_acticount(net, dfg, spaths,
                                                                       activities_count,
