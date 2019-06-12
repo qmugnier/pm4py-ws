@@ -1,6 +1,7 @@
 from pm4py.objects.stochastic_petri import ctmc
 from pm4py.visualization.transition_system import factory as ts_vis_factory
 from pm4py.visualization.common.utils import get_base64_from_gviz
+import base64
 
 
 def apply(log, delay, parameters=None):
@@ -29,4 +30,6 @@ def apply(log, delay, parameters=None):
                                                              "force_names": transient_analysis,
                                                              "fillcolors": fillcolors})
 
-    return get_base64_from_gviz(viz)
+    gviz_base64 = base64.b64encode(str(viz).encode('utf-8'))
+
+    return get_base64_from_gviz(viz), gviz_base64

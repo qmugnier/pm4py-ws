@@ -148,14 +148,19 @@ def get_process_schema():
                     model = saved_obj[1]
                     format = saved_obj[2]
                     this_handler = saved_obj[3]
+                    activities = saved_obj[4]
+                    start_activities = saved_obj[5]
+                    end_activities = saved_obj[6]
+                    gviz_base64 = saved_obj[7]
                 else:
-                    base64, model, format, this_handler = handler.get_schema(
+                    base64, model, format, this_handler, activities, start_activities, end_activities, gviz_base64 = handler.get_schema(
                         variant=variant,
                         parameters=parameters)
-                    lh.save_object_memory(ps_repr, [base64, model, format, this_handler])
+                    lh.save_object_memory(ps_repr, [base64, model, format, this_handler, activities, start_activities, end_activities, gviz_base64])
                 if model is not None:
                     model = model.decode('utf-8')
-                dictio = {"base64": base64.decode('utf-8'), "model": model, "format": format, "handler": this_handler}
+                dictio = {"base64": base64.decode('utf-8'), "model": model, "format": format, "handler": this_handler, "activities": activities,
+                          "start_activities": start_activities, "end_activities": end_activities, "gviz_base64": gviz_base64.decode('utf-8')}
             except:
                 logging.error(traceback.format_exc())
             Commons.semaphore_matplot.release()
@@ -185,11 +190,11 @@ def get_case_duration():
         if lh.check_user_log_visibility(user, process):
             Commons.semaphore_matplot.acquire()
             try:
-                base64 = lh.get_handler_for_process_and_session(process, session).get_case_duration_svg()
-                dictio = {"base64": base64.decode('utf-8')}
+                base64, gviz_base64, ret = lh.get_handler_for_process_and_session(process, session).get_case_duration_svg()
+                dictio = {"base64": base64.decode('utf-8'), "gviz_base64": gviz_base64.decode('utf-8'), "points": ret}
             except:
                 logging.error(traceback.format_exc())
-                dictio = {"base64": ""}
+                dictio = {"base64": "", "gviz_base64": "", "points": []}
             Commons.semaphore_matplot.release()
 
     ret = jsonify(dictio)
@@ -219,11 +224,11 @@ def get_events_per_time():
         if lh.check_user_log_visibility(user, process):
             Commons.semaphore_matplot.acquire()
             try:
-                base64 = lh.get_handler_for_process_and_session(process, session).get_events_per_time_svg()
-                dictio = {"base64": base64.decode('utf-8')}
+                base64, gviz_base64, ret = lh.get_handler_for_process_and_session(process, session).get_events_per_time_svg()
+                dictio = {"base64": base64.decode('utf-8'), "gviz_base64": gviz_base64.decode('utf-8'), "points": ret}
             except:
                 logging.error(traceback.format_exc())
-                dictio = {"base64": ""}
+                dictio = {"base64": "", "gviz_base64": "", "points": []}
             Commons.semaphore_matplot.release()
 
     ret = jsonify(dictio)
@@ -432,8 +437,8 @@ def do_transient_analysis():
             try:
                 delay = request.args.get('delay', default=86400, type=float)
 
-                base64 = lh.get_handler_for_process_and_session(process, session).get_transient(delay)
-                dictio = {"base64": base64.decode('utf-8')}
+                base64, gviz = lh.get_handler_for_process_and_session(process, session).get_transient(delay)
+                dictio = {"base64": base64.decode('utf-8'), "gviz_base64": gviz.decode('utf-8')}
             except:
                 pass
             Commons.semaphore_matplot.release()
