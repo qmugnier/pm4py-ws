@@ -21,3 +21,5 @@ RUN cd /webapp2 && ng build --prod
 RUN python setup.py install
 
 ENTRYPOINT ["python", "main.py"]
+
+EXPOSE 5000
