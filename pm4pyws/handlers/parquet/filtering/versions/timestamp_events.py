@@ -1,4 +1,4 @@
-from pm4py.algo.filtering.pandas.timestamp_filter import timestamp_filter
+from pm4py.algo.filtering.pandas.timestamp import timestamp_filter
 from datetime import datetime
 
 

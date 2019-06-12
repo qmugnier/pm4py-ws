@@ -1,4 +1,4 @@
-from pm4py.algo.filtering.log.timestamp_filter import timestamp_filter
+from pm4py.algo.filtering.log.timestamp import timestamp_filter
 from datetime import datetime
 
 
