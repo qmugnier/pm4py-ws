@@ -8,6 +8,7 @@ from pm4py.util import constants as pm4_constants
 from pm4py.objects.log.util import xes
 from pm4py.algo.filtering.log.start_activities import start_activities_filter
 from pm4py.algo.filtering.log.end_activities import end_activities_filter
+import base64
 
 from pm4pyws.util import constants
 
@@ -54,5 +55,7 @@ def apply(log, parameters=None):
     heu_net.calculate()
 
     vis = heu_vis_factory.apply(heu_net, parameters={"format": "svg"})
+
+    gviz_base64 = base64.b64encode("".encode('utf-8'))
 
     return get_base64_from_file(vis.name), None, "", "xes"

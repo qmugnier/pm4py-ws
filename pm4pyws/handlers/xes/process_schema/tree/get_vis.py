@@ -7,6 +7,7 @@ from pm4py.util import constants as pm4_constants
 from pm4py.objects.log.util import xes
 from pm4py.algo.filtering.log.start_activities import start_activities_filter
 from pm4py.algo.filtering.log.end_activities import end_activities_filter
+import base64
 
 from pm4pyws.util import constants
 
@@ -47,6 +48,8 @@ def apply(log, parameters=None):
     tree = inductive_miner.apply_tree(filtered_log, parameters=parameters)
     parameters["format"] = "svg"
     gviz = pt_vis_factory.apply(tree, parameters=parameters)
+
+    gviz_base64 = base64.b64encode(str(gviz).encode('utf-8'))
 
     return get_base64_from_gviz(gviz), None, "", "xes"
 

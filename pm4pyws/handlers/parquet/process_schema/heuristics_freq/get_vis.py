@@ -9,6 +9,7 @@ from pm4py.visualization.heuristics_net import factory as heu_vis_factory
 from pm4py.algo.filtering.pandas.attributes import attributes_filter
 from pm4py.algo.filtering.pandas.start_activities import start_activities_filter
 from pm4py.algo.filtering.pandas.end_activities import end_activities_filter
+import base64
 
 from pm4pyws.util import constants as ws_constants
 
@@ -62,5 +63,7 @@ def apply(dataframe, parameters=None):
     heu_net.calculate()
 
     vis = heu_vis_factory.apply(heu_net, parameters={"format": "svg"})
+
+    gviz_base64 = base64.b64encode("".encode('utf-8'))
 
     return get_base64_from_file(vis.name), None, "", "parquet"
