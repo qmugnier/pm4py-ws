@@ -18,7 +18,7 @@ def apply(dataframe, filter, parameters=None):
     if parameters is None:
         parameters = {}
 
-    dt1 = datetime.utcfromtimestamp(int(filter.split("@@@")[0]))
-    dt2 = datetime.utcfromtimestamp(int(filter.split("@@@")[1]))
+    dt1 = datetime.utcfromtimestamp(int(filter[1].split("@@@")[0]))
+    dt2 = datetime.utcfromtimestamp(int(filter[1].split("@@@")[1]))
 
     return timestamp_filter.filter_traces_contained(dataframe, dt1, dt2, parameters=parameters)
