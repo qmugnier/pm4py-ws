@@ -18,7 +18,7 @@ def apply(dataframe, filter, parameters=None):
     if parameters is None:
         parameters = {}
 
-    dt1 = datetime.utcfromtimestamp(int(filter[1].split("@@@")[0]))
-    dt2 = datetime.utcfromtimestamp(int(filter[1].split("@@@")[1]))
+    dt1 = str(datetime.utcfromtimestamp(int(filter[1].split("@@@")[0])))
+    dt2 = str(datetime.utcfromtimestamp(int(filter[1].split("@@@")[1])))
 
     return timestamp_filter.apply_events(dataframe, dt1, dt2, parameters=parameters)
