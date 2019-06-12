@@ -11,7 +11,13 @@ RUN apt-get -y install zip unzip
 RUN pip install -U pm4py Flask flask-cors requests python-keycloak
 RUN pip install -U pyinstaller PyQT5 setuptools
 COPY . /
-RUN cd /webapp2 && npm install && npm install --save-dev --unsafe-perm node-sass && npm install -g @angular/cli && npm install -g @angular/material && ng build --prod
+RUN git submodule init
+RUN git submodule update
+RUN cd /webapp2 && npm install
+RUN cd /webapp2 && npm install --save-dev --unsafe-perm node-sass
+RUN cd /webapp2 && npm install -g @angular/cli
+RUN cd /webapp2 && npm install -g @angular/material
+RUN cd /webapp2 && ng build --prod
 RUN python setup.py install
 
 ENTRYPOINT ["python", "main.py"]

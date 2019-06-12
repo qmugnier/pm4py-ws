@@ -19,6 +19,8 @@ from pm4pyws.handlers.parquet.statistics import case_duration, events_per_time
 from pm4pyws.util import casestats
 from pm4pyws.handlers.parquet.filtering import factory as filtering_factory
 
+import pandas as pd
+
 
 class ParquetHandler(object):
     def __init__(self):
@@ -82,6 +84,8 @@ class ParquetHandler(object):
         if parameters is None:
             parameters = {}
         self.dataframe = parquet_importer.apply(path)
+        # TODO: verify if this is the best way to act
+        self.dataframe["time:timestamp"] = pd.to_datetime(self.dataframe["time:timestamp"], utc=True)
         self.build_variants_df()
         self.calculate_events_number()
         self.calculate_variants_number()
