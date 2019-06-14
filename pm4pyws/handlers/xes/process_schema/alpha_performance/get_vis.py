@@ -54,4 +54,4 @@ def apply(log, parameters=None):
 
     gviz_base64 = base64.b64encode(str(gviz).encode('utf-8'))
 
-    return svg, export_petri_as_string(net, im, fm), ".pnml", "xes", activities, start_activities, end_activities, gviz_base64
+    return svg, export_petri_as_string(net, im, fm), ".pnml", "xes", activities, start_activities, end_activities, gviz_base64, []
