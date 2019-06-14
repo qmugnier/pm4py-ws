@@ -11,6 +11,7 @@ from pm4pyws.util import constants
 from pm4py.algo.filtering.pandas.attributes import attributes_filter
 from pm4py.algo.filtering.pandas.start_activities import start_activities_filter
 from pm4py.algo.filtering.pandas.end_activities import end_activities_filter
+from pm4pyws.util import get_graph
 import base64
 
 
@@ -54,4 +55,6 @@ def apply(dataframe, parameters=None):
 
     gviz_base64 = base64.b64encode(str(gviz).encode('utf-8'))
 
-    return get_base64_from_gviz(gviz), export_petri_as_string(net, im, fm), ".pnml", "parquet", activities, start_activities, end_activities, gviz_base64, []
+    ret_graph = get_graph.get_graph_from_petri(net, im, fm)
+
+    return get_base64_from_gviz(gviz), export_petri_as_string(net, im, fm), ".pnml", "parquet", activities, start_activities, end_activities, gviz_base64, ret_graph
