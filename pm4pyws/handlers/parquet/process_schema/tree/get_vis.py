@@ -50,7 +50,7 @@ def apply(dataframe, parameters=None):
     start_activities = list(start_activities_filter.get_start_activities(dataframe, parameters=parameters).keys())
     end_activities = list(end_activities_filter.get_end_activities(dataframe, parameters=parameters).keys())
 
-    dfg = df_statistics.get_dfg_graph(dataframe, activity_key=activity_key, timestamp_key=timestamp_key, case_id_glue=case_id_glue)
+    dfg = df_statistics.get_dfg_graph(dataframe, activity_key=activity_key, timestamp_key=timestamp_key, case_id_glue=case_id_glue, sort_caseid_required=False, sort_timestamp_along_case_id=False)
     tree = inductive_miner.apply_tree_dfg(dfg, parameters, activities=activities, start_activities=start_activities, end_activities=end_activities)
     gviz = pt_vis_factory.apply(tree, parameters={"format": "svg"})
 

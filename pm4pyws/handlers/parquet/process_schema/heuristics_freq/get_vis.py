@@ -55,11 +55,11 @@ def apply(dataframe, parameters=None):
 
     if timestamp_key in dataframe.columns:
         dfg_frequency = df_statistics.get_dfg_graph(dataframe, case_id_glue=case_id_glue,
-                                                    activity_key=activity_key, timestamp_key=timestamp_key)
+                                                    activity_key=activity_key, timestamp_key=timestamp_key, sort_caseid_required=False, sort_timestamp_along_case_id=False)
         heu_net = HeuristicsNet(dfg_frequency, activities=activities, start_activities=start_activities, end_activities=end_activities, activities_occurrences=activities_count)
     else:
         dfg = df_statistics.get_dfg_graph(dataframe, case_id_glue=case_id_glue,
-                                          activity_key=activity_key, sort_timestamp_along_case_id=False)
+                                          activity_key=activity_key, sort_caseid_required=False, sort_timestamp_along_case_id=False)
         heu_net = HeuristicsNet(dfg, activities=activities, start_activities=start_activities, end_activities=end_activities, activities_occurrences=activities_count)
     heu_net.calculate()
 

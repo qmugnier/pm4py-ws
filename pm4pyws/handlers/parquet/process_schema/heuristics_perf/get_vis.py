@@ -54,7 +54,7 @@ def apply(dataframe, parameters=None):
     end_activities = list(end_activities_count.keys())
 
     dfg_frequency, dfg_performance = df_statistics.get_dfg_graph(dataframe, case_id_glue=case_id_glue,
-                                      activity_key=activity_key, timestamp_key=timestamp_key, measure="both")
+                                      activity_key=activity_key, timestamp_key=timestamp_key, measure="both", sort_caseid_required=False, sort_timestamp_along_case_id=False)
     heu_net = HeuristicsNet(dfg_frequency, performance_dfg=dfg_performance, activities=activities, start_activities=start_activities, end_activities=end_activities, activities_occurrences=activities_count)
     heu_net.calculate()
 
