@@ -9,6 +9,8 @@ from pm4py.algo.filtering.pandas.end_activities import end_activities_filter
 from pm4py.objects.conversion.dfg import factory as dfg_conv_factory
 from pm4py.objects.petri.exporter.pnml import export_petri_as_string
 from pm4pyws.util import get_graph
+from pm4py.util import constants as pm4_constants
+from pm4py.algo.filtering.common.filtering_constants import CASE_CONCEPT_NAME
 import base64
 
 from pm4pyws.util import constants
@@ -36,6 +38,11 @@ def apply(dataframe, parameters=None):
     """
     if parameters is None:
         parameters = {}
+
+    activity_key = parameters[pm4_constants.PARAMETER_CONSTANT_ACTIVITY_KEY] if pm4_constants.PARAMETER_CONSTANT_ACTIVITY_KEY in parameters else xes.DEFAULT_NAME_KEY
+    timestamp_key = parameters[pm4_constants.PARAMETER_CONSTANT_TIMESTAMP_KEY] if pm4_constants.PARAMETER_CONSTANT_TIMESTAMP_KEY in parameters else xes.DEFAULT_TIMESTAMP_KEY
+    case_id_glue = parameters[pm4_constants.PARAMETER_CONSTANT_CASEID_KEY] if pm4_constants.PARAMETER_CONSTANT_CASEID_KEY in parameters else CASE_CONCEPT_NAME
+
     dataframe = attributes_filter.filter_df_keeping_spno_activities(dataframe,
                                                                     max_no_activities=constants.MAX_NO_ACTIVITIES)
     dataframe = auto_filter.apply_auto_filter(dataframe, parameters=parameters)

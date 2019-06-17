@@ -153,8 +153,6 @@ class ParquetHandler(object):
         else:
             self.dataframe = self.dataframe.sort_values(CASE_CONCEPT_NAME)
 
-        print("CIAO")
-
         #self.dataframe["@@index"] = self.dataframe.index
 
     def remove_filter(self, filter, all_filters):
@@ -219,6 +217,8 @@ class ParquetHandler(object):
             Filter to add
         """
         parameters = {}
+        parameters[constants.PARAMETER_CONSTANT_ACTIVITY_KEY] = self.activity_key
+        parameters[constants.PARAMETER_CONSTANT_ATTRIBUTE_KEY] = self.activity_key
         # parameters["variants_df"] = self.variants_df
         self.dataframe = filtering_factory.apply(self.dataframe, filter, parameters=parameters)
         self.filters_chain.append(filter)
@@ -232,6 +232,10 @@ class ParquetHandler(object):
         parameters
             Possible parameters of the algorithm
         """
+        if parameters is None:
+            parameters = {}
+        parameters[constants.PARAMETER_CONSTANT_ACTIVITY_KEY] = self.activity_key
+        parameters[constants.PARAMETER_CONSTANT_ATTRIBUTE_KEY] = self.activity_key
         self.variants_df = case_statistics.get_variants_df_with_case_duration(self.dataframe, parameters=parameters)
 
     def calculate_variants_number(self):
@@ -274,6 +278,8 @@ class ParquetHandler(object):
         """
         if parameters is None:
             parameters = {}
+        parameters[constants.PARAMETER_CONSTANT_ACTIVITY_KEY] = self.activity_key
+        parameters[constants.PARAMETER_CONSTANT_ATTRIBUTE_KEY] = self.activity_key
         parameters["variants_df"] = self.variants_df
         return process_schema_factory.apply(self.dataframe, variant=variant, parameters=parameters)
 
@@ -291,6 +297,10 @@ class ParquetHandler(object):
         graph
             Case duration graph (expressed in Base 64)
         """
+        if parameters is None:
+            parameters = {}
+        parameters[constants.PARAMETER_CONSTANT_ACTIVITY_KEY] = self.activity_key
+        parameters[constants.PARAMETER_CONSTANT_ATTRIBUTE_KEY] = self.activity_key
         return case_duration.get_case_duration_svg(self.dataframe, parameters=parameters)
 
     def get_events_per_time_svg(self, parameters=None):
@@ -307,6 +317,10 @@ class ParquetHandler(object):
         graph
             Events per time graph (expressed in Base 64)
         """
+        if parameters is None:
+            parameters = {}
+        parameters[constants.PARAMETER_CONSTANT_ACTIVITY_KEY] = self.activity_key
+        parameters[constants.PARAMETER_CONSTANT_ATTRIBUTE_KEY] = self.activity_key
         return events_per_time.get_events_per_time_svg(self.dataframe, parameters=parameters)
 
     def get_variant_statistics(self, parameters=None):
@@ -325,6 +339,8 @@ class ParquetHandler(object):
         """
         if parameters is None:
             parameters = {}
+        parameters[constants.PARAMETER_CONSTANT_ACTIVITY_KEY] = self.activity_key
+        parameters[constants.PARAMETER_CONSTANT_ATTRIBUTE_KEY] = self.activity_key
         parameters["variants_df"] = self.variants_df
 
         return variants.get_statistics(self.dataframe, parameters=parameters)
@@ -345,6 +361,10 @@ class ParquetHandler(object):
         sna
             SNA representation
         """
+        if parameters is None:
+            parameters = {}
+        parameters[constants.PARAMETER_CONSTANT_ACTIVITY_KEY] = self.activity_key
+        parameters[constants.PARAMETER_CONSTANT_ATTRIBUTE_KEY] = self.activity_key
         return sna_obtainer.apply(self.dataframe, variant=variant, parameters=parameters)
 
     def get_transient(self, delay, parameters=None):
@@ -363,6 +383,10 @@ class ParquetHandler(object):
         graph
             Case duration graph
         """
+        if parameters is None:
+            parameters = {}
+        parameters[constants.PARAMETER_CONSTANT_ACTIVITY_KEY] = self.activity_key
+        parameters[constants.PARAMETER_CONSTANT_ATTRIBUTE_KEY] = self.activity_key
         return transient.apply(self.dataframe, delay, parameters=parameters)
 
     def get_case_statistics(self, parameters=None):
@@ -381,6 +405,8 @@ class ParquetHandler(object):
         """
         if parameters is None:
             parameters = {}
+        parameters[constants.PARAMETER_CONSTANT_ACTIVITY_KEY] = self.activity_key
+        parameters[constants.PARAMETER_CONSTANT_ATTRIBUTE_KEY] = self.activity_key
         parameters["max_ret_cases"] = 500
         parameters["sort_by_column"] = parameters[
             "sort_by_column"] if "sort_by_column" in parameters else "caseDuration"
@@ -410,6 +436,10 @@ class ParquetHandler(object):
         list_events
             Events belonging to the case
         """
+        if parameters is None:
+            parameters = {}
+        parameters[constants.PARAMETER_CONSTANT_ACTIVITY_KEY] = self.activity_key
+        parameters[constants.PARAMETER_CONSTANT_ATTRIBUTE_KEY] = self.activity_key
         return case_statistics.get_events(self.dataframe, caseid, parameters=parameters)
 
     def download_xes_log(self):
@@ -433,6 +463,10 @@ class ParquetHandler(object):
         start_activities_dict
             Dictionary of start activities
         """
+        if parameters is None:
+            parameters = {}
+        parameters[constants.PARAMETER_CONSTANT_ACTIVITY_KEY] = self.activity_key
+        parameters[constants.PARAMETER_CONSTANT_ATTRIBUTE_KEY] = self.activity_key
         return start_activities_filter.get_start_activities(self.dataframe, parameters=parameters)
 
     def get_end_activities(self, parameters=None):
@@ -444,6 +478,10 @@ class ParquetHandler(object):
         end_activities_dict
             Dictionary of end activities
         """
+        if parameters is None:
+            parameters = {}
+        parameters[constants.PARAMETER_CONSTANT_ACTIVITY_KEY] = self.activity_key
+        parameters[constants.PARAMETER_CONSTANT_ATTRIBUTE_KEY] = self.activity_key
         return end_activities_filter.get_end_activities(self.dataframe, parameters=parameters)
 
     def get_attributes_list(self, parameters=None):
@@ -466,6 +504,10 @@ class ParquetHandler(object):
         attribute_values
             List of values
         """
+        if parameters is None:
+            parameters = {}
+        parameters[constants.PARAMETER_CONSTANT_ACTIVITY_KEY] = self.activity_key
+        parameters[constants.PARAMETER_CONSTANT_ATTRIBUTE_KEY] = self.activity_key
         initial_dict = attributes_filter.get_attribute_values(self.dataframe, attribute_key, parameters=parameters)
         return_dict = {}
         for key in initial_dict:
