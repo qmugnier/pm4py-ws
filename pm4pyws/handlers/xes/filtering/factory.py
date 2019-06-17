@@ -47,8 +47,8 @@ def apply(log, filter, parameters=None):
     elif filter[0] == "case_performance_filter":
         return case_performance_filter.apply(log, filter, parameters=parameters)
     elif filter[0] == "numeric_attr_traces":
-        return numeric_attr_traces.apply(dataframe, filter, parameters=parameters)
+        return numeric_attr_traces.apply(log, filter, parameters=parameters)
     elif filter[0] == "numeric_attr_events":
-        return numeric_attr_events.apply(dataframe, filter, parameters=parameters)
+        return numeric_attr_events.apply(log, filter, parameters=parameters)
 
     return log
