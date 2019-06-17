@@ -413,7 +413,15 @@ class ParquetHandler(object):
         parameters["sort_ascending"] = parameters["sort_ascending"] if "sort_ascending" in parameters else False
 
         if "variant" in parameters:
-            filtered_dataframe = variants_filter.apply(self.dataframe, [parameters["variant"]], parameters=parameters)
+            var_to_filter = parameters["variant"]
+            # TODO: TECHNICAL DEBT
+            # quick turnaround for bug
+            var_to_filter = var_to_filter.replace(" start","+start")
+            var_to_filter = var_to_filter.replace(" START", "+START")
+            var_to_filter = var_to_filter.replace(" complete", "+complete")
+            var_to_filter = var_to_filter.replace(" COMPLETE", "+COMPLETE")
+
+            filtered_dataframe = variants_filter.apply(self.dataframe, [var_to_filter], parameters=parameters)
             return casestats.include_key_in_value_list(
                 case_statistics.get_cases_description(filtered_dataframe, parameters=parameters))
         else:
