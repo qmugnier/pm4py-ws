@@ -169,6 +169,41 @@ def get_process_schema():
     return ret
 
 
+@PM4PyServices.app.route("/getNumericAttributeGraph", methods=["GET"])
+def get_numeric_attribute_graph():
+    """
+    Gets the numeric attribute graph
+
+    Returns
+    -------------
+    dictio
+        JSONified dictionary that contains in the 'base64' entry the SVG representation
+        of the case duration graph
+    """
+    # reads the session
+    session = request.args.get('session', type=str)
+    # reads the requested process name
+    process = request.args.get('process', default='receipt', type=str)
+    # reads the requested attribute
+    attribute = request.args.get('attribute', type=str)
+
+    dictio = {}
+    if check_session_validity(session):
+        user = get_user_from_session(session)
+        if lh.check_user_log_visibility(user, process):
+            Commons.semaphore_matplot.acquire()
+            try:
+                base64, gviz_base64, ret = lh.get_handler_for_process_and_session(process, session).get_numeric_attribute_svg(attribute)
+                dictio = {"base64": base64.decode('utf-8'), "gviz_base64": gviz_base64.decode('utf-8'), "points": ret}
+            except:
+                logging.error(traceback.format_exc())
+                dictio = {"base64": "", "gviz_base64": "", "points": []}
+            Commons.semaphore_matplot.release()
+
+    ret = jsonify(dictio)
+    return ret
+
+
 @PM4PyServices.app.route("/getCaseDurationGraph", methods=["GET"])
 def get_case_duration():
     """

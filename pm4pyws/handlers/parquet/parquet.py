@@ -15,7 +15,7 @@ from pm4pyws.handlers.parquet.cases import variants
 from pm4pyws.handlers.parquet.ctmc import transient
 from pm4pyws.handlers.parquet.process_schema import factory as process_schema_factory
 from pm4pyws.handlers.parquet.sna import get_sna as sna_obtainer
-from pm4pyws.handlers.parquet.statistics import case_duration, events_per_time
+from pm4pyws.handlers.parquet.statistics import case_duration, events_per_time, numeric_attribute
 from pm4pyws.util import casestats
 from pm4pyws.handlers.parquet.filtering import factory as filtering_factory
 
@@ -282,6 +282,24 @@ class ParquetHandler(object):
         parameters[constants.PARAMETER_CONSTANT_ATTRIBUTE_KEY] = self.activity_key
         parameters["variants_df"] = self.variants_df
         return process_schema_factory.apply(self.dataframe, variant=variant, parameters=parameters)
+
+    def get_numeric_attribute_svg(self, attribute, parameters=None):
+        """
+        Get the SVG of a numeric attribute
+
+        Parameters
+        ------------
+        attribute
+            Attribute
+        parameters
+            Other possible parameters
+        """
+        if parameters is None:
+            parameters = {}
+        parameters[constants.PARAMETER_CONSTANT_ACTIVITY_KEY] = self.activity_key
+        parameters[constants.PARAMETER_CONSTANT_ATTRIBUTE_KEY] = self.activity_key
+
+        return numeric_attribute.get_numeric_attribute_distr_svg(self.dataframe, attribute, parameters=parameters)
 
     def get_case_duration_svg(self, parameters=None):
         """
