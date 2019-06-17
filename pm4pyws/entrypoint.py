@@ -441,7 +441,7 @@ def do_transient_analysis():
                 base64, gviz = lh.get_handler_for_process_and_session(process, session).get_transient(delay)
                 dictio = {"base64": base64.decode('utf-8'), "gviz_base64": gviz.decode('utf-8')}
             except:
-                pass
+                logging.error(traceback.format_exc())
             Commons.semaphore_matplot.release()
 
     ret = jsonify(dictio)
