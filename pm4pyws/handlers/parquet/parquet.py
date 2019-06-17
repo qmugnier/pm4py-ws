@@ -44,6 +44,8 @@ class ParquetHandler(object):
         self.cases_number = 0
         # number of events
         self.events_number = 0
+        # classifier
+        self.activity_key = None
 
     def get_filters_chain_repr(self):
         """
@@ -67,7 +69,8 @@ class ParquetHandler(object):
         """
         self.first_ancestor = ancestor.first_ancestor
         self.last_ancestor = ancestor
-        #self.filters_chain = ancestor.filters_chain
+        self.activity_key = ancestor.activity_key
+        # self.filters_chain = ancestor.filters_chain
         self.dataframe = ancestor.dataframe
 
     def build_from_path(self, path, parameters=None):
@@ -86,10 +89,73 @@ class ParquetHandler(object):
         self.dataframe = parquet_importer.apply(path)
         # TODO: verify if this is the best way to act
         self.dataframe["time:timestamp"] = pd.to_datetime(self.dataframe["time:timestamp"], utc=True)
+        self.postloading_processing_dataframe()
         self.build_variants_df()
         self.calculate_events_number()
         self.calculate_variants_number()
         self.calculate_cases_number()
+
+    def build_from_csv(self, path, parameters=None):
+        """
+        Builds the handler from the specified path to CSV file
+
+        Parameters
+        -------------
+        path
+            Path to the log file
+        parameters
+            Parameters of the algorithm
+        """
+        if parameters is None:
+            parameters = {}
+        activity_key = parameters[
+            constants.PARAMETER_CONSTANT_ACTIVITY_KEY] if constants.PARAMETER_CONSTANT_ACTIVITY_KEY in parameters else xes.DEFAULT_NAME_KEY
+        timestamp_key = parameters[
+            constants.PARAMETER_CONSTANT_TIMESTAMP_KEY] if constants.PARAMETER_CONSTANT_TIMESTAMP_KEY in parameters else xes.DEFAULT_TIMESTAMP_KEY
+        case_id_glue = parameters[
+            constants.PARAMETER_CONSTANT_CASEID_KEY] if constants.PARAMETER_CONSTANT_CASEID_KEY in parameters else CASE_CONCEPT_NAME
+        sep = parameters["sep"] if "sep" in parameters else ","
+        quotechar = parameters["quotechar"] if "quotechar" in parameters else None
+
+        if quotechar is not None:
+            self.dataframe = csv_import_adapter.import_dataframe_from_path(path, sep=sep, quotechar=quotechar)
+        else:
+            self.dataframe = csv_import_adapter.import_dataframe_from_path(path, sep=sep)
+
+        if not activity_key == xes.DEFAULT_NAME_KEY:
+            self.dataframe[xes.DEFAULT_NAME_KEY] = activity_key
+        if not timestamp_key == xes.DEFAULT_TIMESTAMP_KEY:
+            self.dataframe[xes.DEFAULT_TIMESTAMP_KEY] = timestamp_key
+        if not case_id_glue == CASE_CONCEPT_NAME:
+            self.dataframe[case_id_glue] = CASE_CONCEPT_NAME
+        self.postloading_processing_dataframe()
+        self.build_variants_df()
+        self.calculate_variants_number()
+        self.calculate_cases_number()
+        self.calculate_events_number()
+
+    def postloading_processing_dataframe(self):
+        """
+        Postloading processing of the dataframe
+        """
+
+        self.dataframe[xes.DEFAULT_NAME_KEY] = self.dataframe[xes.DEFAULT_NAME_KEY].astype(str)
+        if xes.DEFAULT_TRANSITION_KEY in self.dataframe:
+            self.dataframe[xes.DEFAULT_TRANSITION_KEY] = self.dataframe[xes.DEFAULT_TRANSITION_KEY].astype(str)
+            self.dataframe["@@classifier"] = self.dataframe[xes.DEFAULT_NAME_KEY] + "+" + self.dataframe[
+                xes.DEFAULT_TRANSITION_KEY]
+        else:
+            self.dataframe["@@classifier"] = self.dataframe[xes.DEFAULT_NAME_KEY]
+        self.activity_key = "@@classifier"
+
+        if xes.DEFAULT_TIMESTAMP_KEY in self.dataframe:
+            self.dataframe = self.dataframe.sort_values([CASE_CONCEPT_NAME, xes.DEFAULT_TIMESTAMP_KEY])
+        else:
+            self.dataframe = self.dataframe.sort_values(CASE_CONCEPT_NAME)
+
+        print("CIAO")
+
+        #self.dataframe["@@index"] = self.dataframe.index
 
     def remove_filter(self, filter, all_filters):
         """
@@ -153,47 +219,9 @@ class ParquetHandler(object):
             Filter to add
         """
         parameters = {}
-        #parameters["variants_df"] = self.variants_df
+        # parameters["variants_df"] = self.variants_df
         self.dataframe = filtering_factory.apply(self.dataframe, filter, parameters=parameters)
         self.filters_chain.append(filter)
-
-    def build_from_csv(self, path, parameters=None):
-        """
-        Builds the handler from the specified path to CSV file
-
-        Parameters
-        -------------
-        path
-            Path to the log file
-        parameters
-            Parameters of the algorithm
-        """
-        if parameters is None:
-            parameters = {}
-        activity_key = parameters[
-            constants.PARAMETER_CONSTANT_ACTIVITY_KEY] if constants.PARAMETER_CONSTANT_ACTIVITY_KEY in parameters else xes.DEFAULT_NAME_KEY
-        timestamp_key = parameters[
-            constants.PARAMETER_CONSTANT_TIMESTAMP_KEY] if constants.PARAMETER_CONSTANT_TIMESTAMP_KEY in parameters else xes.DEFAULT_TIMESTAMP_KEY
-        case_id_glue = parameters[
-            constants.PARAMETER_CONSTANT_CASEID_KEY] if constants.PARAMETER_CONSTANT_CASEID_KEY in parameters else CASE_CONCEPT_NAME
-        sep = parameters["sep"] if "sep" in parameters else ","
-        quotechar = parameters["quotechar"] if "quotechar" in parameters else None
-
-        if quotechar is not None:
-            self.dataframe = csv_import_adapter.import_dataframe_from_path(path, sep=sep, quotechar=quotechar)
-        else:
-            self.dataframe = csv_import_adapter.import_dataframe_from_path(path, sep=sep)
-
-        if not activity_key == xes.DEFAULT_NAME_KEY:
-            self.dataframe[xes.DEFAULT_NAME_KEY] = activity_key
-        if not timestamp_key == xes.DEFAULT_TIMESTAMP_KEY:
-            self.dataframe[xes.DEFAULT_TIMESTAMP_KEY] = timestamp_key
-        if not case_id_glue == CASE_CONCEPT_NAME:
-            self.dataframe[case_id_glue] = CASE_CONCEPT_NAME
-        self.build_variants_df()
-        self.calculate_variants_number()
-        self.calculate_cases_number()
-        self.calculate_events_number()
 
     def build_variants_df(self, parameters=None):
         """
