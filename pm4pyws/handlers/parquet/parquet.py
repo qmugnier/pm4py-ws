@@ -18,6 +18,7 @@ from pm4pyws.handlers.parquet.sna import get_sna as sna_obtainer
 from pm4pyws.handlers.parquet.statistics import case_duration, events_per_time, numeric_attribute
 from pm4pyws.util import casestats
 from pm4pyws.handlers.parquet.filtering import factory as filtering_factory
+from pm4pyws.handlers.parquet.alignments import get_align
 
 import pandas as pd
 
@@ -539,3 +540,27 @@ class ParquetHandler(object):
         for key in initial_dict:
             return_dict[str(key)] = int(initial_dict[key])
         return return_dict
+
+    def get_alignments(self, petri_string, parameters=None):
+        """
+        Gets the alignments from a string
+
+        Parameters
+        -------------
+        petri_string
+            Petri string
+        parameters
+            Parameters of the algorithm
+
+        Returns
+        -------------
+        petri
+            SVG of the decorated Petri
+        table
+            SVG of the decorated table
+        """
+        if parameters is None:
+            parameters = {}
+        parameters[constants.PARAMETER_CONSTANT_ACTIVITY_KEY] = self.activity_key
+        parameters[constants.PARAMETER_CONSTANT_ATTRIBUTE_KEY] = self.activity_key
+        return get_align.perform_alignments(self.dataframe, petri_string, parameters=parameters)
