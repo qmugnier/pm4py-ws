@@ -448,6 +448,34 @@ def get_logs_list():
     return jsonify({"logs": available_keys})
 
 
+@PM4PyServices.app.route("/getLogsListAdvanced", methods=["GET"])
+def get_logs_list_advanced():
+    """
+    Gets the list of logs loaded into the system
+
+    Returns
+    -----------
+    dictio
+        JSONified dictionary that contains in the 'logs' entry the list of events logs
+    """
+    # reads the session
+    session = request.args.get('session', type=str)
+
+    available_keys = []
+
+    if check_session_validity(session):
+        user = get_user_from_session(session)
+
+        all_keys = lh.get_handlers().keys()
+
+        for key in all_keys:
+            if lh.check_user_log_visibility(user, key):
+                can_download = lh.check_user_enabled_download(user, key)
+                available_keys.append({"log_name": key, "can_download": can_download})
+
+    return jsonify({"logs": available_keys})
+
+
 @PM4PyServices.app.route("/transientAnalysis", methods=["GET"])
 def do_transient_analysis():
     """
