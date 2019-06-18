@@ -45,12 +45,12 @@ def perform_alignments(df, petri_string, parameters=None):
     parameters_align["variants_idx"] = all_variants
 
     alignments = align_factory.apply(log, net, im, fm, parameters=parameters_align)
-    decorations = alignments_decoration.get_alignments_decoration(net, im, fm, aligned_traces=alignments, parameters=parameters)
+    decorations = alignments_decoration.get_alignments_decoration(net, im, fm, aligned_traces=alignments)
 
     gviz_on_petri = pn_vis_factory.apply(net, im, fm, aggregated_statistics=decorations, variant="alignments", parameters={"format": "svg"})
     svg_on_petri = get_base64_from_gviz(gviz_on_petri)
 
-    parameters_table = deepcopy(parameters)
+    parameters_table = {}
     parameters_table["format"] = "svg"
 
     gviz_table = align_table_factory.apply(log, alignments, parameters=parameters_table)
