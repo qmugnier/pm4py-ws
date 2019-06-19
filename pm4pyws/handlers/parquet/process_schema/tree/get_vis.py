@@ -45,6 +45,7 @@ def apply(dataframe, parameters=None):
     dataframe = attributes_filter.filter_df_keeping_spno_activities(dataframe, activity_key=activity_key,
                                                                     max_no_activities=constants.MAX_NO_ACTIVITIES)
     dataframe, end_activities = auto_filter.apply_auto_filter(dataframe, parameters=parameters)
+    end_activities = list(end_activities.keys())
 
     activities_count = attributes_filter.get_attribute_values(dataframe, activity_key, parameters=parameters)
     activities = list(activities_count.keys())
