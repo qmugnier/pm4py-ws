@@ -30,7 +30,6 @@ def clean_expired_sessions():
     """
     um.clean_expired_sessions()
     sessions = um.get_all_sessions()
-    print(sessions)
     lh.remove_unneeded_sessions(sessions)
 
 
@@ -72,6 +71,8 @@ def check_session_validity(session_id):
         Boolean value
     """
     if Configuration.enable_session:
+        clean_expired_sessions()
+
         validity = um.check_session_validity(session_id)
         return validity
     return True
@@ -136,6 +137,8 @@ def get_process_schema():
         and 'format' contains the format
     :return:
     """
+    clean_expired_sessions()
+
     dictio = {}
     # reads the session
     session = request.args.get('session', type=str)
@@ -198,6 +201,8 @@ def get_numeric_attribute_graph():
         JSONified dictionary that contains in the 'base64' entry the SVG representation
         of the case duration graph
     """
+    clean_expired_sessions()
+
     # reads the session
     session = request.args.get('session', type=str)
     # reads the requested process name
@@ -235,6 +240,8 @@ def get_case_duration():
         JSONified dictionary that contains in the 'base64' entry the SVG representation
         of the case duration graph
     """
+    clean_expired_sessions()
+
     # reads the session
     session = request.args.get('session', type=str)
     # reads the requested process name
@@ -269,6 +276,8 @@ def get_events_per_time():
         JSONified dictionary that contains in the 'base64' entry the SVG representation
         of the events per time graph
     """
+    clean_expired_sessions()
+
     # reads the session
     session = request.args.get('session', type=str)
     # reads the requested process name
@@ -304,6 +313,8 @@ def get_sna():
     html
         HTML page containing the SNA representation
     """
+    clean_expired_sessions()
+
     try:
         # reads the session
         session = request.args.get('session', type=str)
@@ -335,6 +346,8 @@ def get_all_variants():
     dictio
         JSONified dictionary that contains in the 'variants' entry the list of variants
     """
+    clean_expired_sessions()
+
     # reads the session
     session = request.args.get('session', type=str)
     # reads the requested process name
@@ -363,6 +376,8 @@ def get_all_cases():
     dictio
         JSONified dictionary that contains in the 'cases' entry the list of cases
     """
+    clean_expired_sessions()
+
     # reads the session
     session = request.args.get('session', type=str)
     process = request.args.get('process', default='receipt', type=str)
@@ -393,6 +408,8 @@ def get_events():
     dictio
         JSONified dictionary that contains in the 'events' entry the list of events
     """
+    clean_expired_sessions()
+
     # reads the session
     session = request.args.get('session', type=str)
     process = request.args.get('process', default='receipt', type=str)
@@ -421,6 +438,8 @@ def load_log_from_path():
     """
     Service that loads a log from a path
     """
+    clean_expired_sessions()
+
     if Configuration.enable_load_local_path:
         try:
             # reads the session
@@ -453,6 +472,8 @@ def get_logs_list():
     dictio
         JSONified dictionary that contains in the 'logs' entry the list of events logs
     """
+    clean_expired_sessions()
+
     # reads the session
     session = request.args.get('session', type=str)
 
@@ -480,6 +501,8 @@ def get_logs_list_advanced():
     dictio
         JSONified dictionary that contains in the 'logs' entry the list of events logs
     """
+    clean_expired_sessions()
+
     # reads the session
     session = request.args.get('session', type=str)
 
@@ -509,6 +532,8 @@ def do_transient_analysis():
         JSONified dictionary that contains in the 'base64' entry the SVG representation
         of the events per time graph
     """
+    clean_expired_sessions()
+
     # reads the session
     session = request.args.get('session', type=str)
     # reads the requested process name
@@ -543,6 +568,8 @@ def get_log_summary():
     log_summary
         Log summary
     """
+    clean_expired_sessions()
+
     # reads the session
     session = request.args.get('session', type=str)
     # reads the requested process name
@@ -582,6 +609,8 @@ def download_xes_log():
     xes_log
         XES log
     """
+    clean_expired_sessions()
+
     # reads the session
     session = request.args.get('session', type=str)
     # reads the requested process name
@@ -606,6 +635,8 @@ def download_csv_log():
     csv_log
         CSV log
     """
+    clean_expired_sessions()
+
     # reads the session
     session = request.args.get('session', type=str)
     # reads the requested process name
@@ -630,6 +661,8 @@ def get_start_activities():
     start_activities
         Dictionary of start activities
     """
+    clean_expired_sessions()
+
     # reads the session
     session = request.args.get('session', type=str)
     # reads the requested process name
@@ -655,6 +688,8 @@ def get_end_activities():
     end_activities
         Dictionary of end activities
     """
+    clean_expired_sessions()
+
     # reads the session
     session = request.args.get('session', type=str)
     # reads the requested process name
@@ -672,6 +707,8 @@ def get_end_activities():
 
 @PM4PyServices.app.route("/getAttributesList", methods=["GET"])
 def get_attributes_list():
+    clean_expired_sessions()
+
     # reads the session
     session = request.args.get('session', type=str)
     # reads the requested process name
@@ -687,6 +724,8 @@ def get_attributes_list():
 
 @PM4PyServices.app.route("/getAttributeValues", methods=["GET"])
 def get_attribute_values():
+    clean_expired_sessions()
+
     # reads the session
     session = request.args.get('session', type=str)
     # reads the requested process name
@@ -704,6 +743,8 @@ def get_attribute_values():
 
 @PM4PyServices.app.route("/loginService", methods=["GET"])
 def login_service():
+    clean_expired_sessions()
+
     if Configuration.enable_session:
         # reads the user name
         user = request.args.get('user', type=str)
@@ -721,6 +762,8 @@ def login_service():
 
 @PM4PyServices.app.route("/checkSessionService", methods=["GET"])
 def check_session_service():
+    clean_expired_sessions()
+
     if Configuration.enable_session:
         # reads the session
         session = request.args.get('session', type=str)
@@ -753,6 +796,8 @@ def generate_random_string(N):
 
 @PM4PyServices.app.route("/uploadLog", methods=["POST"])
 def upload_log():
+    clean_expired_sessions()
+
     # reads the session
     session = request.args.get('session', type=str)
     if check_session_validity(session):
@@ -795,6 +840,8 @@ def get_alignments():
     dictio
         Dictionary containing the Petri net and the table
     """
+    clean_expired_sessions()
+
     # reads the session
     session = request.args.get('session', type=str)
     # reads the requested process name
@@ -831,12 +878,12 @@ def add_filter():
     dictio
         Success, or not
     """
+    clean_expired_sessions()
+
     # reads the session
     session = request.args.get('session', type=str)
     # reads the requested process name
     process = request.args.get('process', default='receipt', type=str)
-
-    clean_expired_sessions()
 
     if check_session_validity(session):
         user = get_user_from_session(session)
@@ -863,12 +910,12 @@ def remove_filter():
     dictio
         Success, or not
     """
+    clean_expired_sessions()
+
     # reads the session
     session = request.args.get('session', type=str)
     # reads the requested process name
     process = request.args.get('process', default='receipt', type=str)
-
-    clean_expired_sessions()
 
     if check_session_validity(session):
         user = get_user_from_session(session)
