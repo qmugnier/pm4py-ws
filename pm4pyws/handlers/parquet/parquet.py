@@ -227,6 +227,7 @@ class ParquetHandler(object):
         parameters = {}
         parameters[constants.PARAMETER_CONSTANT_ACTIVITY_KEY] = self.activity_key
         parameters[constants.PARAMETER_CONSTANT_ATTRIBUTE_KEY] = self.activity_key
+        parameters[constants.GROUPED_DATAFRAME] = self.grouped_dataframe
         # parameters["variants_df"] = self.variants_df
         self.dataframe = filtering_factory.apply(self.dataframe, filter, parameters=parameters)
         self.filters_chain.append(filter)
@@ -244,6 +245,8 @@ class ParquetHandler(object):
             parameters = {}
         parameters[constants.PARAMETER_CONSTANT_ACTIVITY_KEY] = self.activity_key
         parameters[constants.PARAMETER_CONSTANT_ATTRIBUTE_KEY] = self.activity_key
+        parameters[constants.GROUPED_DATAFRAME] = self.grouped_dataframe
+
         self.variants_df = case_statistics.get_variants_df_with_case_duration(self.dataframe, parameters=parameters)
 
     def calculate_variants_number(self):
@@ -288,6 +291,8 @@ class ParquetHandler(object):
             parameters = {}
         parameters[constants.PARAMETER_CONSTANT_ACTIVITY_KEY] = self.activity_key
         parameters[constants.PARAMETER_CONSTANT_ATTRIBUTE_KEY] = self.activity_key
+        parameters[constants.GROUPED_DATAFRAME] = self.grouped_dataframe
+
         parameters["variants_df"] = self.variants_df
         return process_schema_factory.apply(self.dataframe, variant=variant, parameters=parameters)
 
@@ -306,6 +311,7 @@ class ParquetHandler(object):
             parameters = {}
         parameters[constants.PARAMETER_CONSTANT_ACTIVITY_KEY] = self.activity_key
         parameters[constants.PARAMETER_CONSTANT_ATTRIBUTE_KEY] = self.activity_key
+        parameters[constants.GROUPED_DATAFRAME] = self.grouped_dataframe
 
         return numeric_attribute.get_numeric_attribute_distr_svg(self.dataframe, attribute, parameters=parameters)
 
@@ -327,6 +333,8 @@ class ParquetHandler(object):
             parameters = {}
         parameters[constants.PARAMETER_CONSTANT_ACTIVITY_KEY] = self.activity_key
         parameters[constants.PARAMETER_CONSTANT_ATTRIBUTE_KEY] = self.activity_key
+        parameters[constants.GROUPED_DATAFRAME] = self.grouped_dataframe
+
         return case_duration.get_case_duration_svg(self.dataframe, parameters=parameters)
 
     def get_events_per_time_svg(self, parameters=None):
@@ -347,6 +355,8 @@ class ParquetHandler(object):
             parameters = {}
         parameters[constants.PARAMETER_CONSTANT_ACTIVITY_KEY] = self.activity_key
         parameters[constants.PARAMETER_CONSTANT_ATTRIBUTE_KEY] = self.activity_key
+        parameters[constants.GROUPED_DATAFRAME] = self.grouped_dataframe
+
         return events_per_time.get_events_per_time_svg(self.dataframe, parameters=parameters)
 
     def get_variant_statistics(self, parameters=None):
@@ -367,6 +377,8 @@ class ParquetHandler(object):
             parameters = {}
         parameters[constants.PARAMETER_CONSTANT_ACTIVITY_KEY] = self.activity_key
         parameters[constants.PARAMETER_CONSTANT_ATTRIBUTE_KEY] = self.activity_key
+        parameters[constants.GROUPED_DATAFRAME] = self.grouped_dataframe
+
         parameters["variants_df"] = self.variants_df
 
         return variants.get_statistics(self.dataframe, parameters=parameters)
@@ -391,6 +403,8 @@ class ParquetHandler(object):
             parameters = {}
         parameters[constants.PARAMETER_CONSTANT_ACTIVITY_KEY] = self.activity_key
         parameters[constants.PARAMETER_CONSTANT_ATTRIBUTE_KEY] = self.activity_key
+        parameters[constants.GROUPED_DATAFRAME] = self.grouped_dataframe
+
         return sna_obtainer.apply(self.dataframe, variant=variant, parameters=parameters)
 
     def get_transient(self, delay, parameters=None):
@@ -413,6 +427,8 @@ class ParquetHandler(object):
             parameters = {}
         parameters[constants.PARAMETER_CONSTANT_ACTIVITY_KEY] = self.activity_key
         parameters[constants.PARAMETER_CONSTANT_ATTRIBUTE_KEY] = self.activity_key
+        parameters[constants.GROUPED_DATAFRAME] = self.grouped_dataframe
+
         return transient.apply(self.dataframe, delay, parameters=parameters)
 
     def get_case_statistics(self, parameters=None):
@@ -433,6 +449,7 @@ class ParquetHandler(object):
             parameters = {}
         parameters[constants.PARAMETER_CONSTANT_ACTIVITY_KEY] = self.activity_key
         parameters[constants.PARAMETER_CONSTANT_ATTRIBUTE_KEY] = self.activity_key
+        parameters[constants.GROUPED_DATAFRAME] = self.grouped_dataframe
         parameters["max_ret_cases"] = 500
         parameters["sort_by_column"] = parameters[
             "sort_by_column"] if "sort_by_column" in parameters else "caseDuration"
@@ -474,6 +491,7 @@ class ParquetHandler(object):
             parameters = {}
         parameters[constants.PARAMETER_CONSTANT_ACTIVITY_KEY] = self.activity_key
         parameters[constants.PARAMETER_CONSTANT_ATTRIBUTE_KEY] = self.activity_key
+        parameters[constants.GROUPED_DATAFRAME] = self.grouped_dataframe
         return case_statistics.get_events(self.dataframe, caseid, parameters=parameters)
 
     def download_xes_log(self):
@@ -501,6 +519,8 @@ class ParquetHandler(object):
             parameters = {}
         parameters[constants.PARAMETER_CONSTANT_ACTIVITY_KEY] = self.activity_key
         parameters[constants.PARAMETER_CONSTANT_ATTRIBUTE_KEY] = self.activity_key
+        parameters[constants.GROUPED_DATAFRAME] = self.grouped_dataframe
+
         return start_activities_filter.get_start_activities(self.dataframe, parameters=parameters)
 
     def get_end_activities(self, parameters=None):
@@ -516,6 +536,8 @@ class ParquetHandler(object):
             parameters = {}
         parameters[constants.PARAMETER_CONSTANT_ACTIVITY_KEY] = self.activity_key
         parameters[constants.PARAMETER_CONSTANT_ATTRIBUTE_KEY] = self.activity_key
+        parameters[constants.GROUPED_DATAFRAME] = self.grouped_dataframe
+
         return end_activities_filter.get_end_activities(self.dataframe, parameters=parameters)
 
     def get_attributes_list(self, parameters=None):
@@ -542,6 +564,8 @@ class ParquetHandler(object):
             parameters = {}
         parameters[constants.PARAMETER_CONSTANT_ACTIVITY_KEY] = self.activity_key
         parameters[constants.PARAMETER_CONSTANT_ATTRIBUTE_KEY] = self.activity_key
+        parameters[constants.GROUPED_DATAFRAME] = self.grouped_dataframe
+
         initial_dict = attributes_filter.get_attribute_values(self.dataframe, attribute_key, parameters=parameters)
         return_dict = {}
         for key in initial_dict:
@@ -570,4 +594,6 @@ class ParquetHandler(object):
             parameters = {}
         parameters[constants.PARAMETER_CONSTANT_ACTIVITY_KEY] = self.activity_key
         parameters[constants.PARAMETER_CONSTANT_ATTRIBUTE_KEY] = self.activity_key
+        parameters[constants.GROUPED_DATAFRAME] = self.grouped_dataframe
+
         return get_align.perform_alignments(self.dataframe, petri_string, parameters=parameters)
