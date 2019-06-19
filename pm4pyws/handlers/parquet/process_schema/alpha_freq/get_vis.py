@@ -49,7 +49,7 @@ def apply(dataframe, parameters=None):
                                                                     max_no_activities=constants.MAX_NO_ACTIVITIES)
     dataframe = auto_filter.apply_auto_filter(dataframe, parameters=parameters)
     dfg = df_statistics.get_dfg_graph(dataframe, activity_key=activity_key, timestamp_key=timestamp_key, case_id_glue=case_id_glue, sort_caseid_required=False, sort_timestamp_along_case_id=False)
-    activities_count = attributes_filter.get_attribute_values(dataframe, activity_key)
+    activities_count = attributes_filter.get_attribute_values(dataframe, activity_key, parameters=parameters)
     activities = list(activities_count.keys())
     start_activities = list(start_activities_filter.get_start_activities(dataframe, parameters=parameters).keys())
     end_activities = list(end_activities_filter.get_end_activities(dataframe, parameters=parameters).keys())

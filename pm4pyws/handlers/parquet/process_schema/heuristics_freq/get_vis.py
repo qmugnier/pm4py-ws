@@ -46,7 +46,7 @@ def apply(dataframe, parameters=None):
                                                                     max_no_activities=ws_constants.MAX_NO_ACTIVITIES)
     dataframe = auto_filter.apply_auto_filter(dataframe, parameters=parameters)
 
-    activities_count = attributes_filter.get_attribute_values(dataframe, activity_key)
+    activities_count = attributes_filter.get_attribute_values(dataframe, activity_key, parameters=parameters)
     start_activities_count = start_activities_filter.get_start_activities(dataframe, parameters=parameters)
     end_activities_count = end_activities_filter.get_end_activities(dataframe, parameters=parameters)
     activities = list(activities_count.keys())

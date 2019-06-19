@@ -31,6 +31,8 @@ class ParquetHandler(object):
 
         # sets the current dataframe to None
         self.dataframe = None
+        # grouped dataframe
+        self.grouped_dataframe = None
         # sets the first ancestor (in the filtering chain) to None
         self.first_ancestor = self
         # sets the last ancestor (in the filtering chain) to None
@@ -73,6 +75,7 @@ class ParquetHandler(object):
         self.activity_key = ancestor.activity_key
         # self.filters_chain = ancestor.filters_chain
         self.dataframe = ancestor.dataframe
+        self.grouped_dataframe = ancestor.grouped_dataframe
 
     def build_from_path(self, path, parameters=None):
         """
@@ -92,6 +95,7 @@ class ParquetHandler(object):
         self.dataframe["time:timestamp"] = pd.to_datetime(self.dataframe["time:timestamp"], utc=True)
         self.postloading_processing_dataframe()
         self.build_variants_df()
+        self.grouped_dataframe = self.dataframe.groupby(CASE_CONCEPT_NAME)
         self.calculate_events_number()
         self.calculate_variants_number()
         self.calculate_cases_number()
@@ -131,6 +135,7 @@ class ParquetHandler(object):
             self.dataframe[case_id_glue] = CASE_CONCEPT_NAME
         self.postloading_processing_dataframe()
         self.build_variants_df()
+        self.grouped_dataframe = self.dataframe.groupby(CASE_CONCEPT_NAME)
         self.calculate_variants_number()
         self.calculate_cases_number()
         self.calculate_events_number()
@@ -177,6 +182,7 @@ class ParquetHandler(object):
         for filter in all_filters:
             new_handler.add_filter0(filter)
         new_handler.build_variants_df()
+        new_handler.grouped_dataframe = new_handler.dataframe.groupby(CASE_CONCEPT_NAME)
         new_handler.calculate_cases_number()
         new_handler.calculate_variants_number()
         new_handler.calculate_events_number()
@@ -203,6 +209,7 @@ class ParquetHandler(object):
         for filter in all_filters:
             new_handler.add_filter0(filter)
         new_handler.build_variants_df()
+        new_handler.grouped_dataframe = new_handler.dataframe.groupby(CASE_CONCEPT_NAME)
         new_handler.calculate_cases_number()
         new_handler.calculate_variants_number()
         new_handler.calculate_events_number()
@@ -249,7 +256,7 @@ class ParquetHandler(object):
         """
         Calculate the number of cases in this log
         """
-        self.cases_number = len(self.dataframe.groupby("case:concept:name"))
+        self.cases_number = len(self.grouped_dataframe)
 
     def calculate_events_number(self):
         """

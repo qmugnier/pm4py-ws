@@ -12,6 +12,7 @@ from pm4pyws.util import get_graph
 from pm4py.util import constants as pm4_constants
 from pm4py.algo.filtering.common.filtering_constants import CASE_CONCEPT_NAME
 import base64
+import time
 
 from pm4pyws.util import constants
 
@@ -43,6 +44,8 @@ def apply(dataframe, parameters=None):
     timestamp_key = parameters[pm4_constants.PARAMETER_CONSTANT_TIMESTAMP_KEY] if pm4_constants.PARAMETER_CONSTANT_TIMESTAMP_KEY in parameters else xes.DEFAULT_TIMESTAMP_KEY
     case_id_glue = parameters[pm4_constants.PARAMETER_CONSTANT_CASEID_KEY] if pm4_constants.PARAMETER_CONSTANT_CASEID_KEY in parameters else CASE_CONCEPT_NAME
 
+    aa = time.time()
+
     dataframe = attributes_filter.filter_df_keeping_spno_activities(dataframe, activity_key=activity_key,
                                                                     max_no_activities=constants.MAX_NO_ACTIVITIES)
     dataframe = auto_filter.apply_auto_filter(dataframe, parameters=parameters)
@@ -51,6 +54,10 @@ def apply(dataframe, parameters=None):
     activities = list(activities_count.keys())
     start_activities = list(start_activities_filter.get_start_activities(dataframe, parameters=parameters).keys())
     end_activities = list(end_activities_filter.get_end_activities(dataframe, parameters=parameters).keys())
+
+    bb = time.time()
+
+    print("bb-aa=",(bb-aa))
 
     gviz = dfg_vis_factory.apply(dfg, activities_count=activities_count, parameters={"format": "svg"})
 
