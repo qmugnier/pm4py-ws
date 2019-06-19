@@ -7,7 +7,7 @@ from pm4py.visualization.common.utils import get_base64_from_gviz
 from pm4py.visualization.petrinet import factory as pn_vis_factory
 from pm4py.visualization.petrinet.util import alignments_decoration
 from pm4py.objects.conversion.log import factory as log_conv_factory
-from copy import deepcopy
+from copy import copy
 
 
 def perform_alignments(df, petri_string, parameters=None):
@@ -35,11 +35,10 @@ def perform_alignments(df, petri_string, parameters=None):
 
     net, im, fm = pnml.import_petri_from_string(petri_string, parameters=parameters)
 
-    parameters_conv = deepcopy(parameters)
+    parameters_conv = copy(parameters)
     parameters_conv["return_variants"] = True
     log, all_variants = log_conv_factory.apply(df, variant=log_conv_factory.DF_TO_EVENT_LOG_NV, parameters=parameters_conv)
 
-    #parameters_align = deepcopy(parameters)
     parameters_align = {}
     parameters_align["ret_tuple_as_trans_desc"] = True
     parameters_align["variants_idx"] = all_variants

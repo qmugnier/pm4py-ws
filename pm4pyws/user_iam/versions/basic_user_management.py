@@ -86,3 +86,30 @@ class BasicUserManagement(UserManagement):
             user = str(results[0])
         conn_users.close()
         return user
+
+    def clean_expired_sessions(self):
+        """
+        Cleans the expired sessions in IAM
+        """
+        pass
+
+    def get_all_sessions(self):
+        """
+        Gets all sessions from the users database
+
+        Returns
+        -----------
+        sessions
+            List of sessions
+        """
+
+        sessions = []
+        conn_users = sqlite3.connect(self.user_db)
+        curs_users = conn_users.cursor()
+        curs_users.execute("SELECT SESSION_ID FROM SESSIONS")
+        results = curs_users.fetchall()
+        if results is not None:
+            for result in results:
+                sessions.append(str(result[0]))
+        conn_users.close()
+        return sessions

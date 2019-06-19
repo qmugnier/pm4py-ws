@@ -26,6 +26,21 @@ class BasicLogSessionHandler(LogHandler):
 
         LogHandler.__init__(self, ex)
 
+    def remove_unneeded_sessions(self, all_sessions):
+        """
+        Remove expired sessions
+
+        Parameters
+        ------------
+        all_sessions
+            All valid sessions
+        """
+        shk = list(self.session_handlers.keys())
+        for session in shk:
+            if session not in all_sessions and (not str(session) == "null"):
+                print("removing handler for " + session)
+                del self.session_handlers[session]
+
     def get_handlers(self):
         """
         Gets the current set of handlers

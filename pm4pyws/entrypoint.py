@@ -24,6 +24,16 @@ class Commons:
     semaphore_matplot = Semaphore(1)
 
 
+def clean_expired_sessions():
+    """
+    Cleans expired sessions
+    """
+    um.clean_expired_sessions()
+    sessions = um.get_all_sessions()
+    print(sessions)
+    lh.remove_unneeded_sessions(sessions)
+
+
 def do_login(user, password):
     """
     Logs in a user and returns a session id
@@ -40,7 +50,11 @@ def do_login(user, password):
     session_id
         Session ID
     """
-    return um.do_login(user, password)
+    ret = um.do_login(user, password)
+
+    clean_expired_sessions()
+
+    return ret
 
 
 def check_session_validity(session_id):
@@ -105,6 +119,7 @@ class PM4PyServices:
         lh.load_log_static(log_name, file_path, parameters=parameters)
 
     def serve(self, host="0.0.0.0", port="5000", threaded=True):
+        clean_expired_sessions()
         self.app.run(host=host, port=port, threaded=threaded)
 
 
@@ -157,11 +172,14 @@ def get_process_schema():
                     base64, model, format, this_handler, activities, start_activities, end_activities, gviz_base64, graph_rep = handler.get_schema(
                         variant=variant,
                         parameters=parameters)
-                    lh.save_object_memory(ps_repr, [base64, model, format, this_handler, activities, start_activities, end_activities, gviz_base64, graph_rep])
+                    lh.save_object_memory(ps_repr, [base64, model, format, this_handler, activities, start_activities,
+                                                    end_activities, gviz_base64, graph_rep])
                 if model is not None:
                     model = model.decode('utf-8')
-                dictio = {"base64": base64.decode('utf-8'), "model": model, "format": format, "handler": this_handler, "activities": activities,
-                          "start_activities": start_activities, "end_activities": end_activities, "gviz_base64": gviz_base64.decode('utf-8'), "graph_rep": graph_rep}
+                dictio = {"base64": base64.decode('utf-8'), "model": model, "format": format, "handler": this_handler,
+                          "activities": activities,
+                          "start_activities": start_activities, "end_activities": end_activities,
+                          "gviz_base64": gviz_base64.decode('utf-8'), "graph_rep": graph_rep}
             except:
                 logging.error(traceback.format_exc())
             Commons.semaphore_matplot.release()
@@ -193,7 +211,9 @@ def get_numeric_attribute_graph():
         if lh.check_user_log_visibility(user, process):
             Commons.semaphore_matplot.acquire()
             try:
-                base64, gviz_base64, ret = lh.get_handler_for_process_and_session(process, session).get_numeric_attribute_svg(attribute)
+                base64, gviz_base64, ret = lh.get_handler_for_process_and_session(process,
+                                                                                  session).get_numeric_attribute_svg(
+                    attribute)
                 dictio = {"base64": base64.decode('utf-8'), "gviz_base64": gviz_base64.decode('utf-8'), "points": ret}
             except:
                 logging.error(traceback.format_exc())
@@ -226,7 +246,8 @@ def get_case_duration():
         if lh.check_user_log_visibility(user, process):
             Commons.semaphore_matplot.acquire()
             try:
-                base64, gviz_base64, ret = lh.get_handler_for_process_and_session(process, session).get_case_duration_svg()
+                base64, gviz_base64, ret = lh.get_handler_for_process_and_session(process,
+                                                                                  session).get_case_duration_svg()
                 dictio = {"base64": base64.decode('utf-8'), "gviz_base64": gviz_base64.decode('utf-8'), "points": ret}
             except:
                 logging.error(traceback.format_exc())
@@ -260,7 +281,8 @@ def get_events_per_time():
         if lh.check_user_log_visibility(user, process):
             Commons.semaphore_matplot.acquire()
             try:
-                base64, gviz_base64, ret = lh.get_handler_for_process_and_session(process, session).get_events_per_time_svg()
+                base64, gviz_base64, ret = lh.get_handler_for_process_and_session(process,
+                                                                                  session).get_events_per_time_svg()
                 dictio = {"base64": base64.decode('utf-8'), "gviz_base64": gviz_base64.decode('utf-8'), "points": ret}
             except:
                 logging.error(traceback.format_exc())
@@ -814,6 +836,8 @@ def add_filter():
     # reads the requested process name
     process = request.args.get('process', default='receipt', type=str)
 
+    clean_expired_sessions()
+
     if check_session_validity(session):
         user = get_user_from_session(session)
         if lh.check_user_log_visibility(user, process):
@@ -843,6 +867,8 @@ def remove_filter():
     session = request.args.get('session', type=str)
     # reads the requested process name
     process = request.args.get('process', default='receipt', type=str)
+
+    clean_expired_sessions()
 
     if check_session_validity(session):
         user = get_user_from_session(session)
