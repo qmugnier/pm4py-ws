@@ -54,7 +54,8 @@ setup(
         'python-keycloak',
         'pyinstaller',
         'PyQT5',
-        'setuptools'
+        'setuptools',
+        'pm4pybpmn'
     ],
     project_urls={
         'Documentation': 'http://pm4py.pads.rwth-aachen.de/documentation/',
