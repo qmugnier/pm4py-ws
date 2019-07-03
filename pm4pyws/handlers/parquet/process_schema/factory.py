@@ -5,6 +5,8 @@ from pm4pyws.handlers.parquet.process_schema.heuristics_perf import get_vis as h
 from pm4pyws.handlers.parquet.process_schema.inductive_freq import get_vis as inductive_freq_vis
 from pm4pyws.handlers.parquet.process_schema.inductive_perf import get_vis as inductive_perf_vis
 from pm4pyws.handlers.parquet.process_schema.tree import get_vis as tree_vis
+from pm4pyws.handlers.parquet.process_schema.indbpmn_freq import get_vis as indbpmn_freq_vis
+from pm4pyws.handlers.parquet.process_schema.indbpmn_perf import get_vis as indbpmn_perf_vis
 
 DFG_FREQ = "dfg_freq"
 DFG_PERF = "dfg_perf"
@@ -14,10 +16,13 @@ INDUCTIVE_FREQ = "inductive_freq"
 INDUCTIVE_PERF = "inductive_perf"
 HEURISTICS_FREQ = "heuristics_freq"
 HEURISTICS_PERF = "heuristics_perf"
+INDBPMN_FREQ = "indbpmn_freq"
+INDBPMN_PERF = "indbpmn_perf"
 
 VERSIONS = {DFG_FREQ: dfg_freq_vis.apply, DFG_PERF: dfg_perf_vis.apply, TREE_FREQ: tree_vis.apply,
             TREE_PERF: tree_vis.apply, INDUCTIVE_FREQ: inductive_freq_vis.apply,
-            INDUCTIVE_PERF: inductive_perf_vis.apply, HEURISTICS_FREQ: heu_freq_vis.apply, HEURISTICS_PERF: heu_perf_vis.apply}
+            INDUCTIVE_PERF: inductive_perf_vis.apply, HEURISTICS_FREQ: heu_freq_vis.apply, HEURISTICS_PERF: heu_perf_vis.apply,
+            INDBPMN_FREQ: indbpmn_freq_vis.apply, INDBPMN_PERF: indbpmn_perf_vis.apply}
 
 
 def apply(dataframe, variant=DFG_FREQ, parameters=None):
