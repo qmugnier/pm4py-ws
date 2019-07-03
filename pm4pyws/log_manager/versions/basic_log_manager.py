@@ -37,8 +37,8 @@ class BasicLogSessionHandler(LogHandler):
         """
         shk = list(self.session_handlers.keys())
         for session in shk:
-            if session not in all_sessions and (not str(session) == "null"):
-                print("removing handler for " + session)
+            if session not in all_sessions and (not str(session) == "null" and not str(session) == "None"):
+                print("removing handler for " + str(session))
                 del self.session_handlers[session]
 
     def get_handlers(self):

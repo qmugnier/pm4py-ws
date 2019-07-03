@@ -171,18 +171,24 @@ def get_process_schema():
                     end_activities = saved_obj[6]
                     gviz_base64 = saved_obj[7]
                     graph_rep = saved_obj[8]
+                    type_of_model = saved_obj[9]
+                    decoration = saved_obj[10]
+                    second_model = saved_obj[11]
+                    second_format = saved_obj[12]
                 else:
-                    base64, model, format, this_handler, activities, start_activities, end_activities, gviz_base64, graph_rep = handler.get_schema(
+                    base64, model, format, this_handler, activities, start_activities, end_activities, gviz_base64, graph_rep, type_of_model, decoration, second_model, second_format = handler.get_schema(
                         variant=variant,
                         parameters=parameters)
                     lh.save_object_memory(ps_repr, [base64, model, format, this_handler, activities, start_activities,
-                                                    end_activities, gviz_base64, graph_rep])
+                                                    end_activities, gviz_base64, graph_rep, type_of_model, decoration, second_model, second_format])
                 if model is not None:
                     model = model.decode('utf-8')
                 dictio = {"base64": base64.decode('utf-8'), "model": model, "format": format, "handler": this_handler,
                           "activities": activities,
                           "start_activities": start_activities, "end_activities": end_activities,
-                          "gviz_base64": gviz_base64.decode('utf-8'), "graph_rep": graph_rep}
+                          "gviz_base64": gviz_base64.decode('utf-8'), "graph_rep": graph_rep,
+                          "type_of_model": type_of_model, "decoration": decoration,
+                          "second_model": second_model, "second_format": second_format}
             except:
                 logging.error(traceback.format_exc())
             Commons.semaphore_matplot.release()
