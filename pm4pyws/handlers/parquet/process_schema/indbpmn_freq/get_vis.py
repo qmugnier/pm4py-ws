@@ -69,7 +69,7 @@ def apply(dataframe, parameters=None):
                                                                       activities_count,
                                                                       variant="frequency")
 
-    bpmn_graph = bpmn_vis_factory.apply_embedding(bpmn_graph, aggregated_statistics=aggregated_statistics)
+    bpmn_graph = bpmn_vis_factory.apply_embedding(bpmn_graph, variant="frequency", aggregated_statistics=aggregated_statistics)
     bpmn_string = bpmn_exporter.get_string_from_bpmn(bpmn_graph)
 
     gviz = bpmn_vis_factory.apply_petri(net, im, fm, aggregated_statistics=aggregated_statistics, variant="frequency", parameters={"format": "svg"})
