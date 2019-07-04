@@ -1,6 +1,6 @@
 from pm4py.algo.discovery.inductive import factory as inductive_miner
 from pm4py.objects.petri.exporter.pnml import export_petri_as_string
-from pm4py.visualization.common.utils import get_base64_from_gviz
+from pm4py.visualization.common.utils import get_base64_from_gviz, get_base64_from_file
 from pm4py.visualization.petrinet import factory as pn_vis_factory
 from pm4py.algo.filtering.log.auto_filter import auto_filter
 from pm4py.algo.filtering.log.attributes import attributes_filter
@@ -10,6 +10,7 @@ from pm4py.objects.log.util import xes
 from pm4py.algo.filtering.log.start_activities import start_activities_filter
 from pm4py.algo.filtering.log.end_activities import end_activities_filter
 from pm4pyws.util import get_graph
+from pm4py.visualization.petrinet.versions import token_decoration
 import base64
 
 from pm4pyws.util import constants
@@ -59,10 +60,14 @@ def apply(log, parameters=None):
     end_activities = list(end_activities_filter.get_end_activities(filtered_log, parameters=parameters).keys())
 
     net, im, fm = inductive_miner.apply(filtered_log, parameters=parameters)
-    parameters["format"] = "svg"
-    gviz = pn_vis_factory.apply(net, im, fm, log=log, variant="frequency", parameters=parameters)
+    #parameters["format"] = "svg"
+    #gviz = pn_vis_factory.apply(net, im, fm, log=log, variant="frequency", parameters=parameters)
 
-    svg = get_base64_from_gviz(gviz)
+    aggregated_statistics = token_decoration.get_decorations(log, net, im, fm,
+                                                             parameters=parameters, measure="frequency")
+    gviz = bpmn_vis_factory.apply_petri(net, im, fm, aggregated_statistics=aggregated_statistics, variant="frequency", parameters={"format": "svg"})
+
+    svg = get_base64_from_file(gviz.name)
 
     gviz_base64 = base64.b64encode("".encode('utf-8'))
 
