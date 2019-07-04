@@ -10,6 +10,8 @@ from pm4py.objects.petri.exporter.pnml import export_petri_as_string
 from pm4py.algo.filtering.pandas.attributes import attributes_filter
 from pm4py.algo.filtering.pandas.start_activities import start_activities_filter
 from pm4py.algo.filtering.pandas.end_activities import end_activities_filter
+from pm4pybpmn.visualization.bpmn.util import convert_performance_map
+from pm4pybpmn.objects.bpmn.exporter import bpmn20 as bpmn_exporter
 from pm4pyws.util import get_graph
 from pm4py.util import constants as pm4_constants
 from pm4py.algo.filtering.common.filtering_constants import CASE_CONCEPT_NAME
@@ -60,11 +62,15 @@ def apply(dataframe, parameters=None):
 
     net, im, fm = inductive_miner.apply_dfg(dfg, parameters, activities=activities, start_activities=start_activities, end_activities=end_activities)
     spaths = get_shortest_paths(net)
+
+    bpmn_graph, el_corr, inv_el_corr, el_corr_keys_map = petri_to_bpmn.apply(net, im, fm)
+
     aggregated_statistics = get_decorations_from_dfg_spaths_acticount(net, dfg, spaths,
                                                                       activities_count,
                                                                       variant="performance")
 
-    bpmn_graph, el_corr, inv_el_corr, el_corr_keys_map = petri_to_bpmn.apply(net, im, fm)
+    bpmn_graph = bpmn_vis_factory.apply_embedding(bpmn_graph, aggregated_statistics=aggregated_statistics)
+    bpmn_string = bpmn_exporter.get_string_from_bpmn(bpmn_graph)
 
     gviz = bpmn_vis_factory.apply_petri(net, im, fm, aggregated_statistics=aggregated_statistics, variant="performance", parameters={"format": "svg"})
 
@@ -72,4 +78,4 @@ def apply(dataframe, parameters=None):
 
     ret_graph = get_graph.get_graph_from_petri(net, im, fm)
 
-    return get_base64_from_file(gviz.name), export_petri_as_string(net, im, fm), ".pnml", "parquet", activities, start_activities, end_activities, gviz_base64, ret_graph, "indbpmn", "perf", None, ""
+    return get_base64_from_file(gviz.name), export_petri_as_string(net, im, fm), ".pnml", "parquet", activities, start_activities, end_activities, gviz_base64, ret_graph, "indbpmn", "perf", bpmn_string, ".bpmn"
