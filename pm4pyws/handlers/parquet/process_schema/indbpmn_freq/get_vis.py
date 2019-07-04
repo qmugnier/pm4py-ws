@@ -67,7 +67,7 @@ def apply(dataframe, parameters=None):
 
     bpmn_graph, el_corr, inv_el_corr, el_corr_keys_map = petri_to_bpmn.apply(net, im, fm)
 
-    gviz = bpmn_vis_factory.apply_petri(net, im, fm, aggregated_statistics=aggregated_statistics, parameters={"format": "svg"})
+    gviz = bpmn_vis_factory.apply_petri(net, im, fm, aggregated_statistics=aggregated_statistics, variant="frequency", parameters={"format": "svg"})
 
     gviz_base64 = base64.b64encode("".encode('utf-8'))
 
