@@ -937,3 +937,22 @@ def remove_filter():
             return jsonify({"status": "OK"})
 
     return jsonify({"status": "FAIL"})
+
+
+@PM4PyServices.app.route("/getUserEventLogVisibility", methods=["GET"])
+def get_user_log_visibilities():
+    clean_expired_sessions()
+
+    user_log_visibility = {}
+
+    # reads the session
+    session = request.args.get('session', type=str)
+
+    if check_session_validity(session):
+        this_user = get_user_from_session(session)
+        is_admin = lh.check_is_admin(this_user)
+
+        if is_admin:
+            user_log_visibility = lh.get_user_eventlog_vis_down_remov()
+
+    return jsonify(user_log_visibility)

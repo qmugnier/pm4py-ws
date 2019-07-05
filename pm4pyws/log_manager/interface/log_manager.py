@@ -176,3 +176,21 @@ class LogHandler(object):
             Value
         """
         raise Exception("log_manager get_object_memory not implemented!")
+
+    def get_user_eventlog_vis_down_remov(self):
+        pass
+
+    def add_user_eventlog_visibility(self, user, event_log):
+        pass
+
+    def remove_user_eventlog_visibility(self, user, event_log):
+        pass
+
+    def add_user_eventlog_downloadable(self, user, event_log):
+        pass
+
+    def remove_user_eventlog_downloadable(self, user, event_log):
+        pass
+
+    def add_user_eventlog_removable(self, user, event_log):
+        pass

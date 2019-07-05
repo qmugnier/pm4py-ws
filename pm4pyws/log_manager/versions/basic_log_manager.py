@@ -279,3 +279,60 @@ class BasicLogSessionHandler(LogHandler):
         if key in self.objects_memory:
             return self.objects_memory[key]
         return None
+
+    def get_user_eventlog_vis_down_remov(self):
+        conn_logs = sqlite3.connect(self.database_path)
+        curs_logs = conn_logs.cursor()
+        user_log_vis = {}
+
+        cur = curs_logs.execute("SELECT USER_ID, LOG_NAME FROM USER_LOG_VISIBILITY")
+        for res in cur.fetchall():
+            user = str(res[0])
+            log = str(res[1])
+            if user not in user_log_vis:
+                user_log_vis[user] = {}
+            if log not in user_log_vis[user]:
+                user_log_vis[user][log] = {"visibility": False, "downloadable": False, "removable": False}
+            user_log_vis[user][log]["visibility"] = True
+
+        cur = curs_logs.execute("SELECT USER_ID, LOG_NAME FROM USER_LOG_REMOVAL")
+        for res in cur.fetchall():
+            user = str(res[0])
+            log = str(res[1])
+            if user not in user_log_vis:
+                user_log_vis[user] = {}
+            if log not in user_log_vis[user]:
+                user_log_vis[user][log] = {"visibility": False, "downloadable": False, "removable": False}
+            user_log_vis[user][log]["downloadable"] = True
+
+        cur = curs_logs.execute("SELECT USER_ID, LOG_NAME FROM USER_LOG_REMOVAL")
+        for res in cur.fetchall():
+            user = str(res[0])
+            log = str(res[1])
+            if user not in user_log_vis:
+                user_log_vis[user] = {}
+            if log not in user_log_vis[user]:
+                user_log_vis[user][log] = {"visibility": False, "downloadable": False, "removable": False}
+            user_log_vis[user][log]["removable"] = True
+
+        return user_log_vis
+
+    def add_user_eventlog_visibility(self, user, event_log):
+        print("add_user_eventlog_visibility "+str(user)+" "+str(event_log))
+        pass
+
+    def remove_user_eventlog_visibility(self, user, event_log):
+        print("remove_user_eventlog_visibility "+str(user)+" "+str(event_log))
+        pass
+
+    def add_user_eventlog_downloadable(self, user, event_log):
+        print("add_user_eventlog_downloadable "+str(user)+" "+str(event_log))
+        pass
+
+    def remove_user_eventlog_downloadable(self, user, event_log):
+        print("remove_user_eventlog_downloadable "+str(user)+" "+str(event_log))
+        pass
+
+    def add_user_eventlog_removable(self, user, event_log):
+        print("add_user_eventlog_removable "+str(user)+" "+str(event_log))
+        pass
