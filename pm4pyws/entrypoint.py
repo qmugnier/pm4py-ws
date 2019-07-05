@@ -943,7 +943,7 @@ def remove_filter():
 def get_user_log_visibilities():
     clean_expired_sessions()
 
-    user_log_visibility = {}
+    user_log_vis = {}
 
     # reads the session
     session = request.args.get('session', type=str)
@@ -953,6 +953,6 @@ def get_user_log_visibilities():
         is_admin = lh.check_is_admin(this_user)
 
         if is_admin:
-            user_log_visibility = lh.get_user_eventlog_vis_down_remov()
+            sorted_users, sorted_logs, user_log_vis = lh.get_user_eventlog_vis_down_remov()
 
-    return jsonify(user_log_visibility)
+    return jsonify({"sorted_users": sorted_users, "sorted_logs": sorted_logs, "user_log_visibility": user_log_vis})

@@ -283,7 +283,24 @@ class BasicLogSessionHandler(LogHandler):
     def get_user_eventlog_vis_down_remov(self):
         conn_logs = sqlite3.connect(self.database_path)
         curs_logs = conn_logs.cursor()
+
+        admin_list = []
         user_log_vis = {}
+        all_logs = set()
+
+        cur = curs_logs.execute("SELECT LOG_NAME, LOG_NAME FROM EVENT_LOGS")
+        for res in cur.fetchall():
+            all_logs.add(str(res[0]))
+
+        cur = curs_logs.execute("SELECT USER_ID, USER_ID FROM ADMINS")
+        for res in cur.fetchall():
+            admin_list.append(str(res[0]))
+
+        cur = curs_logs.execute("SELECT USER_ID, USER_ID FROM OTHER_USERS")
+        for res in cur.fetchall():
+            user = str(res[0])
+            if user not in user_log_vis:
+                user_log_vis[user] = {}
 
         cur = curs_logs.execute("SELECT USER_ID, LOG_NAME FROM USER_LOG_VISIBILITY")
         for res in cur.fetchall():
@@ -315,7 +332,15 @@ class BasicLogSessionHandler(LogHandler):
                 user_log_vis[user][log] = {"visibility": False, "downloadable": False, "removable": False}
             user_log_vis[user][log]["removable"] = True
 
-        return user_log_vis
+        for user in user_log_vis:
+            for log in all_logs:
+                if log not in user_log_vis[user]:
+                    user_log_vis[user][log] = {"visibility": False, "downloadable": False, "removable": False}
+
+        sorted_users = sorted(list(user_log_vis.keys()))
+        sorted_logs = sorted(list(all_logs))
+
+        return sorted_users, sorted_logs, user_log_vis
 
     def add_user_eventlog_visibility(self, user, event_log):
         print("add_user_eventlog_visibility "+str(user)+" "+str(event_log))
