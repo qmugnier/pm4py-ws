@@ -16,9 +16,9 @@ from pm4pyws.requests_logging import factory as logging_factory
 import logging
 
 ex = logging_factory.apply()
-lh = session_manager_factory.apply(ex)
 um = user_iam_factory.apply(ex)
-
+lh = session_manager_factory.apply(ex)
+lh.set_user_management(um)
 
 class Commons:
     semaphore_matplot = Semaphore(1)

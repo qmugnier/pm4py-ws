@@ -19,12 +19,25 @@ class BasicLogSessionHandler(LogHandler):
         self.objects_memory = {}
         self.objects_timestamp = {}
 
+        self.user_management = None
+
         conn_logs = sqlite3.connect(self.database_path)
         curs_logs = conn_logs.cursor()
         curs_logs.execute("DELETE FROM EVENT_LOGS WHERE IS_TEMPORARY = 1")
         conn_logs.commit()
 
         LogHandler.__init__(self, ex)
+
+    def set_user_management(self, um):
+        """
+        Sets the user management
+
+        Parameters
+        ------------
+        um
+            User management
+        """
+        self.user_management = um
 
     def remove_unneeded_sessions(self, all_sessions):
         """
@@ -284,6 +297,11 @@ class BasicLogSessionHandler(LogHandler):
         conn_logs = sqlite3.connect(self.database_path)
         curs_logs = conn_logs.cursor()
 
+        users = self.user_management.get_all_users()
+
+        print("USERS=")
+        print(users)
+
         admin_list = []
         user_log_vis = {}
         all_logs = set()
@@ -295,6 +313,10 @@ class BasicLogSessionHandler(LogHandler):
         cur = curs_logs.execute("SELECT USER_ID, USER_ID FROM ADMINS")
         for res in cur.fetchall():
             admin_list.append(str(res[0]))
+
+        for user in users:
+            if user not in user_log_vis:
+                user_log_vis[user] = {}
 
         cur = curs_logs.execute("SELECT USER_ID, USER_ID FROM OTHER_USERS")
         for res in cur.fetchall():
@@ -332,6 +354,11 @@ class BasicLogSessionHandler(LogHandler):
                 user_log_vis[user][log] = {"visibility": False, "downloadable": False, "removable": False}
             user_log_vis[user][log]["removable"] = True
 
+        # remove admins
+        for adm in admin_list:
+            if adm in user_log_vis:
+                del user_log_vis[adm]
+
         for user in user_log_vis:
             for log in all_logs:
                 if log not in user_log_vis[user]:
@@ -339,6 +366,8 @@ class BasicLogSessionHandler(LogHandler):
 
         sorted_users = sorted(list(user_log_vis.keys()))
         sorted_logs = sorted(list(all_logs))
+
+        conn_logs.close()
 
         return sorted_users, sorted_logs, user_log_vis
 
