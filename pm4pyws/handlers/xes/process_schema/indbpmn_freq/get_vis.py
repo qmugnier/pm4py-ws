@@ -19,6 +19,9 @@ from pm4pyws.util import constants
 
 from pm4pybpmn.objects.conversion.petri_to_bpmn import factory as petri_to_bpmn
 from pm4pybpmn.visualization.bpmn import factory as bpmn_vis_factory
+from pm4pybpmn.visualization.bpmn.util import bpmn_embedding
+from pm4pybpmn.objects.bpmn.util import bpmn_diagram_layouter
+from pm4pybpmn.visualization.bpmn.util import convert_performance_map
 
 
 def apply(log, parameters=None):
@@ -70,7 +73,10 @@ def apply(log, parameters=None):
     aggregated_statistics = token_decoration.get_decorations(log, net, im, fm,
                                                              parameters=parameters, measure="frequency")
 
-    bpmn_graph = bpmn_vis_factory.apply_embedding(bpmn_graph, variant="frequency", aggregated_statistics=aggregated_statistics)
+    bpmn_aggreg_statistics = convert_performance_map.convert_performance_map_to_bpmn(aggregated_statistics,
+                                                                                     inv_el_corr)
+    bpmn_graph = bpmn_embedding.embed_info_into_bpmn(bpmn_graph, bpmn_aggreg_statistics, "frequency")
+    bpmn_graph = bpmn_diagram_layouter.apply(bpmn_graph)
     bpmn_string = bpmn_exporter.get_string_from_bpmn(bpmn_graph)
 
     gviz = bpmn_vis_factory.apply_petri(net, im, fm, aggregated_statistics=aggregated_statistics, variant="frequency", parameters={"format": "svg"})

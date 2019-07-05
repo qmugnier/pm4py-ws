@@ -21,7 +21,9 @@ from pm4pyws.util import constants
 
 from pm4pybpmn.objects.conversion.petri_to_bpmn import factory as petri_to_bpmn
 from pm4pybpmn.visualization.bpmn import factory as bpmn_vis_factory
-
+from pm4pybpmn.visualization.bpmn.util import bpmn_embedding
+from pm4pybpmn.objects.bpmn.util import bpmn_diagram_layouter
+from pm4pybpmn.visualization.bpmn.util import convert_performance_map
 
 def apply(dataframe, parameters=None):
     """
@@ -69,7 +71,10 @@ def apply(dataframe, parameters=None):
                                                                       activities_count,
                                                                       variant="performance")
 
-    bpmn_graph = bpmn_vis_factory.apply_embedding(bpmn_graph, variant="performance", aggregated_statistics=aggregated_statistics)
+    bpmn_aggreg_statistics = convert_performance_map.convert_performance_map_to_bpmn(aggregated_statistics,
+                                                                                     inv_el_corr)
+    bpmn_graph = bpmn_embedding.embed_info_into_bpmn(bpmn_graph, bpmn_aggreg_statistics, "performance")
+    bpmn_graph = bpmn_diagram_layouter.apply(bpmn_graph)
     bpmn_string = bpmn_exporter.get_string_from_bpmn(bpmn_graph)
 
     gviz = bpmn_vis_factory.apply_petri(net, im, fm, aggregated_statistics=aggregated_statistics, variant="performance", parameters={"format": "svg"})
