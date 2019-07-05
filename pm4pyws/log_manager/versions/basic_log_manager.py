@@ -299,9 +299,6 @@ class BasicLogSessionHandler(LogHandler):
 
         users = self.user_management.get_all_users()
 
-        print("USERS=")
-        print(users)
-
         admin_list = []
         user_log_vis = {}
         all_logs = set()
@@ -334,7 +331,7 @@ class BasicLogSessionHandler(LogHandler):
                 user_log_vis[user][log] = {"visibility": False, "downloadable": False, "removable": False}
             user_log_vis[user][log]["visibility"] = True
 
-        cur = curs_logs.execute("SELECT USER_ID, LOG_NAME FROM USER_LOG_REMOVAL")
+        cur = curs_logs.execute("SELECT USER_ID, LOG_NAME FROM USER_LOG_DOWNLOADABLE")
         for res in cur.fetchall():
             user = str(res[0])
             log = str(res[1])
