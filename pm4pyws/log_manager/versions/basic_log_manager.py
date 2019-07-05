@@ -369,25 +369,76 @@ class BasicLogSessionHandler(LogHandler):
         return sorted_users, sorted_logs, user_log_vis
 
     def add_user_eventlog_visibility(self, user, event_log):
-        print("add_user_eventlog_visibility "+str(user)+" "+str(event_log))
-        pass
+        print("start add_user_eventlog_visibility "+str(user)+" "+str(event_log))
+        conn_logs = sqlite3.connect(self.database_path)
+        curs_logs = conn_logs.cursor()
+
+        curs_logs.execute("DELETE FROM USER_LOG_VISIBILITY WHERE USER_ID = ? AND LOG_NAME = ?", (user, event_log))
+        curs_logs.execute("INSERT INTO USER_LOG_VISIBILITY VALUES (?,?)", (user, event_log))
+
+        conn_logs.commit()
+        conn_logs.close()
+
+        print("end add_user_eventlog_visibility "+str(user)+" "+str(event_log))
+
 
     def remove_user_eventlog_visibility(self, user, event_log):
-        print("remove_user_eventlog_visibility "+str(user)+" "+str(event_log))
-        pass
+        print("start remove_user_eventlog_visibility "+str(user)+" "+str(event_log))
+        conn_logs = sqlite3.connect(self.database_path)
+        curs_logs = conn_logs.cursor()
+
+        curs_logs.execute("DELETE FROM USER_LOG_VISIBILITY WHERE USER_ID = ? AND LOG_NAME = ?", (user, event_log))
+
+        conn_logs.commit()
+        conn_logs.close()
+        print("end remove_user_eventlog_visibility "+str(user)+" "+str(event_log))
 
     def add_user_eventlog_downloadable(self, user, event_log):
-        print("add_user_eventlog_downloadable "+str(user)+" "+str(event_log))
-        pass
+        print("start add_user_eventlog_downloadable "+str(user)+" "+str(event_log))
+        conn_logs = sqlite3.connect(self.database_path)
+        curs_logs = conn_logs.cursor()
+
+        curs_logs.execute("DELETE FROM USER_LOG_DOWNLOADABLE WHERE USER_ID = ? AND LOG_NAME = ?", (user, event_log))
+        curs_logs.execute("INSERT INTO USER_LOG_DOWNLOADABLE VALUES (?,?)", (user, event_log))
+
+        conn_logs.commit()
+        conn_logs.close()
+
+        print("end add_user_eventlog_downloadable "+str(user)+" "+str(event_log))
 
     def remove_user_eventlog_downloadable(self, user, event_log):
-        print("remove_user_eventlog_downloadable "+str(user)+" "+str(event_log))
-        pass
+        print("start remove_user_eventlog_downloadable "+str(user)+" "+str(event_log))
+        conn_logs = sqlite3.connect(self.database_path)
+        curs_logs = conn_logs.cursor()
+
+        curs_logs.execute("DELETE FROM USER_LOG_DOWNLOADABLE WHERE USER_ID = ? AND LOG_NAME = ?", (user, event_log))
+
+        conn_logs.commit()
+        conn_logs.close()
+
+        print("end remove_user_eventlog_downloadable "+str(user)+" "+str(event_log))
 
     def add_user_eventlog_removable(self, user, event_log):
-        print("add_user_eventlog_removable "+str(user)+" "+str(event_log))
-        pass
+        print("start add_user_eventlog_removable "+str(user)+" "+str(event_log))
+        conn_logs = sqlite3.connect(self.database_path)
+        curs_logs = conn_logs.cursor()
+
+        curs_logs.execute("DELETE FROM USER_LOG_REMOVAL WHERE USER_ID = ? AND LOG_NAME = ?", (user, event_log))
+        curs_logs.execute("INSERT INTO USER_LOG_REMOVAL VALUES (?,?)", (user, event_log))
+
+        conn_logs.commit()
+        conn_logs.close()
+
+        print("end add_user_eventlog_removable "+str(user)+" "+str(event_log))
 
     def remove_user_eventlog_removable(self, user, event_log):
-        print("remove_user_eventlog_removable "+str(user)+" "+str(event_log))
-        pass
+        print("start remove_user_eventlog_removable "+str(user)+" "+str(event_log))
+        conn_logs = sqlite3.connect(self.database_path)
+        curs_logs = conn_logs.cursor()
+
+        curs_logs.execute("DELETE FROM USER_LOG_REMOVAL WHERE USER_ID = ? AND LOG_NAME = ?", (user, event_log))
+
+        conn_logs.commit()
+        conn_logs.close()
+
+        print("end remove_user_eventlog_removable "+str(user)+" "+str(event_log))
