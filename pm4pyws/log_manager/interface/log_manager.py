@@ -205,3 +205,6 @@ class LogHandler(object):
 
     def add_user_eventlog_removable(self, user, event_log):
         raise Exception("log_manager add_user_eventlog_removable not implemented!")
+
+    def remove_user_eventlog_removable(self, user, event_log):
+        raise Exception("log_manager add_user_eventlog_removable not implemented!")

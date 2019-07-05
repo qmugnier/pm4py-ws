@@ -956,3 +956,129 @@ def get_user_log_visibilities():
             sorted_users, sorted_logs, user_log_vis = lh.get_user_eventlog_vis_down_remov()
 
     return jsonify({"sorted_users": sorted_users, "sorted_logs": sorted_logs, "user_log_visibility": user_log_vis})
+
+
+@PM4PyServices.app.route("/addUserLogVisibility", methods=["GET"])
+def add_user_log_visibility():
+    clean_expired_sessions()
+
+    # reads the session
+    session = request.args.get('session', type=str)
+
+    if check_session_validity(session):
+        this_user = get_user_from_session(session)
+        is_admin = lh.check_is_admin(this_user)
+
+        if is_admin:
+            user = request.args.get('user', type=str)
+            process = request.args.get('process', type=str)
+
+            if is_admin:
+                lh.add_user_eventlog_visibility(user, process)
+
+    return jsonify({})
+
+
+@PM4PyServices.app.route("/removeUserLogVisibility", methods=["GET"])
+def remove_user_log_visibility():
+    clean_expired_sessions()
+
+    # reads the session
+    session = request.args.get('session', type=str)
+
+    if check_session_validity(session):
+        this_user = get_user_from_session(session)
+        is_admin = lh.check_is_admin(this_user)
+
+        if is_admin:
+            user = request.args.get('user', type=str)
+            process = request.args.get('process', type=str)
+
+            if is_admin:
+                lh.remove_user_eventlog_visibility(user, process)
+
+    return jsonify({})
+
+
+@PM4PyServices.app.route("/addUserLogDownloadable", methods=["GET"])
+def add_user_log_downloadable():
+    clean_expired_sessions()
+
+    # reads the session
+    session = request.args.get('session', type=str)
+
+    if check_session_validity(session):
+        this_user = get_user_from_session(session)
+        is_admin = lh.check_is_admin(this_user)
+
+        if is_admin:
+            user = request.args.get('user', type=str)
+            process = request.args.get('process', type=str)
+
+            if is_admin:
+                lh.add_user_eventlog_downloadable(user, process)
+
+    return jsonify({})
+
+
+@PM4PyServices.app.route("/removeUserLogDownloadable", methods=["GET"])
+def remove_user_log_downloadable():
+    clean_expired_sessions()
+
+    # reads the session
+    session = request.args.get('session', type=str)
+
+    if check_session_validity(session):
+        this_user = get_user_from_session(session)
+        is_admin = lh.check_is_admin(this_user)
+
+        if is_admin:
+            user = request.args.get('user', type=str)
+            process = request.args.get('process', type=str)
+
+            if is_admin:
+                lh.remove_user_eventlog_downloadable(user, process)
+
+    return jsonify({})
+
+
+@PM4PyServices.app.route("/addUserLogRemovable", methods=["GET"])
+def add_user_log_removable():
+    clean_expired_sessions()
+
+    # reads the session
+    session = request.args.get('session', type=str)
+
+    if check_session_validity(session):
+        this_user = get_user_from_session(session)
+        is_admin = lh.check_is_admin(this_user)
+
+        if is_admin:
+            user = request.args.get('user', type=str)
+            process = request.args.get('process', type=str)
+
+            if is_admin:
+                lh.add_user_eventlog_removable(user, process)
+
+    return jsonify({})
+
+
+@PM4PyServices.app.route("/removeUserLogRemovable", methods=["GET"])
+def remove_user_log_removable():
+    clean_expired_sessions()
+
+    # reads the session
+    session = request.args.get('session', type=str)
+
+    if check_session_validity(session):
+        this_user = get_user_from_session(session)
+        is_admin = lh.check_is_admin(this_user)
+
+        if is_admin:
+            user = request.args.get('user', type=str)
+            process = request.args.get('process', type=str)
+
+            if is_admin:
+                lh.remove_user_eventlog_removable(user, process)
+
+    return jsonify({})

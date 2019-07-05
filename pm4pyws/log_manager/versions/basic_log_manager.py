@@ -387,3 +387,7 @@ class BasicLogSessionHandler(LogHandler):
     def add_user_eventlog_removable(self, user, event_log):
         print("add_user_eventlog_removable "+str(user)+" "+str(event_log))
         pass
+
+    def remove_user_eventlog_removable(self, user, event_log):
+        print("remove_user_eventlog_removable "+str(user)+" "+str(event_log))
+        pass
