@@ -208,3 +208,9 @@ class LogHandler(object):
 
     def remove_user_eventlog_removable(self, user, event_log):
         raise Exception("log_manager add_user_eventlog_removable not implemented!")
+
+    def check_log_is_removable(self, log):
+        raise Exception("log_manager check_log_is_removable not implemented!")
+
+    def can_delete(self, user, log):
+        raise Exception("log_manager can_delete not implemented!")

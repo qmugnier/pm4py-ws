@@ -442,3 +442,50 @@ class BasicLogSessionHandler(LogHandler):
         conn_logs.close()
 
         print("end remove_user_eventlog_removable "+str(user)+" "+str(event_log))
+
+    def check_log_is_removable(self, log):
+        res = False
+        conn_logs = sqlite3.connect(self.database_path)
+        curs_logs = conn_logs.cursor()
+
+        curs_logs.execute("SELECT * FROM EVENT_LOGS WHERE LOG_NAME = ? AND LOG_NAME = ? AND CAN_REMOVED = 1",(log, log))
+
+        cur = curs_logs.fetchall()
+
+        if cur is not None:
+            for r in cur:
+                res = True
+                break
+
+        conn_logs.commit()
+        conn_logs.close()
+
+        return res
+
+    def can_delete(self, user, log):
+        res = False
+        is_admin = self.check_is_admin(user)
+        is_removable = self.check_log_is_removable(log)
+
+        if not is_removable:
+            return False
+
+        if is_admin:
+            res = True
+
+        conn_logs = sqlite3.connect(self.database_path)
+        curs_logs = conn_logs.cursor()
+
+        curs_logs.execute("SELECT * FROM USER_LOG_REMOVAL WHERE USER_ID = ? AND LOG_NAME = ?", (user, log))
+
+        cur = curs_logs.fetchall()
+
+        if cur is not None:
+            for r in cur:
+                res = True
+                break
+
+        conn_logs.commit()
+        conn_logs.close()
+
+        return res

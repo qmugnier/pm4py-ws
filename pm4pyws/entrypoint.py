@@ -583,7 +583,8 @@ def get_logs_list_advanced():
         for key in all_keys:
             if lh.check_user_log_visibility(user, key):
                 can_download = lh.check_user_enabled_download(user, key)
-                available_keys.append({"log_name": key, "can_download": can_download})
+                can_delete = lh.can_delete(user, key)
+                available_keys.append({"log_name": key, "can_download": can_download, "can_delete": can_delete})
 
         logging.info("get_logs_list_advanced start session=" + str(session) + " user=" + str(user))
 
