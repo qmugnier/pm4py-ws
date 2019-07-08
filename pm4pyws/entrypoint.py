@@ -20,6 +20,7 @@ um = user_iam_factory.apply(ex)
 lh = session_manager_factory.apply(ex)
 lh.set_user_management(um)
 
+
 class Commons:
     semaphore_matplot = Semaphore(1)
 
@@ -184,7 +185,8 @@ def get_process_schema():
                         variant=variant,
                         parameters=parameters)
                     lh.save_object_memory(ps_repr, [base64, model, format, this_handler, activities, start_activities,
-                                                    end_activities, gviz_base64, graph_rep, type_of_model, decoration, second_model, second_format])
+                                                    end_activities, gviz_base64, graph_rep, type_of_model, decoration,
+                                                    second_model, second_format])
                 if model is not None:
                     model = model.decode('utf-8')
                 dictio = {"base64": base64.decode('utf-8'), "model": model, "format": format, "handler": this_handler,
@@ -198,7 +200,8 @@ def get_process_schema():
             Commons.semaphore_matplot.release()
 
             logging.info(
-                "get_process_schema complete session=" + str(session) + " process=" + str(process)+" user="+str(user))
+                "get_process_schema complete session=" + str(session) + " process=" + str(process) + " user=" + str(
+                    user))
     ret = jsonify(dictio)
     return ret
 
@@ -223,7 +226,9 @@ def get_numeric_attribute_graph():
     # reads the requested attribute
     attribute = request.args.get('attribute', type=str)
 
-    logging.info("get_numeric_attribute_graph start session=" + str(session) + " process=" + str(process)+" attribute="+str(attribute))
+    logging.info(
+        "get_numeric_attribute_graph start session=" + str(session) + " process=" + str(process) + " attribute=" + str(
+            attribute))
 
     dictio = {}
     if check_session_validity(session):
@@ -241,8 +246,9 @@ def get_numeric_attribute_graph():
             Commons.semaphore_matplot.release()
 
         logging.info(
-            "get_numeric_attribute_graph start session=" + str(session) + " process=" + str(process) + " attribute=" + str(
-                attribute)+" user="+str(user))
+            "get_numeric_attribute_graph start session=" + str(session) + " process=" + str(
+                process) + " attribute=" + str(
+                attribute) + " user=" + str(user))
 
     ret = jsonify(dictio)
     return ret
@@ -282,7 +288,8 @@ def get_case_duration():
                 dictio = {"base64": "", "gviz_base64": "", "points": []}
             Commons.semaphore_matplot.release()
 
-        logging.info("get_case_duration start session=" + str(session) + " process=" + str(process)+" user="+str(user))
+        logging.info(
+            "get_case_duration start session=" + str(session) + " process=" + str(process) + " user=" + str(user))
 
     ret = jsonify(dictio)
     return ret
@@ -323,7 +330,8 @@ def get_events_per_time():
                 dictio = {"base64": "", "gviz_base64": "", "points": []}
             Commons.semaphore_matplot.release()
 
-        logging.info("get_events_per_time complete session=" + str(session) + " process=" + str(process)+" user="+str(user))
+        logging.info(
+            "get_events_per_time complete session=" + str(session) + " process=" + str(process) + " user=" + str(user))
 
     ret = jsonify(dictio)
 
@@ -359,7 +367,7 @@ def get_sna():
                 sna = lh.get_handler_for_process_and_session(process, session).get_sna(variant=metric, parameters={
                     "weight_threshold": threshold})
 
-            logging.info("get_sna complete session=" + str(session) + " process=" + str(process)+" user="+str(user))
+            logging.info("get_sna complete session=" + str(session) + " process=" + str(process) + " user=" + str(user))
     except:
         logging.error(traceback.format_exc())
         sna = ""
@@ -394,7 +402,8 @@ def get_all_variants():
             variants = lh.get_handler_for_process_and_session(process, session).get_variant_statistics()
             dictio = {"variants": variants}
 
-        logging.info("get_all_variants complete session=" + str(session) + " process=" + str(process)+" user="+str(user))
+        logging.info(
+            "get_all_variants complete session=" + str(session) + " process=" + str(process) + " user=" + str(user))
 
     ret = jsonify(dictio)
 
@@ -418,7 +427,7 @@ def get_all_cases():
     process = request.args.get('process', default='receipt', type=str)
     variant = request.args.get('variant', type=str)
 
-    logging.info("get_events start session=" + str(session) + " process=" + str(process)+" variant="+str(variant))
+    logging.info("get_events start session=" + str(session) + " process=" + str(process) + " variant=" + str(variant))
 
     dictio = {}
 
@@ -433,7 +442,8 @@ def get_all_cases():
             dictio = {"cases": cases_list}
 
         logging.info(
-            "get_events complete session=" + str(session) + " process=" + str(process) + " variant=" + str(variant)+" user="+str(user))
+            "get_events complete session=" + str(session) + " process=" + str(process) + " variant=" + str(
+                variant) + " user=" + str(user))
 
     ret = jsonify(dictio)
     return ret
@@ -473,7 +483,7 @@ def get_events():
                 i = i + 1
             dictio = {"events": events}
 
-        logging.info("get_events complete session=" + str(session) + " process=" + str(process)+" user="+str(user))
+        logging.info("get_events complete session=" + str(session) + " process=" + str(process) + " user=" + str(user))
 
     ret = jsonify(dictio)
     return ret
@@ -504,7 +514,7 @@ def load_log_from_path():
                 print("log_name = ", log_name, "log_path = ", log_path)
                 lh.load_log_static(log_name, log_path, parameters=parameters)
 
-                logging.info("load_log_from_path complete session=" + str(session)+" user="+str(user))
+                logging.info("load_log_from_path complete session=" + str(session) + " user=" + str(user))
 
                 return "OK"
         except:
@@ -541,7 +551,7 @@ def get_logs_list():
             if lh.check_user_log_visibility(user, key):
                 available_keys.append(key)
 
-        logging.info("get_logs_list complete session=" + str(session)+" user="+str(user))
+        logging.info("get_logs_list complete session=" + str(session) + " user=" + str(user))
 
     return jsonify({"logs": available_keys})
 
@@ -575,7 +585,7 @@ def get_logs_list_advanced():
                 can_download = lh.check_user_enabled_download(user, key)
                 available_keys.append({"log_name": key, "can_download": can_download})
 
-        logging.info("get_logs_list_advanced start session=" + str(session)+" user="+str(user))
+        logging.info("get_logs_list_advanced start session=" + str(session) + " user=" + str(user))
 
     return jsonify({"logs": available_keys})
 
@@ -615,7 +625,9 @@ def do_transient_analysis():
                 logging.error(traceback.format_exc())
             Commons.semaphore_matplot.release()
 
-        logging.info("do_transient_analysis complete session=" + str(session) + " process=" + str(process)+" user="+str(user))
+        logging.info(
+            "do_transient_analysis complete session=" + str(session) + " process=" + str(process) + " user=" + str(
+                user))
 
     ret = jsonify(dictio)
     return ret
@@ -659,7 +671,8 @@ def get_log_summary():
                       "this_events_number": this_events_number, "ancestor_variants_number": ancestor_variants_number,
                       "ancestor_cases_number": ancestor_cases_number, "ancestor_events_number": ancestor_events_number}
 
-        logging.info("get_log_summary complete session=" + str(session) + " process=" + str(process)+" user="+str(user))
+        logging.info(
+            "get_log_summary complete session=" + str(session) + " process=" + str(process) + " user=" + str(user))
 
     ret = jsonify(dictio)
     return ret
@@ -818,7 +831,8 @@ def get_attributes_list():
             attributes_list = sorted(
                 list(lh.get_handler_for_process_and_session(process, session).get_attributes_list()))
             logging.info(
-                "get_attributes_list complete session=" + str(session) + " process=" + str(process) + " user=" + str(user))
+                "get_attributes_list complete session=" + str(session) + " process=" + str(process) + " user=" + str(
+                    user))
 
             return jsonify({"attributes_list": attributes_list})
 
@@ -881,7 +895,7 @@ def check_session_service():
         # reads the requested process name
         process = request.args.get('process', default=None, type=str)
 
-        logging.info("check_session_service start session=" + str(session)+" process="+str(process))
+        logging.info("check_session_service start session=" + str(session) + " process=" + str(process))
 
         if check_session_validity(session):
             user = get_user_from_session(session)
@@ -906,7 +920,6 @@ def check_session_service():
                  "can_upload": can_upload})
         else:
             return jsonify({"status": "FAIL", "sessionEnabled": True})
-
 
     return jsonify(
         {"status": "OK", "sessionEnabled": False, "can_download": True, "can_upload": True, "is_admin": True})
@@ -992,7 +1005,8 @@ def get_alignments():
                 logging.error(traceback.format_exc())
                 pass
 
-            logging.info("get_alignments complete session=" + str(session) + " process=" + str(process)+" user="+str(user))
+            logging.info(
+                "get_alignments complete session=" + str(session) + " process=" + str(process) + " user=" + str(user))
 
             Commons.semaphore_matplot.release()
 
@@ -1031,7 +1045,7 @@ def add_filter():
             new_handler = lh.get_handler_for_process_and_session(process, session).add_filter(filter, all_filters)
             lh.set_handler_for_process_and_session(process, session, new_handler)
 
-            logging.info("add_filter start session=" + str(session) + " process=" + str(process)+" user="+str(user))
+            logging.info("add_filter start session=" + str(session) + " process=" + str(process) + " user=" + str(user))
 
             return jsonify({"status": "OK"})
 
@@ -1055,7 +1069,7 @@ def remove_filter():
     # reads the requested process name
     process = request.args.get('process', default='receipt', type=str)
 
-    logging.info("remove_filter start session=" + str(session)+" process="+str(process))
+    logging.info("remove_filter start session=" + str(session) + " process=" + str(process))
 
     if check_session_validity(session):
         user = get_user_from_session(session)
@@ -1068,7 +1082,8 @@ def remove_filter():
             new_handler = lh.get_handler_for_process_and_session(process, session).remove_filter(filter, all_filters)
             lh.set_handler_for_process_and_session(process, session, new_handler)
 
-            logging.info("remove_filter complete session=" + str(session) + " process=" + str(process)+" user="+str(user))
+            logging.info(
+                "remove_filter complete session=" + str(session) + " process=" + str(process) + " user=" + str(user))
 
             return jsonify({"status": "OK"})
 
@@ -1117,7 +1132,8 @@ def add_user_log_visibility():
 
             lh.add_user_eventlog_visibility(user, process)
 
-            logging.info("add_user_log_visibility complete session=" + str(session) + " this_user=" + str(this_user)+" user="+str(user)+" process="+str(process))
+            logging.info("add_user_log_visibility complete session=" + str(session) + " this_user=" + str(
+                this_user) + " user=" + str(user) + " process=" + str(process))
 
     return jsonify({})
 
@@ -1141,7 +1157,8 @@ def remove_user_log_visibility():
 
             lh.remove_user_eventlog_visibility(user, process)
 
-            logging.info("remove_user_log_visibility complete session=" + str(session) + " this_user=" + str(this_user)+" user="+str(user)+" process="+str(process))
+            logging.info("remove_user_log_visibility complete session=" + str(session) + " this_user=" + str(
+                this_user) + " user=" + str(user) + " process=" + str(process))
 
     return jsonify({})
 
@@ -1165,7 +1182,8 @@ def add_user_log_downloadable():
 
             lh.add_user_eventlog_downloadable(user, process)
 
-            logging.info("add_user_log_downloadable complete session=" + str(session) + " this_user=" + str(this_user)+" user="+str(user)+" process="+str(process))
+            logging.info("add_user_log_downloadable complete session=" + str(session) + " this_user=" + str(
+                this_user) + " user=" + str(user) + " process=" + str(process))
 
     return jsonify({})
 
@@ -1189,7 +1207,8 @@ def remove_user_log_downloadable():
 
             lh.remove_user_eventlog_downloadable(user, process)
 
-            logging.info("remove_user_log_downloadable complete session=" + str(session) + " this_user=" + str(this_user)+" user="+str(user)+" process="+str(process))
+            logging.info("remove_user_log_downloadable complete session=" + str(session) + " this_user=" + str(
+                this_user) + " user=" + str(user) + " process=" + str(process))
 
     return jsonify({})
 
@@ -1213,7 +1232,8 @@ def add_user_log_removable():
 
             lh.add_user_eventlog_removable(user, process)
 
-            logging.info("add_user_log_removable complete session="+str(session)+" this_user="+str(this_user)+" user="+str(user)+" process="+str(process))
+            logging.info("add_user_log_removable complete session=" + str(session) + " this_user=" + str(
+                this_user) + " user=" + str(user) + " process=" + str(process))
 
     return jsonify({})
 
@@ -1237,7 +1257,8 @@ def remove_user_log_removable():
 
             lh.remove_user_eventlog_removable(user, process)
 
-            logging.info("remove_user_log_removable complete session="+str(session)+" this_user="+str(this_user)+" user="+str(user)+" process="+str(process))
+            logging.info("remove_user_log_removable complete session=" + str(session) + " this_user=" + str(
+                this_user) + " user=" + str(user) + " process=" + str(process))
 
     return jsonify({})
 
@@ -1254,4 +1275,5 @@ def check_versions():
 
     logging.info("check_versions complete")
 
-    return {"pm4py": str(pm4py.__version__), "pm4pyws": str(pm4pyws.__version__), "pm4pybpmn": str(pm4pybpmn.__version__)}
+    return {"pm4py": str(pm4py.__version__), "pm4pyws": str(pm4pyws.__version__),
+            "pm4pybpmn": str(pm4pybpmn.__version__)}
