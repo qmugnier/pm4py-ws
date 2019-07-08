@@ -1264,6 +1264,24 @@ def remove_user_log_removable():
     return jsonify({})
 
 
+@PM4PyServices.app.route("/deleteEventLog", methods=["GET"])
+def deleteEventLog():
+    clean_expired_sessions()
+
+    # reads the session
+    session = request.args.get('session', type=str)
+    # reads the requested process name
+    process = request.args.get('process', default='receipt', type=str)
+
+    if check_session_validity(session):
+        user = get_user_from_session(session)
+
+        if lh.can_delete(user, process):
+            lh.delete_log(process)
+
+    return jsonify({})
+
+
 @PM4PyServices.app.route("/checkVersions", methods=["GET"])
 def check_versions():
     clean_expired_sessions()

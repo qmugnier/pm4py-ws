@@ -489,3 +489,21 @@ class BasicLogSessionHandler(LogHandler):
         conn_logs.close()
 
         return res
+
+    def delete_log(self, log):
+        conn_logs = sqlite3.connect(self.database_path)
+        curs_logs = conn_logs.cursor()
+
+        curs_logs.execute("DELETE FROM EVENT_LOGS WHERE LOG_NAME = ? AND LOG_NAME = ?", (log,log))
+        curs_logs.execute("DELETE FROM USER_LOG_VISIBILITY WHERE LOG_NAME = ? AND LOG_NAME = ?", (log,log))
+        curs_logs.execute("DELETE FROM USER_LOG_REMOVAL WHERE LOG_NAME = ? AND LOG_NAME = ?", (log,log))
+        curs_logs.execute("DELETE FROM USER_LOG_DOWNLOADABLE WHERE LOG_NAME = ? AND LOG_NAME = ?", (log,log))
+
+        conn_logs.commit()
+        conn_logs.close()
+
+        del self.handlers[log]
+        for session in self.session_handlers:
+            if log in self.session_handlers[session]:
+                del self.session_handlers[session][log]
+
