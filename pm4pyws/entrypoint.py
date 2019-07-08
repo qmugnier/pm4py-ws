@@ -885,7 +885,7 @@ def get_all_paths():
         user = get_user_from_session(session)
         if lh.check_user_log_visibility(user, process):
             dictio = lh.get_handler_for_process_and_session(process, session).get_paths(attribute_key)
-            list_values = sorted([(",".join(x), y) for x, y in dictio.items()], key=lambda x: x[1], reverse=True)
+            list_values = sorted([("@@".join(x), y) for x, y in dictio.items()], key=lambda x: x[1], reverse=True)
             logging.info(
                 "get_all_paths complete session=" + str(session) + " process=" + str(process) + " user=" + str(
                     user))
