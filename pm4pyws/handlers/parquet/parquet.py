@@ -19,6 +19,7 @@ from pm4pyws.handlers.parquet.statistics import case_duration, events_per_time, 
 from pm4pyws.util import casestats
 from pm4pyws.handlers.parquet.filtering import factory as filtering_factory
 from pm4pyws.handlers.parquet.alignments import get_align
+from pm4py.algo.discovery.dfg.adapters.pandas import df_statistics
 
 from pm4py.objects.log.util.xes import DEFAULT_NAME_KEY, DEFAULT_TIMESTAMP_KEY
 
@@ -587,6 +588,28 @@ class ParquetHandler(object):
         for key in initial_dict:
             return_dict[str(key)] = int(initial_dict[key])
         return return_dict
+
+    def get_paths(self, attribute_key, parameters=None):
+        """
+        Gets the paths from the log
+
+        Parameters
+        -------------
+        attribute_key
+            Attribute key
+
+        Returns
+        -------------
+        paths
+            List of paths
+        """
+        if parameters is None:
+            parameters = {}
+
+        dfg = df_statistics.get_dfg_graph(self.dataframe, activity_key=attribute_key, timestamp_key=DEFAULT_TIMESTAMP_KEY,
+                                          case_id_glue=CASE_CONCEPT_NAME, sort_caseid_required=False,
+                                          sort_timestamp_along_case_id=False)
+        return dfg
 
     def get_alignments(self, petri_string, parameters=None):
         """

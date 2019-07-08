@@ -8,6 +8,8 @@ from pm4py.objects.log.importer.xes import factory as xes_importer
 from pm4py.objects.log.util import insert_classifier
 from pm4py.objects.log.util import xes
 from pm4py.statistics.traces.log import case_statistics
+from pm4py.algo.discovery.dfg import factory as dfg_factory
+
 from pm4py.util import constants
 
 from pm4pyws.handlers.xes.alignments import get_align
@@ -513,3 +515,21 @@ class XesHandler(object):
         for key in initial_dict:
             return_dict[str(key)] = int(initial_dict[key])
         return return_dict
+
+    def get_paths(self, attribute_key, parameters=None):
+        """
+        Gets the paths from the log
+
+        Parameters
+        -------------
+        attribute_key
+            Attribute key
+
+        Returns
+        -------------
+        paths
+            List of paths
+        """
+        dfg = dfg_factory.apply(self.log, parameters={constants.PARAMETER_CONSTANT_ACTIVITY_KEY: attribute_key})
+
+        return dfg

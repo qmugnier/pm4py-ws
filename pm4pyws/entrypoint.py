@@ -867,6 +867,34 @@ def get_attribute_values():
     return jsonify({"attributeValues": []})
 
 
+@PM4PyServices.app.route("/getAllPaths", methods=["GET"])
+def get_all_paths():
+    clean_expired_sessions()
+
+    # reads the session
+    session = request.args.get('session', type=str)
+    # reads the requested process name
+    process = request.args.get('process', default='receipt', type=str)
+
+    logging.info("get_all_paths start session=" + str(session) + " process=" + str(process))
+
+    # reads the requested attribute
+    attribute_key = request.args.get('attribute_key', type=str)
+
+    if check_session_validity(session):
+        user = get_user_from_session(session)
+        if lh.check_user_log_visibility(user, process):
+            dictio = lh.get_handler_for_process_and_session(process, session).get_paths(attribute_key)
+            list_values = sorted([(",".join(x), y) for x, y in dictio.items()], key=lambda x: x[1], reverse=True)
+            logging.info(
+                "get_all_paths complete session=" + str(session) + " process=" + str(process) + " user=" + str(
+                    user))
+
+            return jsonify({"paths": list_values})
+
+    return jsonify({"paths": []})
+
+
 @PM4PyServices.app.route("/loginService", methods=["GET"])
 def login_service():
     clean_expired_sessions()
