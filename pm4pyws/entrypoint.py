@@ -1082,3 +1082,18 @@ def remove_user_log_removable():
                 lh.remove_user_eventlog_removable(user, process)
 
     return jsonify({})
+
+
+@PM4PyServices.app.route("/checkVersions", methods=["GET"])
+def check_versions():
+    clean_expired_sessions()
+
+    logging.info("check_versions start")
+
+    import pm4pyws
+    import pm4py
+    import pm4pybpmn
+
+    logging.info("check_versions complete")
+
+    return {"pm4py": str(pm4py.__version__), "pm4pyws": str(pm4pyws.__version__), "pm4pybpmn": str(pm4pybpmn.__version__)}
