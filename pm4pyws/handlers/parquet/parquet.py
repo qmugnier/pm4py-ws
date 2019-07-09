@@ -139,12 +139,13 @@ class ParquetHandler(object):
             self.dataframe = csv_import_adapter.import_dataframe_from_path(path, sep=sep)
 
         if not activity_key == xes.DEFAULT_NAME_KEY:
-            self.dataframe[xes.DEFAULT_NAME_KEY] = activity_key
+            self.dataframe[xes.DEFAULT_NAME_KEY] = self.dataframe[activity_key]
         if not timestamp_key == xes.DEFAULT_TIMESTAMP_KEY:
-            self.dataframe[xes.DEFAULT_TIMESTAMP_KEY] = timestamp_key
+            self.dataframe[xes.DEFAULT_TIMESTAMP_KEY] = self.dataframe[timestamp_key]
         if not case_id_glue == CASE_CONCEPT_NAME:
-            self.dataframe[case_id_glue] = CASE_CONCEPT_NAME
+            self.dataframe[CASE_CONCEPT_NAME] = self.dataframe[case_id_glue]
         self.postloading_processing_dataframe()
+        self.dataframe[CASE_CONCEPT_NAME] = self.dataframe[CASE_CONCEPT_NAME].astype(str)
         self.reduced_dataframe = self.dataframe[[CASE_CONCEPT_NAME, self.activity_key, DEFAULT_TIMESTAMP_KEY]]
         self.build_variants_df()
         self.grouped_dataframe = self.dataframe.groupby(CASE_CONCEPT_NAME)
