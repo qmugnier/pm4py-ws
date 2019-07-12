@@ -64,4 +64,4 @@ def apply(log, parameters=None):
 
     ret_graph = get_graph.get_graph_from_petri(net, im, fm)
 
-    return svg, export_petri_as_string(net, im, fm), ".pnml", "xes", activities, start_activities, end_activities, gviz_base64, ret_graph, "inductive", "perf", None, ""
+    return svg, export_petri_as_string(net, im, fm), ".pnml", "xes", activities, start_activities, end_activities, gviz_base64, ret_graph, "inductive", "perf", None, "", activity_key

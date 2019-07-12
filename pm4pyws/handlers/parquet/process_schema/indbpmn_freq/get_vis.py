@@ -84,5 +84,5 @@ def apply(dataframe, parameters=None):
 
     ret_graph = get_graph.get_graph_from_petri(net, im, fm)
 
-    return get_base64_from_file(gviz.name), export_petri_as_string(net, im, fm), ".pnml", "parquet", activities, start_activities, end_activities, gviz_base64, ret_graph, "indbpmn", "freq", bpmn_string, ".bpmn"
+    return get_base64_from_file(gviz.name), export_petri_as_string(net, im, fm), ".pnml", "parquet", activities, start_activities, end_activities, gviz_base64, ret_graph, "indbpmn", "freq", bpmn_string, ".bpmn", activity_key
 

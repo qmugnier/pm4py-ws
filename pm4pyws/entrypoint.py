@@ -180,13 +180,14 @@ def get_process_schema():
                     decoration = saved_obj[10]
                     second_model = saved_obj[11]
                     second_format = saved_obj[12]
+                    activity_key = saved_obj[13]
                 else:
-                    base64, model, format, this_handler, activities, start_activities, end_activities, gviz_base64, graph_rep, type_of_model, decoration, second_model, second_format = handler.get_schema(
+                    base64, model, format, this_handler, activities, start_activities, end_activities, gviz_base64, graph_rep, type_of_model, decoration, second_model, second_format, activity_key = handler.get_schema(
                         variant=variant,
                         parameters=parameters)
                     lh.save_object_memory(ps_repr, [base64, model, format, this_handler, activities, start_activities,
                                                     end_activities, gviz_base64, graph_rep, type_of_model, decoration,
-                                                    second_model, second_format])
+                                                    second_model, second_format, activity_key])
                 if model is not None:
                     model = model.decode('utf-8')
                 dictio = {"base64": base64.decode('utf-8'), "model": model, "format": format, "handler": this_handler,
@@ -194,7 +195,7 @@ def get_process_schema():
                           "start_activities": start_activities, "end_activities": end_activities,
                           "gviz_base64": gviz_base64.decode('utf-8'), "graph_rep": graph_rep,
                           "type_of_model": type_of_model, "decoration": decoration,
-                          "second_model": second_model, "second_format": second_format}
+                          "second_model": second_model, "second_format": second_format, "activity_key": activity_key}
             except:
                 logging.error(traceback.format_exc())
             Commons.semaphore_matplot.release()
