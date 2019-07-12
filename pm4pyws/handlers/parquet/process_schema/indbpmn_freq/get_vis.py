@@ -79,8 +79,9 @@ def apply(dataframe, parameters=None):
     bpmn_string = bpmn_exporter.get_string_from_bpmn(bpmn_graph)
 
     gviz = bpmn_vis_factory.apply_petri(net, im, fm, aggregated_statistics=aggregated_statistics, variant="frequency", parameters={"format": "svg"})
+    gviz2 = bpmn_vis_factory.apply_petri(net, im, fm, aggregated_statistics=aggregated_statistics, variant="frequency", parameters={"format": "dot"})
 
-    gviz_base64 = base64.b64encode("".encode('utf-8'))
+    gviz_base64 = get_base64_from_file(gviz2.name)
 
     ret_graph = get_graph.get_graph_from_petri(net, im, fm)
 
