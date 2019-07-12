@@ -159,7 +159,7 @@ def get_process_schema():
                 # reads the typeOfModel
                 type_of_model = request.args.get('typeOfModel', default='dfg', type=str)
                 # reads the simplicity
-                simplicity = request.args.get('simplicity', default=0.6, type=float)
+                simplicity = request.args.get('simplicity', default=0.0, type=float)
                 variant = type_of_model + "_" + decoration
                 parameters = {"decreasingFactor": simplicity}
                 handler = lh.get_handler_for_process_and_session(process, session)
