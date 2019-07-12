@@ -25,6 +25,7 @@ from pm4py.objects.log.util.xes import DEFAULT_NAME_KEY, DEFAULT_TIMESTAMP_KEY
 
 from pm4pyws.util import format_recognition
 from pm4pyws.util.encoding_recognition import predict_encoding
+from pm4pyws.util.columns_recognition import assign_column_correspondence
 
 import pandas as pd
 
@@ -128,11 +129,11 @@ class ParquetHandler(object):
         if parameters is None:
             parameters = {}
         activity_key = parameters[
-            constants.PARAMETER_CONSTANT_ACTIVITY_KEY] if constants.PARAMETER_CONSTANT_ACTIVITY_KEY in parameters else xes.DEFAULT_NAME_KEY
+            constants.PARAMETER_CONSTANT_ACTIVITY_KEY] if constants.PARAMETER_CONSTANT_ACTIVITY_KEY in parameters else None
         timestamp_key = parameters[
-            constants.PARAMETER_CONSTANT_TIMESTAMP_KEY] if constants.PARAMETER_CONSTANT_TIMESTAMP_KEY in parameters else xes.DEFAULT_TIMESTAMP_KEY
+            constants.PARAMETER_CONSTANT_TIMESTAMP_KEY] if constants.PARAMETER_CONSTANT_TIMESTAMP_KEY in parameters else None
         case_id_glue = parameters[
-            constants.PARAMETER_CONSTANT_CASEID_KEY] if constants.PARAMETER_CONSTANT_CASEID_KEY in parameters else CASE_CONCEPT_NAME
+            constants.PARAMETER_CONSTANT_CASEID_KEY] if constants.PARAMETER_CONSTANT_CASEID_KEY in parameters else None
 
         recognized_format = format_recognition.get_format_from_csv(path)
         recognized_encoding = predict_encoding(path)
@@ -145,6 +146,8 @@ class ParquetHandler(object):
                                                                            encoding=recognized_encoding)
         else:
             self.dataframe = csv_import_adapter.import_dataframe_from_path(path, sep=sep, encoding=recognized_encoding)
+
+        case_id_glue, activity_key, timestamp_key = assign_column_correspondence(self.dataframe)
 
         if not activity_key == xes.DEFAULT_NAME_KEY:
             self.dataframe[xes.DEFAULT_NAME_KEY] = self.dataframe[activity_key]
