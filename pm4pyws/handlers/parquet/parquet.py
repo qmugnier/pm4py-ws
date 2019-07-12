@@ -24,6 +24,7 @@ from pm4py.algo.discovery.dfg.adapters.pandas import df_statistics
 from pm4py.objects.log.util.xes import DEFAULT_NAME_KEY, DEFAULT_TIMESTAMP_KEY
 
 from pm4pyws.util import format_recognition
+from pm4pyws.util.encoding_recognition import predict_encoding
 
 import pandas as pd
 
@@ -133,16 +134,17 @@ class ParquetHandler(object):
         case_id_glue = parameters[
             constants.PARAMETER_CONSTANT_CASEID_KEY] if constants.PARAMETER_CONSTANT_CASEID_KEY in parameters else CASE_CONCEPT_NAME
 
-
         recognized_format = format_recognition.get_format_from_csv(path)
+        recognized_encoding = predict_encoding(path)
 
         sep = parameters["sep"] if "sep" in parameters else recognized_format.delimiter
         quotechar = parameters["quotechar"] if "quotechar" in parameters else recognized_format.quotechar
 
         if quotechar is not None:
-            self.dataframe = csv_import_adapter.import_dataframe_from_path(path, sep=sep, quotechar=quotechar)
+            self.dataframe = csv_import_adapter.import_dataframe_from_path(path, sep=sep, quotechar=quotechar,
+                                                                           encoding=recognized_encoding)
         else:
-            self.dataframe = csv_import_adapter.import_dataframe_from_path(path, sep=sep)
+            self.dataframe = csv_import_adapter.import_dataframe_from_path(path, sep=sep, encoding=recognized_encoding)
 
         if not activity_key == xes.DEFAULT_NAME_KEY:
             self.dataframe[xes.DEFAULT_NAME_KEY] = self.dataframe[activity_key]
@@ -179,7 +181,7 @@ class ParquetHandler(object):
         else:
             self.dataframe = self.dataframe.sort_values(CASE_CONCEPT_NAME)
 
-        #self.dataframe["@@index"] = self.dataframe.index
+        # self.dataframe["@@index"] = self.dataframe.index
 
     def remove_filter(self, filter, all_filters):
         """
@@ -201,7 +203,8 @@ class ParquetHandler(object):
         new_handler.copy_from_ancestor(self.first_ancestor)
         for filter in all_filters:
             new_handler.add_filter0(filter)
-        new_handler.reduced_dataframe = new_handler.dataframe[[CASE_CONCEPT_NAME, self.activity_key, DEFAULT_TIMESTAMP_KEY]]
+        new_handler.reduced_dataframe = new_handler.dataframe[
+            [CASE_CONCEPT_NAME, self.activity_key, DEFAULT_TIMESTAMP_KEY]]
         new_handler.build_variants_df()
         new_handler.grouped_dataframe = new_handler.dataframe.groupby(CASE_CONCEPT_NAME)
         new_handler.reduced_grouped_dataframe = new_handler.reduced_dataframe.groupby(CASE_CONCEPT_NAME)
@@ -230,7 +233,8 @@ class ParquetHandler(object):
         new_handler.copy_from_ancestor(self.first_ancestor)
         for filter in all_filters:
             new_handler.add_filter0(filter)
-        new_handler.reduced_dataframe = new_handler.dataframe[[CASE_CONCEPT_NAME, self.activity_key, DEFAULT_TIMESTAMP_KEY]]
+        new_handler.reduced_dataframe = new_handler.dataframe[
+            [CASE_CONCEPT_NAME, self.activity_key, DEFAULT_TIMESTAMP_KEY]]
         new_handler.build_variants_df()
         new_handler.grouped_dataframe = new_handler.dataframe.groupby(CASE_CONCEPT_NAME)
         new_handler.reduced_grouped_dataframe = new_handler.reduced_dataframe.groupby(CASE_CONCEPT_NAME)
@@ -271,7 +275,8 @@ class ParquetHandler(object):
         parameters[constants.PARAMETER_CONSTANT_ATTRIBUTE_KEY] = self.activity_key
         parameters[constants.GROUPED_DATAFRAME] = self.reduced_grouped_dataframe
 
-        self.variants_df = case_statistics.get_variants_df_with_case_duration(self.reduced_dataframe, parameters=parameters)
+        self.variants_df = case_statistics.get_variants_df_with_case_duration(self.reduced_dataframe,
+                                                                              parameters=parameters)
 
     def calculate_variants_number(self):
         """
@@ -483,7 +488,7 @@ class ParquetHandler(object):
             var_to_filter = parameters["variant"]
             # TODO: TECHNICAL DEBT
             # quick turnaround for bug
-            var_to_filter = var_to_filter.replace(" start","+start")
+            var_to_filter = var_to_filter.replace(" start", "+start")
             var_to_filter = var_to_filter.replace(" START", "+START")
             var_to_filter = var_to_filter.replace(" complete", "+complete")
             var_to_filter = var_to_filter.replace(" COMPLETE", "+COMPLETE")
@@ -613,7 +618,8 @@ class ParquetHandler(object):
         if parameters is None:
             parameters = {}
 
-        dfg = df_statistics.get_dfg_graph(self.dataframe, activity_key=attribute_key, timestamp_key=DEFAULT_TIMESTAMP_KEY,
+        dfg = df_statistics.get_dfg_graph(self.dataframe, activity_key=attribute_key,
+                                          timestamp_key=DEFAULT_TIMESTAMP_KEY,
                                           case_id_glue=CASE_CONCEPT_NAME, sort_caseid_required=False,
                                           sort_timestamp_along_case_id=False)
         return dfg
