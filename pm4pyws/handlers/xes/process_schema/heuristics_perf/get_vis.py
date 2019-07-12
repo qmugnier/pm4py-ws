@@ -57,7 +57,8 @@ def apply(log, parameters=None):
     heu_net.calculate()
 
     vis = heu_vis_factory.apply(heu_net, parameters={"format": "svg"})
+    vis2 = heu_vis_factory.apply(heu_net, parameters={"format": "dot"})
 
-    gviz_base64 = base64.b64encode("".encode('utf-8'))
+    gviz_base64 = get_base64_from_file(vis2.name)
 
     return get_base64_from_file(vis.name), None, "", "xes", activities, start_activities, end_activities, gviz_base64, [], "heuristics", "perf", None, "", activity_key
