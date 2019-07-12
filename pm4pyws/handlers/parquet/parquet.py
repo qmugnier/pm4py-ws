@@ -23,6 +23,8 @@ from pm4py.algo.discovery.dfg.adapters.pandas import df_statistics
 
 from pm4py.objects.log.util.xes import DEFAULT_NAME_KEY, DEFAULT_TIMESTAMP_KEY
 
+from pm4pyws.util import format_recognition
+
 import pandas as pd
 
 
@@ -130,8 +132,12 @@ class ParquetHandler(object):
             constants.PARAMETER_CONSTANT_TIMESTAMP_KEY] if constants.PARAMETER_CONSTANT_TIMESTAMP_KEY in parameters else xes.DEFAULT_TIMESTAMP_KEY
         case_id_glue = parameters[
             constants.PARAMETER_CONSTANT_CASEID_KEY] if constants.PARAMETER_CONSTANT_CASEID_KEY in parameters else CASE_CONCEPT_NAME
-        sep = parameters["sep"] if "sep" in parameters else ","
-        quotechar = parameters["quotechar"] if "quotechar" in parameters else None
+
+
+        recognized_format = format_recognition.get_format_from_csv(path)
+
+        sep = parameters["sep"] if "sep" in parameters else recognized_format.delimiter
+        quotechar = parameters["quotechar"] if "quotechar" in parameters else recognized_format.quotechar
 
         if quotechar is not None:
             self.dataframe = csv_import_adapter.import_dataframe_from_path(path, sep=sep, quotechar=quotechar)
