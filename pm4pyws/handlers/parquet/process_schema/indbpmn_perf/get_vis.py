@@ -25,6 +25,8 @@ from pm4pybpmn.visualization.bpmn.util import bpmn_embedding
 from pm4pybpmn.objects.bpmn.util import bpmn_diagram_layouter
 from pm4pybpmn.visualization.bpmn.util import convert_performance_map
 
+from pm4py.algo.filtering.dfg.dfg_filtering import clean_dfg_based_on_noise_thresh
+
 def apply(dataframe, parameters=None):
     """
     Gets the Petri net through Inductive Miner, decorated by performance metric
@@ -60,10 +62,14 @@ def apply(dataframe, parameters=None):
                                                                     max_no_activities=constants.MAX_NO_ACTIVITIES)
     dataframe, end_activities = auto_filter.apply_auto_filter(dataframe, parameters=parameters)
     end_activities = list(end_activities.keys())
-    dfg = df_statistics.get_dfg_graph(dataframe, activity_key=activity_key, timestamp_key=timestamp_key, case_id_glue=case_id_glue, sort_caseid_required=False, sort_timestamp_along_case_id=False)
+
     activities_count = attributes_filter.get_attribute_values(dataframe, activity_key, parameters=parameters)
     activities = list(activities_count.keys())
     start_activities = list(start_activities_filter.get_start_activities(dataframe, parameters=parameters).keys())
+
+    dfg = df_statistics.get_dfg_graph(dataframe, activity_key=activity_key, timestamp_key=timestamp_key, case_id_glue=case_id_glue, sort_caseid_required=False, sort_timestamp_along_case_id=False)
+    dfg = clean_dfg_based_on_noise_thresh(dfg, activities, decreasingFactor * constants.DEFAULT_DFG_CLEAN_MULTIPLIER,
+                                          parameters=parameters)
 
     net, im, fm = inductive_miner.apply_dfg(dfg, parameters, activities=activities, start_activities=start_activities, end_activities=end_activities)
     spaths = get_shortest_paths(net)

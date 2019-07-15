@@ -11,6 +11,8 @@ from pm4py.objects.log.util import xes
 from pm4py.statistics.traces.pandas import case_statistics
 from pm4py.util import constants
 
+from pm4pyws.util import constants as ws_constants
+
 from pm4pyws.handlers.parquet.cases import variants
 from pm4pyws.handlers.parquet.ctmc import transient
 from pm4pyws.handlers.parquet.process_schema import factory as process_schema_factory
@@ -52,8 +54,10 @@ class ParquetHandler(object):
         self.filters_chain = []
         # sets the variant dataframe (useful in variants retrieval)
         self.variants_df = None
-        # most common variant
+        # most common variant (activities)
         self.most_common_variant = None
+        # most common variant (paths)
+        self.most_common_paths = None
         # number of variants
         self.variants_number = 0
         # number of cases
@@ -293,8 +297,12 @@ class ParquetHandler(object):
         variants_list = sorted(variants_list, key=lambda x: (x["count"], x["variant"]), reverse=True)
         self.most_common_variant = None
         self.most_common_variant = []
+        self.most_common_paths = None
+        self.most_common_paths = []
         if variants_list:
             self.most_common_variant = variants_list[0]["variant"].split(",")
+            for i in range(len(self.most_common_variant)-1):
+                self.most_common_paths.append((self.most_common_variant[i], self.most_common_variant[i+1]))
 
     def calculate_variants_number(self):
         """
@@ -338,6 +346,8 @@ class ParquetHandler(object):
             parameters = {}
         parameters[constants.PARAMETER_CONSTANT_ACTIVITY_KEY] = self.activity_key
         parameters[constants.PARAMETER_CONSTANT_ATTRIBUTE_KEY] = self.activity_key
+        parameters[ws_constants.PARAM_MOST_COMMON_VARIANT] = self.most_common_variant
+        parameters[ws_constants.PARAM_MOST_COMMON_PATHS] = self.most_common_paths
         # parameters[constants.GROUPED_DATAFRAME] = self.reduced_grouped_dataframe
 
         parameters["variants_df"] = self.variants_df

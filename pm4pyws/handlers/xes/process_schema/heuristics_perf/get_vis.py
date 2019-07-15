@@ -57,7 +57,7 @@ def apply(log, parameters=None):
 
     heu_net = HeuristicsNet(dfg_freq, performance_dfg=dfg_perf, activities=activities, start_activities=start_activities, end_activities=end_activities, activities_occurrences=activities_count)
 
-    heu_net.calculate()
+    heu_net.calculate(dfg_pre_cleaning_noise_thresh=constants.DEFAULT_DFG_CLEAN_MULTIPLIER * decreasingFactor)
 
     vis = heu_vis_factory.apply(heu_net, parameters={"format": "svg"})
     vis2 = heu_vis_factory.apply(heu_net, parameters={"format": "dot"})

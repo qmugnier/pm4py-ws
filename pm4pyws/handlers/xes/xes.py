@@ -11,6 +11,7 @@ from pm4py.statistics.traces.log import case_statistics
 from pm4py.algo.discovery.dfg import factory as dfg_factory
 
 from pm4py.util import constants
+from pm4pyws.util import constants as ws_constants
 
 from pm4pyws.handlers.xes.alignments import get_align
 from pm4pyws.handlers.xes.cases import variants
@@ -40,8 +41,10 @@ class XesHandler(object):
         self.activity_key = None
         # variants
         self.variants = None
-        # most common variant
+        # most common variant (activities)
         self.most_common_variant = None
+        # most common variant (paths)
+        self.most_common_paths = None
         # number of variants
         self.variants_number = 0
         # number of cases
@@ -201,9 +204,12 @@ class XesHandler(object):
         variants_list = sorted(variants_list, key=lambda x: (x["count"], x["variant"]), reverse=True)
         self.most_common_variant = None
         self.most_common_variant = []
+        self.most_common_paths = None
+        self.most_common_paths = []
         if variants_list:
             self.most_common_variant = variants_list[0]["variant"].split(",")
-
+            for i in range(len(self.most_common_variant)-1):
+                self.most_common_paths.append((self.most_common_variant[i], self.most_common_variant[i+1]))
 
     def calculate_variants_number(self):
         """
@@ -247,6 +253,8 @@ class XesHandler(object):
             parameters = {}
         parameters[constants.PARAMETER_CONSTANT_ACTIVITY_KEY] = self.activity_key
         parameters[constants.PARAMETER_CONSTANT_ATTRIBUTE_KEY] = self.activity_key
+        parameters[ws_constants.PARAM_MOST_COMMON_VARIANT] = self.most_common_variant
+        parameters[ws_constants.PARAM_MOST_COMMON_PATHS] = self.most_common_paths
         return process_schema_factory.apply(self.log, variant=variant, parameters=parameters)
 
     def get_numeric_attribute_svg(self, attribute, parameters=None):

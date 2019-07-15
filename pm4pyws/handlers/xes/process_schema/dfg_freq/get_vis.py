@@ -56,7 +56,8 @@ def apply(log, parameters=None):
     end_activities = list(end_activities_filter.get_end_activities(filtered_log, parameters=parameters).keys())
 
     dfg = dfg_factory.apply(filtered_log, parameters=parameters)
-    dfg = clean_dfg_based_on_noise_thresh(dfg, activities, decreasingFactor * constants.DEFAULT_DFG_CLEAN_MULTIPLIER)
+    dfg = clean_dfg_based_on_noise_thresh(dfg, activities, decreasingFactor * constants.DEFAULT_DFG_CLEAN_MULTIPLIER,
+                                          parameters=parameters)
 
     parameters["format"] = "svg"
     gviz = dfg_vis_factory.apply(dfg, log=log, variant="frequency", parameters=parameters)

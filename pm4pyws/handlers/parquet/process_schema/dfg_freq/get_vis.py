@@ -16,6 +16,9 @@ import time
 
 from pm4pyws.util import constants
 
+from pm4py.algo.filtering.dfg.dfg_filtering import clean_dfg_based_on_noise_thresh
+
+
 
 def apply(dataframe, parameters=None):
     """
@@ -54,6 +57,8 @@ def apply(dataframe, parameters=None):
     dfg = df_statistics.get_dfg_graph(dataframe, activity_key=activity_key, timestamp_key=timestamp_key, case_id_glue=case_id_glue, sort_caseid_required=False, sort_timestamp_along_case_id=False)
     activities_count = attributes_filter.get_attribute_values(dataframe, activity_key)
     activities = list(activities_count.keys())
+    dfg = clean_dfg_based_on_noise_thresh(dfg, activities, decreasingFactor * constants.DEFAULT_DFG_CLEAN_MULTIPLIER,
+                                          parameters=parameters)
     start_activities = list(start_activities_filter.get_start_activities(dataframe, parameters=parameters).keys())
 
     gviz = dfg_vis_factory.apply(dfg, activities_count=activities_count, parameters={"format": "svg"})

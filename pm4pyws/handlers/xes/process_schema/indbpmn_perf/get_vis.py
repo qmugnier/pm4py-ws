@@ -1,4 +1,4 @@
-from pm4py.algo.discovery.inductive import factory as inductive_miner
+from pm4py.algo.discovery.inductive.versions.dfg import imdfb as inductive_miner
 from pm4py.objects.petri.exporter.pnml import export_petri_as_string
 from pm4py.visualization.common.utils import get_base64_from_gviz, get_base64_from_file
 from pm4py.visualization.petrinet import factory as pn_vis_factory
@@ -22,6 +22,10 @@ from pm4pybpmn.visualization.bpmn import factory as bpmn_vis_factory
 from pm4pybpmn.visualization.bpmn.util import bpmn_embedding
 from pm4pybpmn.objects.bpmn.util import bpmn_diagram_layouter
 from pm4pybpmn.visualization.bpmn.util import convert_performance_map
+
+from pm4py.algo.discovery.dfg import factory as dfg_factory
+from pm4py.algo.filtering.dfg.dfg_filtering import clean_dfg_based_on_noise_thresh
+
 
 def apply(log, parameters=None):
     """
@@ -66,7 +70,11 @@ def apply(log, parameters=None):
     start_activities = list(start_activities_filter.get_start_activities(filtered_log, parameters=parameters).keys())
     end_activities = list(end_activities_filter.get_end_activities(filtered_log, parameters=parameters).keys())
 
-    net, im, fm = inductive_miner.apply(filtered_log, parameters=parameters)
+    dfg = dfg_factory.apply(filtered_log, parameters=parameters)
+    dfg = clean_dfg_based_on_noise_thresh(dfg, activities, decreasingFactor * constants.DEFAULT_DFG_CLEAN_MULTIPLIER,
+                                          parameters=parameters)
+    net, im, fm = inductive_miner.apply_dfg(dfg, parameters=parameters, activities=activities,
+                                            start_activities=start_activities, end_activities=end_activities)
     #parameters["format"] = "svg"
     #gviz = pn_vis_factory.apply(net, im, fm, log=log, variant="performance", parameters=parameters)
 
