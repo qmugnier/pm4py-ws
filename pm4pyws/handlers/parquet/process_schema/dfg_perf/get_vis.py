@@ -61,7 +61,7 @@ def apply(dataframe, parameters=None):
     dfg_perf = {x: y for x, y in dfg_perf.items() if x in dfg}
     start_activities = list(start_activities_filter.get_start_activities(dataframe, parameters=parameters).keys())
     gviz = dfg_vis_factory.apply(dfg_perf, activities_count=activities_count, variant="performance",
-                                 parameters={"format": "svg"})
+                                 parameters={"format": "svg", "start_activities": start_activities, "end_activities": end_activities})
 
     gviz_base64 = base64.b64encode(str(gviz).encode('utf-8'))
 
