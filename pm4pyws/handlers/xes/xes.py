@@ -207,7 +207,12 @@ class XesHandler(object):
         self.most_common_paths = None
         self.most_common_paths = []
         if variants_list:
-            self.most_common_variant = variants_list[0]["variant"].split(",")
+            best_var_idx = 0
+            for i in range(len(variants_list)):
+                if len(variants_list[i]["variant"].split(",")) > 1:
+                    best_var_idx = i
+                    break
+            self.most_common_variant = variants_list[best_var_idx]["variant"].split(",")
             for i in range(len(self.most_common_variant)-1):
                 self.most_common_paths.append((self.most_common_variant[i], self.most_common_variant[i+1]))
 
