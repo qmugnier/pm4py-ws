@@ -12,6 +12,7 @@ from pm4pyws.configuration import Configuration
 from pm4pyws.log_manager import factory as session_manager_factory
 from pm4pyws.user_iam import factory as user_iam_factory
 from pm4pyws.requests_logging import factory as logging_factory
+from pm4pyws.util import constants
 
 import logging
 
@@ -159,7 +160,7 @@ def get_process_schema():
                 # reads the typeOfModel
                 type_of_model = request.args.get('typeOfModel', default='dfg', type=str)
                 # reads the simplicity
-                simplicity = request.args.get('simplicity', default=0.0, type=float)
+                simplicity = request.args.get('simplicity', default=constants.DEFAULT_DEC_FACTOR, type=float)
                 variant = type_of_model + "_" + decoration
                 parameters = {"decreasingFactor": simplicity}
                 handler = lh.get_handler_for_process_and_session(process, session)
