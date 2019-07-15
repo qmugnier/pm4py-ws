@@ -40,6 +40,8 @@ class XesHandler(object):
         self.activity_key = None
         # variants
         self.variants = None
+        # most common variant
+        self.most_common_variant = None
         # number of variants
         self.variants_number = 0
         # number of cases
@@ -189,6 +191,19 @@ class XesHandler(object):
         parameters[constants.PARAMETER_CONSTANT_ATTRIBUTE_KEY] = self.activity_key
         self.variants, self.variants_times = variants_filter.get_variants_along_with_case_durations(self.log,
                                                                                                     parameters=parameters)
+        self.save_most_common_variant(self.variants)
+
+    def save_most_common_variant(self, variants):
+        variants_list = []
+        for var in variants:
+            var_el = {"variant": var, "count": len(variants[var])}
+            variants_list.append(var_el)
+        variants_list = sorted(variants_list, key=lambda x: (x["count"], x["variant"]), reverse=True)
+        self.most_common_variant = None
+        self.most_common_variant = []
+        if variants_list:
+            self.most_common_variant = variants_list[0]["variant"].split(",")
+
 
     def calculate_variants_number(self):
         """

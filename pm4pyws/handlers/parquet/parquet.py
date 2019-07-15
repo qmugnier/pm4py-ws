@@ -52,6 +52,8 @@ class ParquetHandler(object):
         self.filters_chain = []
         # sets the variant dataframe (useful in variants retrieval)
         self.variants_df = None
+        # most common variant
+        self.most_common_variant = None
         # number of variants
         self.variants_number = 0
         # number of cases
@@ -280,6 +282,19 @@ class ParquetHandler(object):
 
         self.variants_df = case_statistics.get_variants_df_with_case_duration(self.reduced_dataframe,
                                                                               parameters=parameters)
+        self.save_most_common_variant(self.variants_df)
+
+
+    def save_most_common_variant(self, variants_df):
+        variants_df["count"] = 1
+        variants_df = variants_df.reset_index()
+        variants_list = variants_df.groupby("variant").agg(
+            {"caseDuration": "mean", "count": "sum"}).reset_index().to_dict('records')
+        variants_list = sorted(variants_list, key=lambda x: (x["count"], x["variant"]), reverse=True)
+        self.most_common_variant = None
+        self.most_common_variant = []
+        if variants_list:
+            self.most_common_variant = variants_list[0]["variant"].split(",")
 
     def calculate_variants_number(self):
         """
@@ -323,7 +338,7 @@ class ParquetHandler(object):
             parameters = {}
         parameters[constants.PARAMETER_CONSTANT_ACTIVITY_KEY] = self.activity_key
         parameters[constants.PARAMETER_CONSTANT_ATTRIBUTE_KEY] = self.activity_key
-        parameters[constants.GROUPED_DATAFRAME] = self.reduced_grouped_dataframe
+        # parameters[constants.GROUPED_DATAFRAME] = self.reduced_grouped_dataframe
 
         parameters["variants_df"] = self.variants_df
         return process_schema_factory.apply(self.reduced_dataframe, variant=variant, parameters=parameters)
