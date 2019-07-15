@@ -58,13 +58,14 @@ def apply(dataframe, parameters=None):
     activities = list(activities_count.keys())
     start_activities = list(start_activities_filter.get_start_activities(dataframe, parameters=parameters).keys())
 
-    dfg = df_statistics.get_dfg_graph(dataframe, activity_key=activity_key, timestamp_key=timestamp_key, case_id_glue=case_id_glue, sort_caseid_required=False, sort_timestamp_along_case_id=False)
+    [dfg, dfg_perf] = df_statistics.get_dfg_graph(dataframe, activity_key=activity_key, timestamp_key=timestamp_key, case_id_glue=case_id_glue, sort_caseid_required=False, sort_timestamp_along_case_id=False, measure="both")
     dfg = clean_dfg_based_on_noise_thresh(dfg, activities, decreasingFactor * constants.DEFAULT_DFG_CLEAN_MULTIPLIER,
                                           parameters=parameters)
+    dfg_perf = {x: y for x, y in dfg_perf.items() if x in dfg}
 
     net, im, fm = inductive_miner.apply_dfg(dfg, parameters, activities=activities, start_activities=start_activities, end_activities=end_activities)
     spaths = get_shortest_paths(net)
-    aggregated_statistics = get_decorations_from_dfg_spaths_acticount(net, dfg, spaths,
+    aggregated_statistics = get_decorations_from_dfg_spaths_acticount(net, dfg_perf, spaths,
                                                                       activities_count,
                                                                       variant="performance")
     gviz = pn_vis_factory.apply(net, im, fm, parameters={"format": "svg"}, variant="performance",

@@ -53,13 +53,14 @@ def apply(dataframe, parameters=None):
                                                                     max_no_activities=constants.MAX_NO_ACTIVITIES)
     dataframe, end_activities = auto_filter.apply_auto_filter(dataframe, parameters=parameters)
     end_activities = list(end_activities.keys())
-    dfg = df_statistics.get_dfg_graph(dataframe, activity_key=activity_key, timestamp_key=timestamp_key, case_id_glue=case_id_glue, sort_caseid_required=False, sort_timestamp_along_case_id=False, measure="performance")
+    [dfg, dfg_perf] = df_statistics.get_dfg_graph(dataframe, activity_key=activity_key, timestamp_key=timestamp_key, case_id_glue=case_id_glue, sort_caseid_required=False, sort_timestamp_along_case_id=False, measure="both")
     activities_count = attributes_filter.get_attribute_values(dataframe, activity_key, parameters=parameters)
     activities = list(activities_count.keys())
     dfg = clean_dfg_based_on_noise_thresh(dfg, activities, decreasingFactor * constants.DEFAULT_DFG_CLEAN_MULTIPLIER,
                                           parameters=parameters)
+    dfg_perf = {x: y for x, y in dfg_perf.items() if x in dfg}
     start_activities = list(start_activities_filter.get_start_activities(dataframe, parameters=parameters).keys())
-    gviz = dfg_vis_factory.apply(dfg, activities_count=activities_count, variant="performance",
+    gviz = dfg_vis_factory.apply(dfg_perf, activities_count=activities_count, variant="performance",
                                  parameters={"format": "svg"})
 
     gviz_base64 = base64.b64encode(str(gviz).encode('utf-8'))
