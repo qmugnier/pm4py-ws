@@ -61,7 +61,7 @@ def apply(log, parameters=None):
     parameters["start_activities"] = start_activities
     parameters["end_activities"] = end_activities
 
-    gviz = dfg_vis_factory.apply(dfg, log=log, variant="performance", parameters=parameters)
+    gviz = dfg_vis_factory.apply(dfg, log=filtered_log, variant="performance", parameters=parameters)
 
     gviz_base64 = base64.b64encode(str(gviz).encode('utf-8'))
 

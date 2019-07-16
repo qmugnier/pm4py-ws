@@ -81,7 +81,7 @@ def apply(log, parameters=None):
 
     bpmn_graph, el_corr, inv_el_corr, el_corr_keys_map = petri_to_bpmn.apply(net, im, fm)
 
-    aggregated_statistics = token_decoration.get_decorations(log, net, im, fm,
+    aggregated_statistics = token_decoration.get_decorations(filtered_log, net, im, fm,
                                                              parameters=parameters, measure="frequency")
 
     bpmn_aggreg_statistics = convert_performance_map.convert_performance_map_to_bpmn(aggregated_statistics,

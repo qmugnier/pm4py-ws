@@ -67,7 +67,7 @@ def apply(log, parameters=None):
     net, im, fm = inductive_miner.apply_dfg(dfg, parameters=parameters, activities=activities,
                                             start_activities=start_activities, end_activities=end_activities)
     parameters["format"] = "svg"
-    gviz = pn_vis_factory.apply(net, im, fm, log=log, variant="performance", parameters=parameters)
+    gviz = pn_vis_factory.apply(net, im, fm, log=filtered_log, variant="performance", parameters=parameters)
 
     svg = get_base64_from_gviz(gviz)
 

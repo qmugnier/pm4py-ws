@@ -68,7 +68,7 @@ def apply(log, parameters=None):
                                             start_activities=start_activities, end_activities=end_activities)
 
     parameters["format"] = "svg"
-    gviz = pn_vis_factory.apply(net, im, fm, log=log, variant="frequency", parameters=parameters)
+    gviz = pn_vis_factory.apply(net, im, fm, log=filtered_log, variant="frequency", parameters=parameters)
 
     svg = get_base64_from_gviz(gviz)
 
