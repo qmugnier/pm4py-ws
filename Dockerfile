@@ -8,7 +8,7 @@ RUN apt-get -y install python3-pydot python-pydot python-pydot-ng graphviz
 RUN apt-get -y install python3-tk
 RUN apt-get -y install zip unzip
 
-RUN pip install --no-cache-dir -U pm4py Flask flask-cors requests python-keycloak
+RUN pip install --no-cache-dir -U pm4py pm4pycvxopt Flask flask-cors requests python-keycloak
 RUN pip install --no-cache-dir -U pyinstaller PyQT5 setuptools
 RUN pip install --no-cache-dir -U pm4pybpmn
 COPY . /
