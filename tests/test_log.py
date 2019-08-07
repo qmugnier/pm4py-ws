@@ -7,12 +7,10 @@ from pm4pyws.handlers.xes.xes import XesHandler
 class XesTests(unittest.TestCase):
     def test_xes(self):
         handler = XesHandler()
-        path = os.path.join("..", "running-example.xes")
+        path = os.path.join("logs//running-example.xes")
         handler.build_from_path(path)
         handler.get_schema(variant="dfg_freq")
         handler.get_schema(variant="dfg_perf")
-        handler.get_schema(variant="alpha_freq")
-        handler.get_schema(variant="alpha_perf")
         handler.get_schema(variant="inductive_freq")
         handler.get_schema(variant="inductive_perf")
         handler.get_schema(variant="tree_freq")

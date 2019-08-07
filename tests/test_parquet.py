@@ -7,11 +7,9 @@ from pm4pyws.handlers.parquet.parquet import ParquetHandler
 class ParquetTests(unittest.TestCase):
     def test_parquets(self):
         handler = ParquetHandler()
-        handler.build_from_path(os.path.join("..", "running-example.parquet"))
+        handler.build_from_path("logs//running-example.parquet")
         handler.get_schema(variant="dfg_freq")
         handler.get_schema(variant="dfg_perf")
-        handler.get_schema(variant="alpha_freq")
-        handler.get_schema(variant="alpha_perf")
         handler.get_schema(variant="inductive_freq")
         handler.get_schema(variant="inductive_perf")
         handler.get_schema(variant="tree_freq")
