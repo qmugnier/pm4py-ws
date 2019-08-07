@@ -49,6 +49,30 @@ class ParquetTests(unittest.TestCase):
         process_quantities_test("logs//running-example.parquet")
         process_quantities_test("logs//receipt.parquet")
 
+    def test_ru_filtering(self):
+        handler = ParquetHandler()
+        handler.build_from_path("logs//running-example.parquet")
+        handler = handler.add_filter(['timestamp_trace_intersecting', '1293703320@@@1294667760'],
+                                     ['timestamp_trace_intersecting', '1293703320@@@1294667760'])
+        handler.get_start_activities()
+        handler.get_end_activities()
+        handler.get_variant_statistics()
+        handler = handler.add_filter(['timestamp_trace_containing', '1293703320@@@1294667760'],
+                                     [['timestamp_trace_intersecting', '1293703320@@@1294667760'],
+                                      ['timestamp_trace_containing', '1293703320@@@1294667760']])
+        handler.get_start_activities()
+        handler.get_end_activities()
+        handler.get_variant_statistics()
+        handler = handler.remove_filter(['timestamp_trace_containing', '1293703320@@@1294667760'],
+                                        [['timestamp_trace_intersecting', '1293703320@@@1294667760']])
+        handler.get_start_activities()
+        handler.get_end_activities()
+        handler.get_variant_statistics()
+        handler = handler.remove_filter(['timestamp_trace_intersecting', '1293703320@@@1294667760'], [])
+        handler.get_start_activities()
+        handler.get_end_activities()
+        handler.get_variant_statistics()
+
 
 if __name__ == "__main__":
     unittest.main()

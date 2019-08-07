@@ -72,4 +72,4 @@ class XesTests(unittest.TestCase):
         handler.get_start_activities()
         handler.get_end_activities()
         handler.get_variant_statistics()
-        
+
