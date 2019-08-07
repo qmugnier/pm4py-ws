@@ -1309,7 +1309,9 @@ def deleteEventLog():
         if lh.can_delete(user, process):
             lh.delete_log(process)
 
-    return jsonify({})
+            return jsonify({"success": True})
+
+    return jsonify({"success": False})
 
 
 @PM4PyServices.app.route("/checkVersions", methods=["GET"])
