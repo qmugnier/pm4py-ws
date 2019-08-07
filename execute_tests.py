@@ -13,11 +13,13 @@ if __name__ == "__main__":
     from tests.test_session import SessionTest
     from tests.test_log_manager import TestLogManager
     from tests.test_exc import ExceptionHandlTest
+    from tests.test_csv_handler import CsvTests
 
     tp = ParquetTests()
     tx = XesTests()
     st = SessionTest()
     lmt = TestLogManager()
     eht = ExceptionHandlTest()
+    csv = CsvTests()
 
     unittest.main()

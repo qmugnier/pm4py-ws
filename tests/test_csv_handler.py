@@ -6,7 +6,7 @@ from pm4pyws.handlers.parquet.parquet import ParquetHandler
 
 def basic_test(path):
     handler = ParquetHandler()
-    handler.build_from_path(path)
+    handler.build_from_csv(path)
     handler.get_schema(variant="dfg_freq")
     handler.get_schema(variant="dfg_perf")
     handler.get_schema(variant="inductive_freq")
@@ -28,7 +28,7 @@ def basic_test(path):
 
 def process_quantities_test(path):
     handler = ParquetHandler()
-    handler.build_from_path(path)
+    handler.build_from_csv(path)
     handler.get_start_activities()
     handler.get_end_activities()
     handler.get_variant_statistics()
