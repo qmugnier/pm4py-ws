@@ -3,6 +3,7 @@ from pm4pyws.requests_logging import factory as exception_factory
 from pm4pyws.log_manager import factory as lm_factory
 import unittest
 
+
 class TestLogManager(unittest.TestCase):
     def test_log_manager(self):
         ex = exception_factory.apply()

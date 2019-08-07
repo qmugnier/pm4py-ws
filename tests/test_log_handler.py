@@ -89,3 +89,6 @@ class XesTests(unittest.TestCase):
         handler.get_end_activities()
         handler.get_variant_statistics()
 
+
+if __name__ == "__main__":
+    unittest.main()

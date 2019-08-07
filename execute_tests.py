@@ -8,14 +8,16 @@ if __name__ == "__main__":
     parent_dir = os.path.dirname(current_dir)
     sys.path.insert(0, parent_dir)
 
-    from tests.test_parquet import ParquetTests
-    from tests.test_log import XesTests
+    from tests.test_parquet_handler import ParquetTests
+    from tests.test_log_handler import XesTests
     from tests.test_session import SessionTest
     from tests.test_log_manager import TestLogManager
+    from tests.test_exc import ExceptionHandlTest
 
     tp = ParquetTests()
     tx = XesTests()
     st = SessionTest()
     lmt = TestLogManager()
+    eht = ExceptionHandlTest()
 
     unittest.main()

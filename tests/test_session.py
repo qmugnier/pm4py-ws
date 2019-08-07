@@ -2,6 +2,7 @@ from pm4pyws.user_iam import factory as user_iam_factory
 from pm4pyws.requests_logging import factory as exception_factory
 import unittest
 
+
 class SessionTest(unittest.TestCase):
     def test_session(self):
         ex = exception_factory.apply()
