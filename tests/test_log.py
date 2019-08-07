@@ -72,4 +72,20 @@ class XesTests(unittest.TestCase):
         handler.get_start_activities()
         handler.get_end_activities()
         handler.get_variant_statistics()
+        handler = handler.add_filter(['end_activities', ['reject request']], [['end_activities', ['reject request']]])
+        handler.get_start_activities()
+        handler.get_end_activities()
+        handler.get_variant_statistics()
+        handler = handler.add_filter(['attributes_pos_trace', ['concept:name', ['check ticket']]],
+                                     [['end_activities', ['reject request']],
+                                      ['attributes_pos_trace', ['concept:name', ['check ticket']]]])
+        handler.get_start_activities()
+        handler.get_end_activities()
+        handler.get_variant_statistics()
+        handler = handler.remove_filter(['attributes_pos_trace', ['concept:name', ['check ticket']]],
+                                        [['end_activities', ['reject request']]])
+        handler = handler.remove_filter(['end_activities', ['reject request']], [])
+        handler.get_start_activities()
+        handler.get_end_activities()
+        handler.get_variant_statistics()
 

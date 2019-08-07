@@ -1073,6 +1073,8 @@ def add_filter():
             # reads all the filters
             all_filters = request.json['all_filters']
 
+            print(filter, all_filters)
+
             new_handler = lh.get_handler_for_process_and_session(process, session).add_filter(filter, all_filters)
             lh.set_handler_for_process_and_session(process, session, new_handler)
 
