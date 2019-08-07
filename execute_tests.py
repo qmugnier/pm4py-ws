@@ -10,8 +10,10 @@ if __name__ == "__main__":
 
     from tests.test_parquet import ParquetTests
     from tests.test_log import XesTests
+    from tests.test_session import SessionTest
 
     tp = ParquetTests()
     tx = XesTests()
+    st = SessionTest()
 
     unittest.main()
