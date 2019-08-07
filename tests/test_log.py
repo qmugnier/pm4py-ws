@@ -48,3 +48,28 @@ class XesTests(unittest.TestCase):
     def test_xes_process_quantities(self):
         process_quantities_test("logs//running-example.xes")
         process_quantities_test("logs//receipt.xes")
+
+    def test_ru_filtering(self):
+        handler = XesHandler()
+        handler.build_from_path("logs//running-example.xes")
+        handler = handler.add_filter(['timestamp_trace_intersecting', '1293703320@@@1294667760'],
+                                     ['timestamp_trace_intersecting', '1293703320@@@1294667760'])
+        handler.get_start_activities()
+        handler.get_end_activities()
+        handler.get_variant_statistics()
+        handler = handler.add_filter(['timestamp_trace_containing', '1293703320@@@1294667760'],
+                                     [['timestamp_trace_intersecting', '1293703320@@@1294667760'],
+                                      ['timestamp_trace_containing', '1293703320@@@1294667760']])
+        handler.get_start_activities()
+        handler.get_end_activities()
+        handler.get_variant_statistics()
+        handler = handler.remove_filter(['timestamp_trace_containing', '1293703320@@@1294667760'],
+                                        [['timestamp_trace_intersecting', '1293703320@@@1294667760']])
+        handler.get_start_activities()
+        handler.get_end_activities()
+        handler.get_variant_statistics()
+        handler = handler.remove_filter(['timestamp_trace_intersecting', '1293703320@@@1294667760'], [])
+        handler.get_start_activities()
+        handler.get_end_activities()
+        handler.get_variant_statistics()
+        
