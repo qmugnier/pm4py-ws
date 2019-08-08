@@ -2,12 +2,14 @@ FROM tiangolo/uwsgi-nginx-flask
 
 RUN apt-get update
 RUN apt-get -y upgrade
-RUN apt-get -y install nano vim git python3-pydot python-pydot python-pydot-ng graphviz python3-tk zip unzip curl
+RUN apt-get -y install nano vim git python3-pydot python-pydot python-pydot-ng graphviz python3-tk zip unzip curl ftp
 RUN curl -sL https://deb.nodesource.com/setup_10.x | bash
 RUN apt-get install nodejs
 
-RUN pip install --no-cache-dir -U pm4py pm4pycvxopt Flask flask-cors requests python-keycloak pyinstaller PyQT5 setuptools pm4pybpmn
+RUN pip install --no-cache-dir -U pm4py Flask flask-cors requests python-keycloak pyinstaller PyQT5 setuptools pm4pybpmn
+RUN pip install --no-cache-dir -U pm4pycvxopt pm4pybpmn
 COPY . /app
+RUN cat "enable_session = True" >> /app/pm4pyws/configuration.py
 RUN mkdir -p /app/webapp2
 RUN rm -rRf /app/webapp2
 RUN cd / && git clone https://github.com/pm-tk/source.git
