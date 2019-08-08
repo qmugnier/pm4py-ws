@@ -17,10 +17,10 @@ COPY . /app
 RUN echo "enable_session = True" >> /app/pm4pyws/configuration.py
 RUN echo "static_folder = '/app/webapp2/dist'" >> /app/pm4pyws/configuration.py
 
-#RUN mkdir -p /app/webapp2
-#RUN rm -rRf /app/webapp2
-#RUN cd / && git clone https://github.com/pm-tk/source.git
-#RUN cd / && mv /source /app/webapp2
+RUN mkdir -p /app/webapp2
+RUN rm -rRf /app/webapp2
+RUN cd / && git clone https://github.com/pm-tk/source.git
+RUN cd / && mv /source /app/webapp2
 #RUN cd /app/webapp2 && npm install && npm install --save-dev --unsafe-perm node-sass && npm install -g @angular/core @angular/cli @angular/material
 #RUN cd /app/webapp2 && ng build --prod
 
