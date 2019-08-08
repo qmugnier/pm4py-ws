@@ -2,9 +2,14 @@ FROM tiangolo/uwsgi-nginx-flask
 
 RUN apt-get update
 RUN apt-get -y upgrade
-RUN apt-get -y install nano vim git python3-pydot python-pydot python-pydot-ng graphviz python3-tk zip unzip curl ftp
+RUN apt-get -y install nano vim git python3-pydot python-pydot python-pydot-ng graphviz python3-tk zip unzip curl ftp fail2ban
 RUN curl -sL https://deb.nodesource.com/setup_10.x | bash
 RUN apt-get install nodejs
+
+COPY ./docker-sec-confs/sysctl.conf /etc/sysctl.conf
+COPY ./docker-sec-confs/limits.conf /etc/security/limits.conf
+COPY ./docker-sec-confs/nginx.conf /etc/nginx/nginx.conf
+COPY ./docker-sec-confs/jail.local /etc/fail2ban/jail.local
 
 RUN pip install --no-cache-dir -U pm4py Flask flask-cors requests python-keycloak pyinstaller PyQT5 setuptools pm4pybpmn
 RUN pip install --no-cache-dir -U pm4pycvxopt pm4pybpmn
