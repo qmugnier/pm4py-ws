@@ -18,7 +18,7 @@
 # See man 5 jail.conf for details.
 #
 # [DEFAULT]
-# bantime = 3600
+# bantime = 604800
 #
 # [sshd]
 # enabled = true
@@ -853,3 +853,14 @@ logpath  = /var/log/haproxy.log
 port    = ldap,ldaps
 filter  = slapd
 logpath = /var/log/slapd.log
+
+
+[nginx-req-limit]
+
+enabled = true
+filter = nginx-req-limit
+action = iptables-multiport[name=ReqLimit, port=”http,https”, protocol=tcp]
+logpath = /var/log/nginx/*error.log
+findtime = 200
+bantime = 2600
+maxretry = 20
