@@ -5,6 +5,15 @@ try:
 except:
     pass
 
+from pm4pyws import configuration as Configuration
+
+try:
+    import pm4pybpmn
+    Configuration.enable_bpmn = True
+except:
+    Configuration.enable_bpmn = False
+
+
 from pm4pyws.entrypoint import PM4PyServices
 
 app = PM4PyServices.app
