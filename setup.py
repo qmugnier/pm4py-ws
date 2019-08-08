@@ -54,7 +54,6 @@ setup(
         'requests',
         'python-keycloak',
         'pyinstaller',
-        'PyQT5',
         'setuptools'
     ],
     project_urls={
