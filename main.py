@@ -20,6 +20,6 @@ conn_event_logs.close()
 
 # offers the service to the outside
 if __name__ == "__main__":
-    LISTENING_HOST = "127.0.0.1"
+    LISTENING_HOST = "0.0.0.0"
     LISTENING_PORT = 5000
     S.serve(host=LISTENING_HOST, port=LISTENING_PORT)

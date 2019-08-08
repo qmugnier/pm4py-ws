@@ -8,7 +8,7 @@ from threading import Semaphore
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 
-from pm4pyws.configuration import Configuration
+from pm4pyws import configuration as Configuration
 from pm4pyws.log_manager import factory as session_manager_factory
 from pm4pyws.user_iam import factory as user_iam_factory
 from pm4pyws.requests_logging import factory as logging_factory
@@ -1072,8 +1072,6 @@ def add_filter():
             filter = request.json['filter']
             # reads all the filters
             all_filters = request.json['all_filters']
-
-            print(filter, all_filters)
 
             new_handler = lh.get_handler_for_process_and_session(process, session).add_filter(filter, all_filters)
             lh.set_handler_for_process_and_session(process, session, new_handler)
