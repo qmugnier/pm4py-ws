@@ -1,5 +1,3 @@
-import requests
-
 try:
     import pm4pycvxopt
 except:

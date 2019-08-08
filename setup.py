@@ -51,7 +51,6 @@ setup(
         'pm4py',
         'Flask',
         'flask-cors',
-        'requests',
         'setuptools'
     ],
     project_urls={

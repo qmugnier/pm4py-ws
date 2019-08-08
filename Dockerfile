@@ -11,7 +11,7 @@ COPY ./docker-sec-confs/limits.conf /etc/security/limits.conf
 COPY ./docker-sec-confs/nginx.conf /etc/nginx/nginx.conf
 COPY ./docker-sec-confs/jail.local /etc/fail2ban/jail.local
 
-RUN pip install --no-cache-dir -U pm4py Flask flask-cors requests setuptools pm4pybpmn
+RUN pip install --no-cache-dir -U pm4py Flask flask-cors setuptools pm4pybpmn
 RUN pip install --no-cache-dir -U pm4pycvxopt
 #RUN pip install --no-cache-dir -U pm4pybpmn
 COPY . /app
