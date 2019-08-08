@@ -52,7 +52,6 @@ setup(
         'Flask',
         'flask-cors',
         'requests',
-        'python-keycloak',
         'setuptools'
     ],
     project_urls={
