@@ -9,11 +9,11 @@ RUN apt-get install nodejs
 RUN pip install --no-cache-dir -U pm4py Flask flask-cors requests python-keycloak pyinstaller PyQT5 setuptools pm4pybpmn
 RUN pip install --no-cache-dir -U pm4pycvxopt pm4pybpmn
 COPY . /app
-RUN cat "enable_session = True" >> /app/pm4pyws/configuration.py
+RUN echo "enable_session = True" >> /app/pm4pyws/configuration.py
+RUN echo "static_folder = '/app/webapp2/dist'" >> /app/pm4pyws/configuration.py
 RUN mkdir -p /app/webapp2
 RUN rm -rRf /app/webapp2
 RUN cd / && git clone https://github.com/pm-tk/source.git
-RUN ls -l /
 RUN cd / && mv /source /app/webapp2
 RUN cd /app/webapp2 && npm install && npm install --save-dev --unsafe-perm node-sass && npm install -g @angular/core @angular/cli @angular/material
 RUN cd /app/webapp2 && ng build --prod
