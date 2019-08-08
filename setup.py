@@ -53,7 +53,6 @@ setup(
         'flask-cors',
         'requests',
         'python-keycloak',
-        'pyinstaller',
         'setuptools'
     ],
     project_urls={
