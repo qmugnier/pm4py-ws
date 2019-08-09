@@ -9,7 +9,7 @@ class BasicLoggingHandler(LoggingHandler):
         Create a basic logging handler
         """
         logging.basicConfig(
-            filename=configuration.error_log_path,
+            filename=Configuration.error_log_path,
             level=logging.INFO,
             format='[%(asctime)s] {%(pathname)s:%(lineno)d} %(levelname)s - %(message)s',
             datefmt='%H:%M:%S'

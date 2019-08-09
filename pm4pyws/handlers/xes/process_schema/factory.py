@@ -24,11 +24,11 @@ VERSIONS = {DFG_FREQ: dfg_freq_vis.apply, DFG_PERF: dfg_perf_vis.apply, TREE_FRE
 
 try:
     import pm4pybpmn
-    configuration.enable_bpmn = True
+    Configuration.enable_bpmn = True
 except:
-    configuration.enable_bpmn = False
+    Configuration.enable_bpmn = False
 
-if configuration.enable_bpmn:
+if Configuration.enable_bpmn:
     from pm4pyws.handlers.xes.process_schema.indbpmn_freq import get_vis as indbpmn_freq_vis
     from pm4pyws.handlers.xes.process_schema.indbpmn_perf import get_vis as indbpmn_perf_vis
 

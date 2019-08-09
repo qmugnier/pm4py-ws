@@ -94,14 +94,14 @@ def get_user_from_session(session_id):
     user
         User ID
     """
-    if configuration.enable_session:
+    if Configuration.enable_session:
         user = um.get_user_from_session(session_id)
         return user
     return None
 
 
 class PM4PyServices:
-    app = Flask(__name__, static_url_path='', static_folder=configuration.static_folder)
+    app = Flask(__name__, static_url_path='', static_folder=Configuration.static_folder)
     app.add_url_rule(app.static_url_path + '/<path:filename>', endpoint='static',
                      view_func=app.send_static_file)
     CORS(app)
@@ -498,7 +498,7 @@ def load_log_from_path():
     """
     clean_expired_sessions()
 
-    if configuration.enable_load_local_path:
+    if Configuration.enable_load_local_path:
         try:
             # reads the session
             session = request.args.get('session', type=str)
@@ -700,7 +700,7 @@ def download_xes_log():
 
     logging.info("download_xes_log start session=" + str(session) + " process=" + str(process))
 
-    if configuration.enable_download:
+    if Configuration.enable_download:
         if check_session_validity(session):
             user = get_user_from_session(session)
             if lh.check_user_log_visibility(user, process):
@@ -733,7 +733,7 @@ def download_csv_log():
 
     logging.info("download_csv_log start session=" + str(session) + " process=" + str(process))
 
-    if configuration.enable_download:
+    if Configuration.enable_download:
         if check_session_validity(session):
             user = get_user_from_session(session)
             if lh.check_user_log_visibility(user, process):
@@ -901,7 +901,7 @@ def get_all_paths():
 def login_service():
     clean_expired_sessions()
 
-    if configuration.enable_session:
+    if Configuration.enable_session:
         # reads the user name
         user = request.args.get('user', type=str)
         # reads the password
@@ -920,7 +920,7 @@ def login_service():
 def check_session_service():
     clean_expired_sessions()
 
-    if configuration.enable_session:
+    if Configuration.enable_session:
         # reads the session
         session = request.args.get('session', type=str)
         # reads the requested process name
@@ -981,12 +981,12 @@ def upload_log():
                 stru = base64.b64decode(base64_content).decode('utf-8')
 
                 if extension.lower() == "xes" or extension.lower() == "csv" or extension.lower() == "parquet":
-                    filepath = os.path.join(configuration.event_logs_path, basename + "." + extension)
+                    filepath = os.path.join(Configuration.event_logs_path, basename + "." + extension)
                     F = open(filepath, "w")
                     F.write(stru)
                     F.close()
 
-                    if configuration.upload_as_temporary:
+                    if Configuration.upload_as_temporary:
                         lh.manage_upload(user, basename, filepath, True)
                     else:
                         lh.manage_upload(user, basename, filepath, False)

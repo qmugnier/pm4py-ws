@@ -9,7 +9,7 @@ from pm4pywsconfiguration import configuration as Configuration
 
 class BasicUserManagement(UserManagement):
     def __init__(self, ex, parameters=None):
-        self.user_db = configuration.users_db_path
+        self.user_db = Configuration.users_db_path
         UserManagement.__init__(self, ex)
 
     def do_login(self, user, password):
@@ -30,7 +30,7 @@ class BasicUserManagement(UserManagement):
         """
         conn_users = sqlite3.connect(self.user_db)
         curs_users = conn_users.cursor()
-        if configuration.md5_password_backend and not configuration.md5_password_frontend:
+        if Configuration.md5_password_backend and not Configuration.md5_password_frontend:
             password = hashlib.md5(password.encode()).hexdigest()
         curs_users.execute("SELECT USER_ID FROM USERS WHERE USER_ID = ? AND PASSWORD = ?", (user, password))
         results = curs_users.fetchone()
@@ -103,7 +103,7 @@ class BasicUserManagement(UserManagement):
 
         curs_users.execute(
             "SELECT SESSION_ID FROM SESSIONS WHERE Cast ((JulianDay(datetime('now')) - JulianDay(CREATION_DATE)) * 24 * 60 * 60 As Integer) >= "+str(
-                configuration.session_duration))
+                Configuration.session_duration))
         results = curs_users.fetchall()
         if results is not None:
             for result in results:
@@ -112,7 +112,7 @@ class BasicUserManagement(UserManagement):
         if expired_sessions:
             curs_users.execute(
                 "DELETE FROM SESSIONS WHERE Cast ((JulianDay(datetime('now')) - JulianDay(CREATION_DATE)) * 24 * 60 * 60 As Integer) >= " + str(
-                    configuration.session_duration))
+                    Configuration.session_duration))
             conn_users.commit()
         else:
             #print("NO EXPIRED")

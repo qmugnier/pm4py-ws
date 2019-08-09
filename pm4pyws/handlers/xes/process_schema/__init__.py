@@ -5,9 +5,9 @@ from pm4pywsconfiguration import configuration as Configuration
 
 try:
     import pm4pybpmn
-    configuration.enable_bpmn = True
+    Configuration.enable_bpmn = True
 except:
-    configuration.enable_bpmn = False
+    Configuration.enable_bpmn = False
 
-if configuration.enable_bpmn:
+if Configuration.enable_bpmn:
     from pm4pyws.handlers.parquet.process_schema import indbpmn_freq, indbpmn_perf
