@@ -6,7 +6,7 @@ from pm4pyws.handlers.xes.process_schema.inductive_freq import get_vis as induct
 from pm4pyws.handlers.xes.process_schema.inductive_perf import get_vis as inductive_perf_vis
 from pm4pyws.handlers.xes.process_schema.tree import get_vis as tree_vis
 
-from pm4pyws import configuration as Configuration
+from pm4pywsconfiguration import configuration as Configuration
 
 DFG_FREQ = "dfg_freq"
 DFG_PERF = "dfg_perf"
@@ -24,11 +24,11 @@ VERSIONS = {DFG_FREQ: dfg_freq_vis.apply, DFG_PERF: dfg_perf_vis.apply, TREE_FRE
 
 try:
     import pm4pybpmn
-    Configuration.enable_bpmn = True
+    configuration.enable_bpmn = True
 except:
-    Configuration.enable_bpmn = False
+    configuration.enable_bpmn = False
 
-if Configuration.enable_bpmn:
+if configuration.enable_bpmn:
     from pm4pyws.handlers.xes.process_schema.indbpmn_freq import get_vis as indbpmn_freq_vis
     from pm4pyws.handlers.xes.process_schema.indbpmn_perf import get_vis as indbpmn_perf_vis
 

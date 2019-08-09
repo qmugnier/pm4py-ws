@@ -1,6 +1,6 @@
 import logging
 from pm4pyws.requests_logging.interface.logginghandler import LoggingHandler
-from pm4pyws import configuration as Configuration
+from pm4pywsconfiguration import configuration as Configuration
 
 
 class BasicLoggingHandler(LoggingHandler):
@@ -9,7 +9,7 @@ class BasicLoggingHandler(LoggingHandler):
         Create a basic logging handler
         """
         logging.basicConfig(
-            filename=Configuration.error_log_path,
+            filename=configuration.error_log_path,
             level=logging.INFO,
             format='[%(asctime)s] {%(pathname)s:%(lineno)d} %(levelname)s - %(message)s',
             datefmt='%H:%M:%S'

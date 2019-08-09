@@ -1,6 +1,6 @@
 import sqlite3
 
-from pm4pyws import configuration as Configuration
+from pm4pywsconfiguration import configuration as Configuration
 from pm4pyws.handlers.parquet.parquet import ParquetHandler
 from pm4pyws.handlers.xes.xes import XesHandler
 from pm4pyws.log_manager.interface.log_manager import LogHandler
@@ -11,7 +11,7 @@ import time
 class BasicLogSessionHandler(LogHandler):
     def __init__(self, ex):
         # path to the database
-        self.database_path = Configuration.event_log_db_path
+        self.database_path = configuration.event_log_db_path
 
         self.handlers = {}
         self.session_handlers = {}
@@ -122,7 +122,7 @@ class BasicLogSessionHandler(LogHandler):
         boolean
             Boolean value
         """
-        if Configuration.enable_session:
+        if configuration.enable_session:
             conn_logs = sqlite3.connect(self.database_path)
             curs_logs = conn_logs.cursor()
             curs_logs.execute("SELECT USER_ID FROM ADMINS WHERE USER_ID = ? AND USER_ID = ?", (user, user))
@@ -178,7 +178,7 @@ class BasicLogSessionHandler(LogHandler):
         process
             Process
         """
-        if Configuration.enable_session:
+        if configuration.enable_session:
             conn_logs = sqlite3.connect(self.database_path)
             curs_logs = conn_logs.cursor()
             curs_logs.execute("SELECT USER_ID FROM USER_LOG_VISIBILITY WHERE USER_ID = ? AND LOG_NAME = ?",
@@ -203,7 +203,7 @@ class BasicLogSessionHandler(LogHandler):
         boolean
             Boolean value
         """
-        if Configuration.enable_session:
+        if configuration.enable_session:
             conn_logs = sqlite3.connect(self.database_path)
             curs_logs = conn_logs.cursor()
             curs_logs.execute("SELECT USER_ID FROM USER_UPLOADABLE WHERE USER_ID = ? AND USER_ID = ?", (user, user))
@@ -229,7 +229,7 @@ class BasicLogSessionHandler(LogHandler):
         boolean
             Boolean value
         """
-        if Configuration.enable_session:
+        if configuration.enable_session:
             conn_logs = sqlite3.connect(self.database_path)
             curs_logs = conn_logs.cursor()
             curs_logs.execute("SELECT USER_ID FROM USER_LOG_DOWNLOADABLE WHERE USER_ID = ? AND LOG_NAME = ?",

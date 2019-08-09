@@ -5,12 +5,12 @@ except:
 
 
 from pm4pyws.entrypoint import PM4PyServices
-from pm4pyws import configuration as Configuration
+from pm4pywsconfiguration import configuration as Configuration
 
 app = PM4PyServices.app
 
 import sqlite3
-conn_event_logs = sqlite3.connect(Configuration.event_log_db_path)
+conn_event_logs = sqlite3.connect(configuration.event_log_db_path)
 cursor_event_logs = conn_event_logs.cursor()
 S = PM4PyServices()
 cursor_event_logs.execute("SELECT LOG_NAME, LOG_PATH FROM EVENT_LOGS WHERE LOADED_BOOT = 1")
