@@ -1,12 +1,12 @@
 enable_upload = True
 enable_download = True
 enable_load_local_path = True
-enable_session = False
+enable_session = True
 upload_as_temporary = True
 session_duration = 86400
 enable_bpmn = False
 md5_password_backend = True
-md5_password_frontend = False
+md5_password_frontend = True
 static_folder = '../webapp2/dist'
 files_path = 'files'
 error_log_path = files_path + '/error_log/pm4pyws.log'
