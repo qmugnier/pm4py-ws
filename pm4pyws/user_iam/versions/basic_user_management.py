@@ -8,7 +8,7 @@ from pm4pyws import configuration as Configuration
 
 class BasicUserManagement(UserManagement):
     def __init__(self, ex, parameters=None):
-        self.user_db = "users.db"
+        self.user_db = Configuration.users_db_path
         UserManagement.__init__(self, ex)
 
     def do_login(self, user, password):
