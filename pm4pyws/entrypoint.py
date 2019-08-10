@@ -126,7 +126,7 @@ class PM4PyServices:
         if ssl_context is None:
             self.app.run(host=host, port=port, threaded=threaded)
         else:
-            self.app.run(host=host, port=port, threaded=thread, ssl_context=ssl_context)
+            self.app.run(host=host, port=port, threaded=threaded, ssl_context=ssl_context)
 
 @PM4PyServices.app.route("/getProcessSchema", methods=["GET"])
 def get_process_schema():
