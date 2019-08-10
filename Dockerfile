@@ -18,6 +18,8 @@ COPY . /app
 #RUN cd /app/files && python download_big_logs.py
 RUN echo "enable_session = True" >> /app/pm4pywsconfiguration/configuration.py
 RUN echo "static_folder = '/app/webapp2/dist'" >> /app/pm4pywsconfiguration/configuration.py
+RUN echo "ssl_context_directory = '/app/ssl_cert_gen'" >> /app/pm4pywsconfiguration/configuration.py
+#RUN cd /app/ssl_cert_gen && python create.py
 
 RUN mkdir -p /app/webapp2
 RUN rm -rRf /app/webapp2
