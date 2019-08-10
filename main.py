@@ -25,10 +25,14 @@ PRIVATE_KEY_FILE = "this.key"
 
 try:
     content = os.listdir(Configuration.ssl_context_directory)
+    print(content)
     if CERT_FILE in content and PRIVATE_KEY_FILE in content:
+        print("yes!")
         there_is_ssl_context = True
 except:
     pass
+
+print("there_is_ssl_context", there_is_ssl_context)
 
 # offers the service to the outside
 if __name__ == "__main__":
