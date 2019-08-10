@@ -20,7 +20,7 @@ for result in cursor_event_logs.fetchall():
 conn_event_logs.close()
 
 there_is_ssl_context = False
-CERT_FILE = "this.cert"
+CERT_FILE = "this.crt"
 PRIVATE_KEY_FILE = "this.key"
 
 try:
