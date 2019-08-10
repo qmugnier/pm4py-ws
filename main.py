@@ -25,9 +25,7 @@ PRIVATE_KEY_FILE = "this.key"
 
 try:
     content = os.listdir(Configuration.ssl_context_directory)
-    print(content)
     if CERT_FILE in content and PRIVATE_KEY_FILE in content:
-        print("yes!")
         there_is_ssl_context = True
 except:
     pass
