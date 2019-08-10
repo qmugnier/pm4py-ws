@@ -5,7 +5,11 @@ import urllib.request
 
 logs_to_download = {
     "receipt": "http://www.alessandroberti.it/receipt.parquet",
-    "roadtraffic": "http://www.alessandroberti.it/roadtraffic.parquet"
+    "roadtraffic": "http://www.alessandroberti.it/roadtraffic.parquet",
+    "bpic2017": "http://www.alessandroberti.it/bpic2017.parquet",
+    "bpic2017_application": "http://www.alessandroberti.it/bpic2017_application.parquet",
+    "bpic2018": "http://www.alessandroberti.it/bpic2018.parquet",
+    "bpic2019": "http://www.alessandroberti.it/bpic2019.parquet"
 }
 
 shutil.rmtree("event_logs")
