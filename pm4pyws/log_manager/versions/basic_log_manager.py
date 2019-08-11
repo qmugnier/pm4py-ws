@@ -65,7 +65,7 @@ class BasicLogSessionHandler(LogHandler):
         """
         return self.handlers
 
-    def get_handler_for_process_and_session(self, process, session):
+    def get_handler_for_process_and_session(self, process, session, parameters=None):
         """
         Gets an handler for a given process and session
 
@@ -75,6 +75,8 @@ class BasicLogSessionHandler(LogHandler):
             Process
         session
             Session
+        parameters
+            Possible parameters of the algorithm
 
         Returns
         -------------

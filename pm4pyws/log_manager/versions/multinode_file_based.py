@@ -47,7 +47,7 @@ class MultiNodeSessionHandler(LogHandler):
 
         self.logs_correspondence = logs_corr
 
-    def load_temp_log_if_it_is_there(self, log_name, session):
+    def load_temp_log_if_it_is_there(self, log_name, session, parameters=None):
         """
         Load a log associated to a session if it exists in the temp logs folder
 
@@ -57,7 +57,15 @@ class MultiNodeSessionHandler(LogHandler):
             Log name
         session
             Session ID
+        parameters
+            Possible parameters of the algorithm
         """
+        if parameters is None:
+            parameters = {}
+        force_reload = parameters["force_reload"] if "force_reload" in parameters else False
+        if force_reload:
+            return None
+
         handler = None
         file_path = self.logs_correspondence[log_name]
         is_parquet = False
@@ -137,7 +145,7 @@ class MultiNodeSessionHandler(LogHandler):
         """
         return self.logs_correspondence
 
-    def get_handler_for_process_and_session(self, process, session):
+    def get_handler_for_process_and_session(self, process, session, parameters=None):
         """
         Gets an handler for a given process and session
 
@@ -147,6 +155,8 @@ class MultiNodeSessionHandler(LogHandler):
             Process
         session
             Session
+        parameters
+            Possible parameters of the algorithm
 
         Returns
         -------------
@@ -155,7 +165,7 @@ class MultiNodeSessionHandler(LogHandler):
         """
         self.load_log_correspondence()
         if process in self.logs_correspondence:
-            handler = self.load_temp_log_if_it_is_there(process, session)
+            handler = self.load_temp_log_if_it_is_there(process, session, parameters=parameters)
             if handler is not None:
                 return handler
             handler = self.load_log_on_request(process)
