@@ -18,7 +18,7 @@ import logging
 
 ex = logging_factory.apply()
 um = user_iam_factory.apply(ex)
-lh = session_manager_factory.apply(ex)
+lh = session_manager_factory.apply(ex, variant="multinode_file_based")
 lh.set_user_management(um)
 
 

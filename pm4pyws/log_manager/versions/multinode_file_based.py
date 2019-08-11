@@ -66,14 +66,13 @@ class MultiNodeSessionHandler(LogHandler):
             is_parquet = True
             extension = "parquet"
         temp_log_path = os.path.join(Configuration.temp_logs_path, str(log_name)+"_"+str(session)+"."+extension)
-        print(temp_log_path, os.path.exists(temp_log_path))
         if os.path.exists(temp_log_path):
             if is_parquet:
                 handler = ParquetHandler()
-                handler.build_from_path(file_path)
+                handler.build_from_path(temp_log_path)
             else:
                 handler = XesHandler()
-                handler.build_from_path(file_path)
+                handler.build_from_path(temp_log_path)
         return handler
 
     def load_log_on_request(self, log_name):
