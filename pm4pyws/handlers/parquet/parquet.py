@@ -31,6 +31,7 @@ from pm4pyws.util.columns_recognition import assign_column_correspondence
 from pm4pywsconfiguration import configuration as Configuration
 
 import pandas as pd
+import time
 
 
 class ParquetHandler(object):
@@ -281,7 +282,7 @@ class ParquetHandler(object):
             parameters = {}
         parameters[constants.PARAMETER_CONSTANT_ACTIVITY_KEY] = self.activity_key
         parameters[constants.PARAMETER_CONSTANT_ATTRIBUTE_KEY] = self.activity_key
-        parameters[constants.GROUPED_DATAFRAME] = self.reduced_grouped_dataframe
+        #parameters[constants.GROUPED_DATAFRAME] = self.reduced_grouped_dataframe
 
         self.variants_df = case_statistics.get_variants_df_with_case_duration(self.reduced_dataframe,
                                                                               parameters=parameters)
