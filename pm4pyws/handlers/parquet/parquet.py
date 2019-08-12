@@ -312,13 +312,15 @@ class ParquetHandler(object):
         """
         Calculate the number of variants in this log
         """
-        self.variants_number = len(self.variants_df.groupby("variant"))
+        #self.variants_number = len(self.variants_df.groupby("variant"))
+        self.variants_number = self.variants_df["variant"].nunique()
 
     def calculate_cases_number(self):
         """
         Calculate the number of cases in this log
         """
-        self.cases_number = len(self.grouped_dataframe)
+        #self.cases_number = len(self.grouped_dataframe)
+        self.cases_number = self.dataframe["case:concept:name"].nunique()
 
     def calculate_events_number(self):
         """
