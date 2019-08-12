@@ -208,19 +208,21 @@ class ParquetHandler(object):
         new_handler
             New handler
         """
-        new_handler = ParquetHandler()
-        new_handler.copy_from_ancestor(self.first_ancestor)
-        for filter in all_filters:
-            new_handler.add_filter0(filter)
-        new_handler.reduced_dataframe = new_handler.dataframe[
-            [CASE_CONCEPT_NAME, self.activity_key, DEFAULT_TIMESTAMP_KEY]]
-        new_handler.build_variants_df()
-        new_handler.grouped_dataframe = new_handler.dataframe.groupby(CASE_CONCEPT_NAME)
-        new_handler.reduced_grouped_dataframe = new_handler.reduced_dataframe.groupby(CASE_CONCEPT_NAME)
-        new_handler.calculate_cases_number()
-        new_handler.calculate_variants_number()
-        new_handler.calculate_events_number()
-        return new_handler
+        if all_filters:
+            new_handler = ParquetHandler()
+            new_handler.copy_from_ancestor(self.first_ancestor)
+            for filter in all_filters:
+                new_handler.add_filter0(filter)
+            new_handler.reduced_dataframe = new_handler.dataframe[
+                [CASE_CONCEPT_NAME, self.activity_key, DEFAULT_TIMESTAMP_KEY]]
+            new_handler.build_variants_df()
+            new_handler.grouped_dataframe = new_handler.dataframe.groupby(CASE_CONCEPT_NAME)
+            new_handler.reduced_grouped_dataframe = new_handler.reduced_dataframe.groupby(CASE_CONCEPT_NAME)
+            new_handler.calculate_cases_number()
+            new_handler.calculate_variants_number()
+            new_handler.calculate_events_number()
+            return new_handler
+        return self.first_ancestor
 
     def add_filter(self, filter, all_filters):
         """
