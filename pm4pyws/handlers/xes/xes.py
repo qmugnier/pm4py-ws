@@ -340,7 +340,11 @@ class XesHandler(object):
         parameters[constants.PARAMETER_CONSTANT_ATTRIBUTE_KEY] = self.activity_key
         parameters["variants"] = self.variants
         parameters["var_durations"] = self.variants_times
-        return variants.get_statistics(self.log, parameters=parameters)
+        variants_stats = variants.get_statistics(self.log, parameters=parameters)
+        variants_stats = variants_stats[0:min(len(variants_stats), ws_constants.MAX_NO_VARIANTS_TO_RETURN)]
+
+        return variants_stats
+
 
     def get_sna(self, variant="handover", parameters=None):
         """
