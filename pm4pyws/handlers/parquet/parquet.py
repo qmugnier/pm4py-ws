@@ -449,7 +449,6 @@ class ParquetHandler(object):
         parameters["variants_df"] = self.variants_df
         variants_stats = variants.get_statistics(self.reduced_dataframe, parameters=parameters)
         variants_stats = variants_stats[0:min(len(variants_stats), ws_constants.MAX_NO_VARIANTS_TO_RETURN)]
-        print(len(variants_stats))
 
         return variants_stats
 
