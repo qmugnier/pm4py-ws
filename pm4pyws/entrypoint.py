@@ -398,6 +398,8 @@ def get_all_variants():
     session = request.args.get('session', type=str)
     # reads the requested process name
     process = request.args.get('process', default='receipt', type=str)
+    # reads the maximum number of variants to return
+    max_no_variants = request.args.get('max_no_variants', default=constants.MAX_NO_VARIANTS_TO_RETURN, type=int)
 
     logging.info("get_all_variants start session=" + str(session) + " process=" + str(process))
 
@@ -406,7 +408,11 @@ def get_all_variants():
     if check_session_validity(session):
         user = get_user_from_session(session)
         if lh.check_user_log_visibility(user, process):
-            variants = lh.get_handler_for_process_and_session(process, session).get_variant_statistics()
+            parameters = {}
+            parameters["max_no_variants"] = constants.MAX_NO_VARIANTS_TO_RETURN
+
+            variants = lh.get_handler_for_process_and_session(process, session).get_variant_statistics(
+                parameters=parameters)
             dictio = {"variants": variants}
 
         logging.info(
@@ -433,6 +439,7 @@ def get_all_cases():
     session = request.args.get('session', type=str)
     process = request.args.get('process', default='receipt', type=str)
     variant = request.args.get('variant', type=str)
+    max_no_cases = request.args.get('max_no_cases', default=constants.MAX_NO_CASES_TO_RETURN)
 
     logging.info("get_events start session=" + str(session) + " process=" + str(process) + " variant=" + str(variant))
 
@@ -444,6 +451,8 @@ def get_all_cases():
             parameters = {}
             if variant is not None:
                 parameters["variant"] = variant
+            parameters["max_ret_cases"] = max_no_cases
+
             cases_list = lh.get_handler_for_process_and_session(process, session).get_case_statistics(
                 parameters=parameters)
             dictio = {"cases": cases_list}
@@ -1045,7 +1054,8 @@ def get_alignments():
                     pass
 
                 logging.info(
-                    "get_alignments complete session=" + str(session) + " process=" + str(process) + " user=" + str(user))
+                    "get_alignments complete session=" + str(session) + " process=" + str(process) + " user=" + str(
+                        user))
 
                 Commons.semaphore_matplot.release()
 
@@ -1156,7 +1166,8 @@ def get_user_log_visibilities():
             if is_admin:
                 sorted_users, sorted_logs, user_log_vis = lh.get_user_eventlog_vis_down_remov()
 
-                logging.info("get_user_log_visibilities complete session=" + str(session) + " this_user=" + str(this_user))
+                logging.info(
+                    "get_user_log_visibilities complete session=" + str(session) + " this_user=" + str(this_user))
 
                 return jsonify({"success": True, "sorted_users": sorted_users, "sorted_logs": sorted_logs,
                                 "user_log_visibility": user_log_vis})
@@ -1371,4 +1382,5 @@ def check_versions():
                 "pm4pybpmn": str(pm4pybpmn.__version__), "hostname": str(socket.gethostname())}
 
     except:
-        return {"pm4py": str(pm4py.__version__), "pm4pyws": str(pm4pyws.__version__), "hostname": str(socket.gethostname())}
+        return {"pm4py": str(pm4py.__version__), "pm4pyws": str(pm4pyws.__version__),
+                "hostname": str(socket.gethostname())}
