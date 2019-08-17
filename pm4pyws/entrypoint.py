@@ -409,7 +409,7 @@ def get_all_variants():
         user = get_user_from_session(session)
         if lh.check_user_log_visibility(user, process):
             parameters = {}
-            parameters["max_no_variants"] = constants.MAX_NO_VARIANTS_TO_RETURN
+            parameters["max_no_variants"] = int(max_no_variants)
 
             variants = lh.get_handler_for_process_and_session(process, session).get_variant_statistics(
                 parameters=parameters)
@@ -439,7 +439,7 @@ def get_all_cases():
     session = request.args.get('session', type=str)
     process = request.args.get('process', default='receipt', type=str)
     variant = request.args.get('variant', type=str)
-    max_no_cases = request.args.get('max_no_cases', default=constants.MAX_NO_CASES_TO_RETURN)
+    max_no_cases = request.args.get('max_no_cases', default=constants.MAX_NO_CASES_TO_RETURN, type=int)
 
     logging.info("get_events start session=" + str(session) + " process=" + str(process) + " variant=" + str(variant))
 
@@ -451,7 +451,7 @@ def get_all_cases():
             parameters = {}
             if variant is not None:
                 parameters["variant"] = variant
-            parameters["max_ret_cases"] = max_no_cases
+            parameters["max_ret_cases"] = int(max_no_cases)
 
             cases_list = lh.get_handler_for_process_and_session(process, session).get_case_statistics(
                 parameters=parameters)
