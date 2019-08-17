@@ -21,5 +21,6 @@ parquet_performance_setting1 = True
 enable_process_caching = False
 overall_enable_alignments = True
 overall_enable_transient = True
+overall_enable_sna = True
 overall_enable_sharing = True
 overall_enable_deletion = True

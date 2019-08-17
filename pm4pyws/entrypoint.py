@@ -366,15 +366,16 @@ def get_sna():
 
         logging.info("get_sna start session=" + str(session) + " process=" + str(process))
 
-        if check_session_validity(session):
-            user = get_user_from_session(session)
-            if lh.check_user_log_visibility(user, process):
-                metric = request.args.get('metric', default='handover', type=str)
-                threshold = request.args.get('threshold', default=0.0, type=float)
-                sna = lh.get_handler_for_process_and_session(process, session).get_sna(variant=metric, parameters={
-                    "weight_threshold": threshold})
+        if Configuration.overall_enable_sna:
+            if check_session_validity(session):
+                user = get_user_from_session(session)
+                if lh.check_user_log_visibility(user, process):
+                    metric = request.args.get('metric', default='handover', type=str)
+                    threshold = request.args.get('threshold', default=0.0, type=float)
+                    sna = lh.get_handler_for_process_and_session(process, session).get_sna(variant=metric, parameters={
+                        "weight_threshold": threshold})
 
-            logging.info("get_sna complete session=" + str(session) + " process=" + str(process) + " user=" + str(user))
+                logging.info("get_sna complete session=" + str(session) + " process=" + str(process) + " user=" + str(user))
     except:
         logging.error(traceback.format_exc())
         sna = ""
