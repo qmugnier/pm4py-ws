@@ -331,7 +331,7 @@ class ParquetHandler(object):
             Variants dataframe
         """
         if self.variants_df is None:
-            self.variants_df = self.build_variants_df()
+            self.build_variants_df()
 
         return self.variants_df
 
