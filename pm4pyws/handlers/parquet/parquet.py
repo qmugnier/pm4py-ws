@@ -115,6 +115,8 @@ class ParquetHandler(object):
         # TODO: verify if this is the best way to act
         self.dataframe[DEFAULT_TIMESTAMP_KEY] = pd.to_datetime(self.dataframe[DEFAULT_TIMESTAMP_KEY], utc=True)
         self.postloading_processing_dataframe()
+        self.dataframe[CASE_CONCEPT_NAME] = self.dataframe[CASE_CONCEPT_NAME].astype(str)
+        self.sort_dataframe_by_case_id()
         self.reduced_dataframe = self.dataframe[[CASE_CONCEPT_NAME, self.activity_key, DEFAULT_TIMESTAMP_KEY]]
         self.build_variants_df()
         self.grouped_dataframe = self.dataframe.groupby(CASE_CONCEPT_NAME)
@@ -153,7 +155,13 @@ class ParquetHandler(object):
         else:
             self.dataframe = csv_import_adapter.import_dataframe_from_path(path, sep=sep)
 
-        case_id_glue, activity_key, timestamp_key = assign_column_correspondence(self.dataframe)
+        case_id_glue1, activity_key1, timestamp_key1 = assign_column_correspondence(self.dataframe)
+        if case_id_glue is None:
+            case_id_glue = case_id_glue1
+        if activity_key is None:
+            activity_key = activity_key1
+        if timestamp_key is None:
+            timestamp_key = timestamp_key1
 
         if not activity_key == xes.DEFAULT_NAME_KEY:
             self.dataframe[xes.DEFAULT_NAME_KEY] = self.dataframe[activity_key]
@@ -163,6 +171,7 @@ class ParquetHandler(object):
             self.dataframe[CASE_CONCEPT_NAME] = self.dataframe[case_id_glue]
         self.postloading_processing_dataframe()
         self.dataframe[CASE_CONCEPT_NAME] = self.dataframe[CASE_CONCEPT_NAME].astype(str)
+        self.sort_dataframe_by_case_id()
         self.reduced_dataframe = self.dataframe[[CASE_CONCEPT_NAME, self.activity_key, DEFAULT_TIMESTAMP_KEY]]
         self.build_variants_df()
         self.grouped_dataframe = self.dataframe.groupby(CASE_CONCEPT_NAME)
@@ -185,12 +194,11 @@ class ParquetHandler(object):
             self.dataframe["@@classifier"] = self.dataframe[xes.DEFAULT_NAME_KEY]
         self.activity_key = "@@classifier"
 
+    def sort_dataframe_by_case_id(self):
         if xes.DEFAULT_TIMESTAMP_KEY in self.dataframe:
             self.dataframe = self.dataframe.sort_values([CASE_CONCEPT_NAME, xes.DEFAULT_TIMESTAMP_KEY])
         else:
             self.dataframe = self.dataframe.sort_values(CASE_CONCEPT_NAME)
-
-        # self.dataframe["@@index"] = self.dataframe.index
 
     def remove_filter(self, filter, all_filters):
         """
