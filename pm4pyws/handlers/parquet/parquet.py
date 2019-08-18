@@ -125,8 +125,8 @@ class ParquetHandler(object):
             self.sort_dataframe_by_case_id()
             self.build_reduced_dataframe()
             self.build_variants_df()
-            self.grouped_dataframe = self.dataframe.groupby(CASE_CONCEPT_NAME)
-            self.reduced_grouped_dataframe = self.reduced_dataframe.groupby(CASE_CONCEPT_NAME)
+            self.build_grouped_dataframe()
+            self.build_reduced_grouped_dataframe()
             self.calculate_events_number()
             self.calculate_variants_number()
             self.calculate_cases_number()
@@ -181,8 +181,8 @@ class ParquetHandler(object):
             self.sort_dataframe_by_case_id()
             self.build_reduced_dataframe()
             self.build_variants_df()
-            self.grouped_dataframe = self.dataframe.groupby(CASE_CONCEPT_NAME)
-            self.reduced_grouped_dataframe = self.reduced_dataframe.groupby(CASE_CONCEPT_NAME)
+            self.build_grouped_dataframe()
+            self.build_reduced_grouped_dataframe()
             self.calculate_variants_number()
             self.calculate_cases_number()
             self.calculate_events_number()
@@ -239,8 +239,8 @@ class ParquetHandler(object):
             if not self.is_lazy:
                 new_handler.build_reduced_dataframe()
                 new_handler.build_variants_df()
-                new_handler.grouped_dataframe = new_handler.dataframe.groupby(CASE_CONCEPT_NAME)
-                new_handler.reduced_grouped_dataframe = new_handler.reduced_dataframe.groupby(CASE_CONCEPT_NAME)
+                new_handler.build_grouped_dataframe()
+                new_handler.build_reduced_grouped_dataframe()
                 new_handler.calculate_cases_number()
                 new_handler.calculate_variants_number()
                 new_handler.calculate_events_number()
@@ -274,8 +274,8 @@ class ParquetHandler(object):
         if not self.is_lazy:
             new_handler.build_reduced_dataframe()
             new_handler.build_variants_df()
-            new_handler.grouped_dataframe = new_handler.dataframe.groupby(CASE_CONCEPT_NAME)
-            new_handler.reduced_grouped_dataframe = new_handler.reduced_dataframe.groupby(CASE_CONCEPT_NAME)
+            new_handler.build_grouped_dataframe()
+            new_handler.build_reduced_grouped_dataframe()
             new_handler.calculate_cases_number()
             new_handler.calculate_variants_number()
             new_handler.calculate_events_number()
@@ -353,6 +353,45 @@ class ParquetHandler(object):
         if self.reduced_dataframe is None:
             self.build_reduced_dataframe()
         return self.reduced_dataframe
+
+    def build_grouped_dataframe(self):
+        """
+        Saves the grouped dataframe
+        """
+        self.grouped_dataframe = self.dataframe.groupby(CASE_CONCEPT_NAME)
+
+    def get_grouped_dataframe(self):
+        """
+        Returns the grouped dataframe
+
+        Returns
+        --------------
+        grouped_dataframe
+            Grouped dataframe
+        """
+        if self.grouped_dataframe is None:
+            self.build_grouped_dataframe()
+        return self.grouped_dataframe
+
+    def build_reduced_grouped_dataframe(self):
+        """
+        Saves the reduced grouped dataframe
+        """
+        reduced_dataframe = self.get_reduced_dataframe()
+        self.reduced_grouped_dataframe = reduced_dataframe.groupby(CASE_CONCEPT_NAME)
+
+    def get_reduced_grouped_dataframe(self):
+        """
+        Returns the reduced grouped dataframe
+
+        Returns
+        ----------------
+        reduced_grouped_dataframe
+            Reduced grouped dataframe
+        """
+        if self.reduced_grouped_dataframe is None:
+            self.build_reduced_grouped_dataframe()
+        return self.reduced_grouped_dataframe
 
     def save_most_common_variant(self, variants_df):
         variants_df["count"] = 1
