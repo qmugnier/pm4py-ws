@@ -512,8 +512,7 @@ class ParquetHandler(object):
             parameters[ws_constants.PARAM_MOST_COMMON_VARIANT] = self.most_common_variant
             parameters[ws_constants.PARAM_MOST_COMMON_PATHS] = self.most_common_paths
 
-        if Configuration.parquet_performance_setting1 and self.reduced_grouped_dataframe is not None:
-            parameters[constants.GROUPED_DATAFRAME] = self.reduced_grouped_dataframe
+        parameters[constants.GROUPED_DATAFRAME] = self.get_reduced_grouped_dataframe()
 
         if self.variants_df is not None:
             parameters["variants_df"] = self.variants_df
