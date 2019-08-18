@@ -120,7 +120,8 @@ class ParquetHandler(object):
         # TODO: verify if this is the best way to act
         self.dataframe[DEFAULT_TIMESTAMP_KEY] = pd.to_datetime(self.dataframe[DEFAULT_TIMESTAMP_KEY], utc=True)
         self.postloading_processing_dataframe()
-        self.dataframe[CASE_CONCEPT_NAME] = self.dataframe[CASE_CONCEPT_NAME].astype(str)
+        if not str(self.dataframe[CASE_CONCEPT_NAME].dtype) == "object":
+            self.dataframe[CASE_CONCEPT_NAME] = self.dataframe[CASE_CONCEPT_NAME].astype(str)
         if not self.is_lazy:
             self.sort_dataframe_by_case_id()
             self.build_reduced_dataframe()
@@ -176,7 +177,10 @@ class ParquetHandler(object):
         if not case_id_glue == CASE_CONCEPT_NAME:
             self.dataframe[CASE_CONCEPT_NAME] = self.dataframe[case_id_glue]
         self.postloading_processing_dataframe()
-        self.dataframe[CASE_CONCEPT_NAME] = self.dataframe[CASE_CONCEPT_NAME].astype(str)
+
+        if not str(self.dataframe[CASE_CONCEPT_NAME].dtype) == "object":
+            self.dataframe[CASE_CONCEPT_NAME] = self.dataframe[CASE_CONCEPT_NAME].astype(str)
+
         if not self.is_lazy:
             self.sort_dataframe_by_case_id()
             self.build_reduced_dataframe()
@@ -192,14 +196,19 @@ class ParquetHandler(object):
         Postloading processing of the dataframe
         """
 
-        self.dataframe[xes.DEFAULT_NAME_KEY] = self.dataframe[xes.DEFAULT_NAME_KEY].astype(str)
-        if xes.DEFAULT_TRANSITION_KEY in self.dataframe:
-            self.dataframe[xes.DEFAULT_TRANSITION_KEY] = self.dataframe[xes.DEFAULT_TRANSITION_KEY].astype(str)
-            self.dataframe["@@classifier"] = self.dataframe[xes.DEFAULT_NAME_KEY] + "+" + self.dataframe[
-                xes.DEFAULT_TRANSITION_KEY]
-        else:
-            self.dataframe["@@classifier"] = self.dataframe[xes.DEFAULT_NAME_KEY]
         self.activity_key = "@@classifier"
+        if not str(self.dataframe[xes.DEFAULT_NAME_KEY].dtype) == "object":
+            self.dataframe[xes.DEFAULT_NAME_KEY] = self.dataframe[xes.DEFAULT_NAME_KEY].astype(str)
+        if xes.DEFAULT_TRANSITION_KEY in self.dataframe:
+            if not str(self.dataframe[xes.DEFAULT_TRANSITION_KEY].dtype) == "object":
+                self.dataframe[xes.DEFAULT_TRANSITION_KEY] = self.dataframe[xes.DEFAULT_TRANSITION_KEY].astype(str)
+
+        if not "@@classifier" in self.dataframe:
+            if xes.DEFAULT_TRANSITION_KEY in self.dataframe:
+                self.dataframe["@@classifier"] = self.dataframe[xes.DEFAULT_NAME_KEY] + "+" + self.dataframe[
+                    xes.DEFAULT_TRANSITION_KEY]
+            else:
+                self.dataframe["@@classifier"] = self.dataframe[xes.DEFAULT_NAME_KEY]
 
     def sort_dataframe_by_case_id(self):
         """
