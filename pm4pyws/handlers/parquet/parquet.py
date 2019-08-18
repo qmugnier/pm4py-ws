@@ -214,11 +214,12 @@ class ParquetHandler(object):
         """
         Sort the dataframe by case ID
         """
-        if xes.DEFAULT_TIMESTAMP_KEY in self.dataframe:
-            self.dataframe = self.dataframe.sort_values([CASE_CONCEPT_NAME, xes.DEFAULT_TIMESTAMP_KEY])
-        else:
-            self.dataframe = self.dataframe.sort_values(CASE_CONCEPT_NAME)
-        self.sorted_dataframe = True
+        if not self.sorted_dataframe:
+            if xes.DEFAULT_TIMESTAMP_KEY in self.dataframe:
+                self.dataframe = self.dataframe.sort_values([CASE_CONCEPT_NAME, xes.DEFAULT_TIMESTAMP_KEY])
+            else:
+                self.dataframe = self.dataframe.sort_values(CASE_CONCEPT_NAME)
+            self.sorted_dataframe = True
 
     def remove_filter(self, filter, all_filters):
         """
