@@ -121,8 +121,11 @@ class ParquetHandler(object):
         # TODO: verify if this is the best way to act
         self.dataframe[DEFAULT_TIMESTAMP_KEY] = pd.to_datetime(self.dataframe[DEFAULT_TIMESTAMP_KEY], utc=True)
         self.postloading_processing_dataframe()
+        self.dataframe = self.dataframe.sort_values([DEFAULT_TIMESTAMP_KEY, ws_constants.DEFAULT_EVENT_INDEX_KEY])
         if not str(self.dataframe[CASE_CONCEPT_NAME].dtype) == "object":
             self.dataframe[CASE_CONCEPT_NAME] = self.dataframe[CASE_CONCEPT_NAME].astype(str)
+        if not ws_constants.DEFAULT_CASE_INDEX_KEY in self.dataframe:
+            self.dataframe[ws_constants.DEFAULT_CASE_INDEX_KEY] = self.dataframe.groupby(CASE_CONCEPT_NAME).ngroup()
         if not self.is_lazy:
             self.sort_dataframe_by_case_id()
             self.build_reduced_dataframe()
@@ -152,17 +155,13 @@ class ParquetHandler(object):
             constants.PARAMETER_CONSTANT_TIMESTAMP_KEY] if constants.PARAMETER_CONSTANT_TIMESTAMP_KEY in parameters else None
         case_id_glue = parameters[
             constants.PARAMETER_CONSTANT_CASEID_KEY] if constants.PARAMETER_CONSTANT_CASEID_KEY in parameters else None
-
         recognized_format = format_recognition.get_format_from_csv(path)
-
         sep = parameters["sep"] if "sep" in parameters else recognized_format.delimiter
         quotechar = parameters["quotechar"] if "quotechar" in parameters else recognized_format.quotechar
-
         if quotechar is not None:
             self.dataframe = csv_import_adapter.import_dataframe_from_path(path, sep=sep, quotechar=quotechar)
         else:
             self.dataframe = csv_import_adapter.import_dataframe_from_path(path, sep=sep)
-
         case_id_glue1, activity_key1, timestamp_key1 = assign_column_correspondence(self.dataframe)
         if case_id_glue is None:
             case_id_glue = case_id_glue1
@@ -170,7 +169,6 @@ class ParquetHandler(object):
             activity_key = activity_key1
         if timestamp_key is None:
             timestamp_key = timestamp_key1
-
         if not activity_key == xes.DEFAULT_NAME_KEY:
             self.dataframe[xes.DEFAULT_NAME_KEY] = self.dataframe[activity_key]
         if not timestamp_key == xes.DEFAULT_TIMESTAMP_KEY:
@@ -178,10 +176,11 @@ class ParquetHandler(object):
         if not case_id_glue == CASE_CONCEPT_NAME:
             self.dataframe[CASE_CONCEPT_NAME] = self.dataframe[case_id_glue]
         self.postloading_processing_dataframe()
-
+        self.dataframe = self.dataframe.sort_values([DEFAULT_TIMESTAMP_KEY, ws_constants.DEFAULT_EVENT_INDEX_KEY])
         if not str(self.dataframe[CASE_CONCEPT_NAME].dtype) == "object":
             self.dataframe[CASE_CONCEPT_NAME] = self.dataframe[CASE_CONCEPT_NAME].astype(str)
-
+        if not ws_constants.DEFAULT_CASE_INDEX_KEY in self.dataframe:
+            self.dataframe[ws_constants.DEFAULT_CASE_INDEX_KEY] = self.dataframe.groupby(CASE_CONCEPT_NAME).ngroup()
         if not self.is_lazy:
             self.sort_dataframe_by_case_id()
             self.build_reduced_dataframe()

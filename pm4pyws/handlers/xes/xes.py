@@ -24,6 +24,7 @@ from pm4pyws.util import casestats
 
 from pm4py.objects.conversion.log import factory as log_conv_factory
 import datetime
+from pm4py.objects.log.util import sorting
 
 
 class XesHandler(object):
@@ -186,10 +187,15 @@ class XesHandler(object):
         self.activity_key = xes.DEFAULT_NAME_KEY
         if classifier_key is not None:
             self.activity_key = classifier_key
+
+        # sorts the traces and the events in the log
+        self.log = sorting.sort_timestamp_log(self.log)
+
         self.build_variants()
         self.calculate_variants_number()
         self.calculate_cases_number()
         self.calculate_events_number()
+        # inserts the event and the case index attributes
         self.insert_event_index()
 
     def insert_event_index(self):
@@ -201,6 +207,7 @@ class XesHandler(object):
         for index, trace in enumerate(self.log):
             for index2, event in enumerate(trace):
                 ev_map[ev_count] = (index, index2)
+                event[ws_constants.DEFAULT_CASE_INDEX_KEY] = index
                 event[ws_constants.DEFAULT_EVENT_INDEX_KEY] = ev_count
                 ev_count = ev_count + 1
         self.event_map = ev_map
