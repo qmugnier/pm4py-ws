@@ -506,6 +506,44 @@ def get_events():
     return ret
 
 
+@PM4PyServices.app.route("/getEventsForDotted", methods=["GET"])
+def get_events_per_dotted():
+    """
+    Gets the events for the Dotted Chart
+
+    Returns
+    -------------
+    dictio
+        JSONified dictionary that contains in the 'events' entry the list of events
+    """
+    clean_expired_sessions()
+
+    # reads the session
+    session = request.args.get('session', type=str)
+    process = request.args.get('process', default='receipt', type=str)
+    attribute1 = request.args.get('attribute1', type=str)
+    attribute2 = request.args.get('attribute2', type=str)
+    attribute3 = request.args.get('attribute3', type=str)
+
+    attributes = [attribute1, attribute2]
+    if attribute3:
+        attributes.append(attribute3)
+
+    dictio = {}
+
+    if check_session_validity(session):
+        user = get_user_from_session(session)
+        if lh.check_user_log_visibility(user, process):
+            events, types = lh.get_handler_for_process_and_session(process, session).get_events_for_dotted(attributes)
+            dictio = {"events": events, "types": types}
+
+        logging.info("get_events_per_dotted complete session=" + str(session) + " process=" + str(process) + " user=" + str(user))
+
+
+    ret = jsonify(dictio)
+    return ret
+
+
 @PM4PyServices.app.route("/loadLogFromPath", methods=["POST"])
 def load_log_from_path():
     """

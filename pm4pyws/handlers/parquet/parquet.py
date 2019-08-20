@@ -32,6 +32,7 @@ from pm4pywsconfiguration import configuration as Configuration
 
 import pandas as pd
 import time
+import datetime
 
 
 class ParquetHandler(object):
@@ -864,3 +865,31 @@ class ParquetHandler(object):
             parameters[constants.GROUPED_DATAFRAME] = self.reduced_grouped_dataframe
 
         return get_align.perform_alignments(self.get_reduced_dataframe(), petri_string, parameters=parameters)
+
+    def get_events_for_dotted(self, attributes):
+        """
+        Get the events (for the dotted chart) with the corresponding list of attributes
+
+        Returns
+        --------------
+        attributes
+            List of attributes
+        """
+        df2 = self.dataframe[attributes].dropna()
+        stream = df2.to_dict('r')
+        stream = sorted(stream, key=lambda x: x[attributes[1]])
+
+        types = {}
+
+        if stream:
+            for attr in attributes:
+                val = stream[0][attr]
+
+                types[attr] = str(type(val))
+
+                if type(val) is pd._libs.tslibs.timestamps.Timestamp:
+                    for ev in stream:
+                        ev[attr] = ev[attr].timestamp()
+
+        return stream, types
+
