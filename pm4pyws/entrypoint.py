@@ -375,7 +375,8 @@ def get_sna():
                     sna = lh.get_handler_for_process_and_session(process, session).get_sna(variant=metric, parameters={
                         "weight_threshold": threshold})
 
-                logging.info("get_sna complete session=" + str(session) + " process=" + str(process) + " user=" + str(user))
+                logging.info(
+                    "get_sna complete session=" + str(session) + " process=" + str(process) + " user=" + str(user))
     except:
         logging.error(traceback.format_exc())
         sna = ""
@@ -534,11 +535,48 @@ def get_events_per_dotted():
     if check_session_validity(session):
         user = get_user_from_session(session)
         if lh.check_user_log_visibility(user, process):
-            events, types = lh.get_handler_for_process_and_session(process, session).get_events_for_dotted(attributes)
-            dictio = {"events": events, "types": types}
+            events, types, uniques, third_unique_values, attributes = lh.get_handler_for_process_and_session(process,
+                                                                                                 session).get_events_for_dotted(
+                attributes)
+            dictio = {"events": events, "types": types, "uniques": uniques, "attributes": attributes,
+                      "third_unique_values": third_unique_values}
 
-        logging.info("get_events_per_dotted complete session=" + str(session) + " process=" + str(process) + " user=" + str(user))
+        logging.info(
+            "get_events_per_dotted complete session=" + str(session) + " process=" + str(process) + " user=" + str(
+                user))
 
+    ret = jsonify(dictio)
+    return ret
+
+
+@PM4PyServices.app.route("/getSpecEventByIdx", methods=["GET"])
+def get_spec_event_by_idx():
+    """
+    Gets the events for the Dotted Chart
+
+    Returns
+    -------------
+    dictio
+        JSONified dictionary that contains in the 'events' entry the list of events
+    """
+    clean_expired_sessions()
+
+    # reads the session
+    session = request.args.get('session', type=str)
+    process = request.args.get('process', default='receipt', type=str)
+    index = request.args.get('index', type=int)
+
+    dictio = {}
+
+    if check_session_validity(session):
+        user = get_user_from_session(session)
+        if lh.check_user_log_visibility(user, process):
+            event = lh.get_handler_for_process_and_session(process, session).get_spec_event_by_idx(index)
+            dictio = {"events": event}
+
+        logging.info(
+            "get_spec_event_by_idx complete session=" + str(session) + " process=" + str(process) + " user=" + str(
+                user))
 
     ret = jsonify(dictio)
     return ret
@@ -720,7 +758,8 @@ def get_log_summary():
 
             ancestor_variants_number = lh.get_handler_for_process_and_session(process,
                                                                               session).first_ancestor.get_variants_number()
-            ancestor_cases_number = lh.get_handler_for_process_and_session(process, session).first_ancestor.get_cases_number()
+            ancestor_cases_number = lh.get_handler_for_process_and_session(process,
+                                                                           session).first_ancestor.get_cases_number()
             ancestor_events_number = lh.get_handler_for_process_and_session(process,
                                                                             session).first_ancestor.get_events_number()
 
