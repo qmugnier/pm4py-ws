@@ -572,7 +572,7 @@ def get_spec_event_by_idx():
         user = get_user_from_session(session)
         if lh.check_user_log_visibility(user, process):
             event = lh.get_handler_for_process_and_session(process, session).get_spec_event_by_idx(index)
-            dictio = {"events": event}
+            dictio = {"event": event}
 
         logging.info(
             "get_spec_event_by_idx complete session=" + str(session) + " process=" + str(process) + " user=" + str(

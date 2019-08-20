@@ -883,9 +883,9 @@ class ParquetHandler(object):
         attributes = [ws_constants.DEFAULT_EVENT_INDEX_KEY] + attributes
         df2 = self.dataframe[attributes].dropna()
         uniques = {i: int(df2[attributes[i]].nunique()) for i in range(len(attributes))}
-        third_unique_values = []
         stream = df2.to_dict('r')
         stream = sorted(stream, key=lambda x: (x[attributes[2]], x[attributes[1]], x[attributes[0]]))
+        third_unique_values = []
         if len(attributes) > 3:
             third_unique_values = list(set(s[attributes[3]] for s in stream))
         types = {}
@@ -904,9 +904,13 @@ class ParquetHandler(object):
 
         Parameters
         --------------
+        ev_idx
+            Event index
 
-        :param ev_idx:
-        :return:
+        Returns
+        --------------
+        event
+            Specific event
         """
         event = self.dataframe[self.dataframe[ws_constants.DEFAULT_EVENT_INDEX_KEY] == ev_idx]
         ret = event.to_dict('r')[0]
