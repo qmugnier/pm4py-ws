@@ -97,9 +97,9 @@ class ParquetHandler(object):
         self.activity_key = ancestor.activity_key
         # self.filters_chain = ancestor.filters_chain
         self.dataframe = ancestor.dataframe
-        #self.grouped_dataframe = ancestor.grouped_dataframe
-        #self.reduced_dataframe = ancestor.reduced_dataframe
-        #self.reduced_grouped_dataframe = ancestor.reduced_grouped_dataframe
+        # self.grouped_dataframe = ancestor.grouped_dataframe
+        # self.reduced_dataframe = ancestor.reduced_dataframe
+        # self.reduced_grouped_dataframe = ancestor.reduced_grouped_dataframe
         self.is_lazy = ancestor.is_lazy
         self.sorted_dataframe = ancestor.sorted_dataframe
 
@@ -196,19 +196,22 @@ class ParquetHandler(object):
         Postloading processing of the dataframe
         """
 
-        self.activity_key = "@@classifier"
+        self.activity_key = ws_constants.DEFAULT_CLASSIFIER_KEY
         if not str(self.dataframe[xes.DEFAULT_NAME_KEY].dtype) == "object":
             self.dataframe[xes.DEFAULT_NAME_KEY] = self.dataframe[xes.DEFAULT_NAME_KEY].astype(str)
         if xes.DEFAULT_TRANSITION_KEY in self.dataframe:
             if not str(self.dataframe[xes.DEFAULT_TRANSITION_KEY].dtype) == "object":
                 self.dataframe[xes.DEFAULT_TRANSITION_KEY] = self.dataframe[xes.DEFAULT_TRANSITION_KEY].astype(str)
 
-        if not "@@classifier" in self.dataframe:
+        if not ws_constants.DEFAULT_CLASSIFIER_KEY in self.dataframe:
             if xes.DEFAULT_TRANSITION_KEY in self.dataframe:
-                self.dataframe["@@classifier"] = self.dataframe[xes.DEFAULT_NAME_KEY] + "+" + self.dataframe[
-                    xes.DEFAULT_TRANSITION_KEY]
+                self.dataframe[ws_constants.DEFAULT_CLASSIFIER_KEY] = self.dataframe[xes.DEFAULT_NAME_KEY] + "+" + \
+                                                                      self.dataframe[xes.DEFAULT_TRANSITION_KEY]
             else:
-                self.dataframe["@@classifier"] = self.dataframe[xes.DEFAULT_NAME_KEY]
+                self.dataframe[ws_constants.DEFAULT_CLASSIFIER_KEY] = self.dataframe[xes.DEFAULT_NAME_KEY]
+
+        if not ws_constants.DEFAULT_EVENT_INDEX_KEY in self.dataframe:
+            self.dataframe[ws_constants.DEFAULT_EVENT_INDEX_KEY] = self.dataframe.index
 
     def sort_dataframe_by_case_id(self):
         """
@@ -216,9 +219,10 @@ class ParquetHandler(object):
         """
         if not self.sorted_dataframe:
             if xes.DEFAULT_TIMESTAMP_KEY in self.dataframe:
-                self.dataframe = self.dataframe.sort_values([CASE_CONCEPT_NAME, xes.DEFAULT_TIMESTAMP_KEY])
+                self.dataframe = self.dataframe.sort_values(
+                    [CASE_CONCEPT_NAME, xes.DEFAULT_TIMESTAMP_KEY, ws_constants.DEFAULT_EVENT_INDEX_KEY])
             else:
-                self.dataframe = self.dataframe.sort_values(CASE_CONCEPT_NAME)
+                self.dataframe = self.dataframe.sort_values([CASE_CONCEPT_NAME, ws_constants.DEFAULT_EVENT_INDEX_KEY])
             self.sorted_dataframe = True
 
     def remove_filter(self, filter, all_filters):
@@ -684,7 +688,7 @@ class ParquetHandler(object):
         parameters[constants.PARAMETER_CONSTANT_ATTRIBUTE_KEY] = self.activity_key
         if self.reduced_grouped_dataframe is not None:
             parameters[constants.GROUPED_DATAFRAME] = self.reduced_grouped_dataframe
-        #parameters["max_ret_cases"] = ws_constants.MAX_NO_CASES_TO_RETURN
+        # parameters["max_ret_cases"] = ws_constants.MAX_NO_CASES_TO_RETURN
         parameters["sort_by_column"] = parameters[
             "sort_by_column"] if "sort_by_column" in parameters else "caseDuration"
         parameters["sort_ascending"] = parameters["sort_ascending"] if "sort_ascending" in parameters else False
@@ -698,7 +702,8 @@ class ParquetHandler(object):
             var_to_filter = var_to_filter.replace(" complete", "+complete")
             var_to_filter = var_to_filter.replace(" COMPLETE", "+COMPLETE")
 
-            filtered_dataframe = variants_filter.apply(self.get_reduced_dataframe(), [var_to_filter], parameters=parameters)
+            filtered_dataframe = variants_filter.apply(self.get_reduced_dataframe(), [var_to_filter],
+                                                       parameters=parameters)
             return casestats.include_key_in_value_list(
                 case_statistics.get_cases_description(filtered_dataframe, parameters=parameters))
         else:
