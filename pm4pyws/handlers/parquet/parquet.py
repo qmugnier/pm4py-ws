@@ -896,7 +896,10 @@ class ParquetHandler(object):
                 if type(val) is pd._libs.tslibs.timestamps.Timestamp:
                     for ev in stream:
                         ev[attr] = ev[attr].timestamp()
-        return stream, types, uniques, third_unique_values, attributes
+        traces = {}
+        for attr in attributes:
+            traces[attr] = [s[attr] for s in stream]
+        return traces, types, uniques, third_unique_values, attributes
 
     def get_spec_event_by_idx(self, ev_idx):
         """
