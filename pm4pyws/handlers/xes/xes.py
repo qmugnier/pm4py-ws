@@ -685,11 +685,17 @@ class XesHandler(object):
                     for ev in stream:
                         ev[attr] = ev[attr].timestamp()
         traces = []
-        for index, v in enumerate(third_unique_values):
+        if third_unique_values:
+            for index, v in enumerate(third_unique_values):
+                traces.append({})
+                for index2, attr in enumerate(attributes):
+                    if index2 < len(attributes)-1:
+                        traces[-1][attr] = [s[attr] for s in stream if s[attributes[3]] == v]
+        else:
+            third_unique_values.append("UNIQUE")
             traces.append({})
             for index2, attr in enumerate(attributes):
-                if index2 < len(attributes)-1:
-                    traces[-1][attr] = [s[attr] for s in stream if s[attributes[3]] == v]
+                traces[-1][attr] = [s[attr] for s in stream]
         return traces, types, attributes, third_unique_values
 
     def get_spec_event_by_idx(self, ev_idx):
