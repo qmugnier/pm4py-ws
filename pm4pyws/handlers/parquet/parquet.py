@@ -881,12 +881,11 @@ class ParquetHandler(object):
         """
         attributes = [ws_constants.DEFAULT_EVENT_INDEX_KEY] + attributes
         df2 = self.dataframe[attributes].dropna()
-        uniques = {i: int(df2[attributes[i]].nunique()) for i in range(len(attributes))}
         stream = df2.to_dict('r')
         stream = sorted(stream, key=lambda x: (x[attributes[2]], x[attributes[1]], x[attributes[0]]))
         third_unique_values = []
         if len(attributes) > 3:
-            third_unique_values = list(set(s[attributes[3]] for s in stream))
+            third_unique_values = sorted(list(set(s[attributes[3]] for s in stream)))
         types = {}
         if stream:
             for attr in attributes:
@@ -895,10 +894,13 @@ class ParquetHandler(object):
                 if type(val) is pd._libs.tslibs.timestamps.Timestamp:
                     for ev in stream:
                         ev[attr] = ev[attr].timestamp()
-        traces = {}
-        for attr in attributes:
-            traces[attr] = [s[attr] for s in stream]
-        return traces, types, uniques, third_unique_values, attributes
+        traces = []
+        for index, v in enumerate(third_unique_values):
+            traces.append({})
+            for index2, attr in enumerate(attributes):
+                if index2 < len(attributes)-1:
+                    traces[-1][attr] = [s[attr] for s in stream if s[attributes[3]] == v]
+        return traces, types, attributes, third_unique_values
 
     def get_spec_event_by_idx(self, ev_idx):
         """
