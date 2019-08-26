@@ -103,7 +103,7 @@ class ParquetHandler(object):
         # self.reduced_dataframe = ancestor.reduced_dataframe
         # self.reduced_grouped_dataframe = ancestor.reduced_grouped_dataframe
         self.is_lazy = ancestor.is_lazy
-        self.sorted_dataframe_by_case_id = ancestor.sorted_dataframe
+        self.sorted_dataframe_by_case_id = ancestor.sorted_dataframe_by_case_id
         self.sorted_dataframe_basilar = ancestor.sorted_dataframe_basilar
 
     def build_from_path(self, path, parameters=None):
