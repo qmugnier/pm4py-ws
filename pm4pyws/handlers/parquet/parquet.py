@@ -71,7 +71,8 @@ class ParquetHandler(object):
         self.activity_key = None
 
         self.is_lazy = is_lazy
-        self.sorted_dataframe = False
+        self.sorted_dataframe_basilar = False
+        self.sorted_dataframe_by_case_id = False
 
     def get_filters_chain_repr(self):
         """
@@ -102,7 +103,8 @@ class ParquetHandler(object):
         # self.reduced_dataframe = ancestor.reduced_dataframe
         # self.reduced_grouped_dataframe = ancestor.reduced_grouped_dataframe
         self.is_lazy = ancestor.is_lazy
-        self.sorted_dataframe = ancestor.sorted_dataframe
+        self.sorted_dataframe_by_case_id = ancestor.sorted_dataframe
+        self.sorted_dataframe_basilar = ancestor.sorted_dataframe_basilar
 
     def build_from_path(self, path, parameters=None):
         """
@@ -120,11 +122,10 @@ class ParquetHandler(object):
         self.dataframe = parquet_importer.apply(path)
         # TODO: verify if this is the best way to act
         self.dataframe[DEFAULT_TIMESTAMP_KEY] = pd.to_datetime(self.dataframe[DEFAULT_TIMESTAMP_KEY], utc=True)
-        self.postloading_processing_dataframe()
-        self.dataframe = self.dataframe.sort_values([DEFAULT_TIMESTAMP_KEY, ws_constants.DEFAULT_EVENT_INDEX_KEY])
-        self.dataframe = self.dataframe.reset_index(drop=True)
         if not str(self.dataframe[CASE_CONCEPT_NAME].dtype) == "object":
             self.dataframe[CASE_CONCEPT_NAME] = self.dataframe[CASE_CONCEPT_NAME].astype(str)
+        self.postloading_processing_dataframe()
+        self.sort_dataframe_basilar()
         self.build_grouped_dataframe()
         if not ws_constants.DEFAULT_CASE_INDEX_KEY in self.dataframe:
             self.dataframe[ws_constants.DEFAULT_CASE_INDEX_KEY] = self.grouped_dataframe.ngroup()
@@ -176,11 +177,10 @@ class ParquetHandler(object):
             self.dataframe[xes.DEFAULT_TIMESTAMP_KEY] = self.dataframe[timestamp_key]
         if not case_id_glue == CASE_CONCEPT_NAME:
             self.dataframe[CASE_CONCEPT_NAME] = self.dataframe[case_id_glue]
-        self.postloading_processing_dataframe()
-        self.dataframe = self.dataframe.sort_values([DEFAULT_TIMESTAMP_KEY, ws_constants.DEFAULT_EVENT_INDEX_KEY])
-        self.dataframe = self.dataframe.reset_index(drop=True)
         if not str(self.dataframe[CASE_CONCEPT_NAME].dtype) == "object":
             self.dataframe[CASE_CONCEPT_NAME] = self.dataframe[CASE_CONCEPT_NAME].astype(str)
+        self.postloading_processing_dataframe()
+        self.sort_dataframe_basilar()
         self.build_grouped_dataframe()
         if not ws_constants.DEFAULT_CASE_INDEX_KEY in self.dataframe:
             self.dataframe[ws_constants.DEFAULT_CASE_INDEX_KEY] = self.grouped_dataframe.ngroup()
@@ -205,28 +205,42 @@ class ParquetHandler(object):
             if not str(self.dataframe[xes.DEFAULT_TRANSITION_KEY].dtype) == "object":
                 self.dataframe[xes.DEFAULT_TRANSITION_KEY] = self.dataframe[xes.DEFAULT_TRANSITION_KEY].astype(str)
 
-        if not ws_constants.DEFAULT_CLASSIFIER_KEY in self.dataframe:
+        if ws_constants.DEFAULT_CLASSIFIER_KEY not in self.dataframe:
             if xes.DEFAULT_TRANSITION_KEY in self.dataframe:
                 self.dataframe[ws_constants.DEFAULT_CLASSIFIER_KEY] = self.dataframe[xes.DEFAULT_NAME_KEY] + "+" + \
                                                                       self.dataframe[xes.DEFAULT_TRANSITION_KEY]
             else:
                 self.dataframe[ws_constants.DEFAULT_CLASSIFIER_KEY] = self.dataframe[xes.DEFAULT_NAME_KEY]
 
-        if not ws_constants.DEFAULT_EVENT_INDEX_KEY in self.dataframe:
+    def build_event_index(self):
+        """
+        Builds the index of events in the dataframe
+        """
+        if ws_constants.DEFAULT_EVENT_INDEX_KEY not in self.dataframe:
             self.dataframe[ws_constants.DEFAULT_EVENT_INDEX_KEY] = self.dataframe.index
-            pass
+
+    def sort_dataframe_basilar(self):
+        """
+        Do a basic sort of the dataframe
+        """
+        if not self.sorted_dataframe_basilar:
+            self.build_event_index()
+            self.dataframe = self.dataframe.sort_values([DEFAULT_TIMESTAMP_KEY, ws_constants.DEFAULT_EVENT_INDEX_KEY])
+            self.dataframe = self.dataframe.reset_index(drop=True)
+            self.sorted_dataframe_basilar = True
 
     def sort_dataframe_by_case_id(self):
         """
         Sort the dataframe by case ID
         """
-        if not self.sorted_dataframe:
+        self.sort_dataframe_basilar()
+        if not self.sorted_dataframe_by_case_id:
             if xes.DEFAULT_TIMESTAMP_KEY in self.dataframe:
                 self.dataframe = self.dataframe.sort_values(
                     [CASE_CONCEPT_NAME, xes.DEFAULT_TIMESTAMP_KEY, ws_constants.DEFAULT_EVENT_INDEX_KEY])
             else:
                 self.dataframe = self.dataframe.sort_values([CASE_CONCEPT_NAME, ws_constants.DEFAULT_EVENT_INDEX_KEY])
-            self.sorted_dataframe = True
+            self.sorted_dataframe_by_case_id = True
 
     def remove_filter(self, filter, all_filters):
         """
@@ -324,19 +338,20 @@ class ParquetHandler(object):
         parameters
             Possible parameters of the algorithm
         """
-        if parameters is None:
-            parameters = {}
-        parameters[constants.PARAMETER_CONSTANT_ACTIVITY_KEY] = self.activity_key
-        parameters[constants.PARAMETER_CONSTANT_ATTRIBUTE_KEY] = self.activity_key
+        if self.variants_df is None:
+            if parameters is None:
+                parameters = {}
+            parameters[constants.PARAMETER_CONSTANT_ACTIVITY_KEY] = self.activity_key
+            parameters[constants.PARAMETER_CONSTANT_ATTRIBUTE_KEY] = self.activity_key
 
-        if self.reduced_dataframe is not None:
-            dataframe = self.reduced_dataframe
-        else:
-            dataframe = self.dataframe
+            if self.reduced_dataframe is not None:
+                dataframe = self.reduced_dataframe
+            else:
+                dataframe = self.dataframe
 
-        self.variants_df = case_statistics.get_variants_df_with_case_duration(dataframe,
-                                                                              parameters=parameters)
-        self.save_most_common_variant(self.variants_df)
+            self.variants_df = case_statistics.get_variants_df_with_case_duration(dataframe,
+                                                                                  parameters=parameters)
+            self.save_most_common_variant(self.variants_df)
 
     def get_variants_df(self):
         """
@@ -347,8 +362,7 @@ class ParquetHandler(object):
         variants_df
             Variants dataframe
         """
-        if self.variants_df is None:
-            self.build_variants_df()
+        self.build_variants_df()
 
         return self.variants_df
 
@@ -356,7 +370,8 @@ class ParquetHandler(object):
         """
         Builds the reduced dataframe
         """
-        self.reduced_dataframe = self.dataframe[[CASE_CONCEPT_NAME, self.activity_key, DEFAULT_TIMESTAMP_KEY]]
+        if self.reduced_dataframe is None:
+            self.reduced_dataframe = self.dataframe[[CASE_CONCEPT_NAME, self.activity_key, DEFAULT_TIMESTAMP_KEY]]
 
     def get_reduced_dataframe(self):
         """
@@ -367,15 +382,16 @@ class ParquetHandler(object):
         reduced_dataframe
             Dataframe containing only 3 columns
         """
-        if self.reduced_dataframe is None:
-            self.build_reduced_dataframe()
+
+        self.build_reduced_dataframe()
         return self.reduced_dataframe
 
     def build_grouped_dataframe(self):
         """
         Saves the grouped dataframe
         """
-        self.grouped_dataframe = self.dataframe.groupby(CASE_CONCEPT_NAME, sort=False)
+        if self.grouped_dataframe is None:
+            self.grouped_dataframe = self.dataframe.groupby(CASE_CONCEPT_NAME, sort=False)
 
     def get_grouped_dataframe(self):
         """
@@ -386,16 +402,16 @@ class ParquetHandler(object):
         grouped_dataframe
             Grouped dataframe
         """
-        if self.grouped_dataframe is None:
-            self.build_grouped_dataframe()
+        self.build_grouped_dataframe()
         return self.grouped_dataframe
 
     def build_reduced_grouped_dataframe(self):
         """
         Saves the reduced grouped dataframe
         """
-        reduced_dataframe = self.get_reduced_dataframe()
-        self.reduced_grouped_dataframe = reduced_dataframe.groupby(CASE_CONCEPT_NAME)
+        if self.reduced_grouped_dataframe is None:
+            reduced_dataframe = self.get_reduced_dataframe()
+            self.reduced_grouped_dataframe = reduced_dataframe.groupby(CASE_CONCEPT_NAME)
 
     def get_reduced_grouped_dataframe(self):
         """
@@ -406,8 +422,7 @@ class ParquetHandler(object):
         reduced_grouped_dataframe
             Reduced grouped dataframe
         """
-        if self.reduced_grouped_dataframe is None:
-            self.build_reduced_grouped_dataframe()
+        self.build_reduced_grouped_dataframe()
         return self.reduced_grouped_dataframe
 
     def save_most_common_variant(self, variants_df):
@@ -512,7 +527,7 @@ class ParquetHandler(object):
         parameters[constants.PARAMETER_CONSTANT_ACTIVITY_KEY] = self.activity_key
         parameters[constants.PARAMETER_CONSTANT_ATTRIBUTE_KEY] = self.activity_key
 
-        if not self.sorted_dataframe:
+        if not self.sorted_dataframe_by_case_id:
             self.sort_dataframe_by_case_id()
 
         if self.most_common_variant is not None:
