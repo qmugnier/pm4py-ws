@@ -33,6 +33,7 @@ from pm4pywsconfiguration import configuration as Configuration
 import pandas as pd
 import time
 import datetime
+import math
 
 
 class ParquetHandler(object):
@@ -911,7 +912,17 @@ class ParquetHandler(object):
         self.insert_case_number_in_grouped_df()
 
         attributes = [ws_constants.DEFAULT_EVENT_INDEX_KEY] + attributes
-        df2 = self.dataframe[attributes].dropna()
+        attributes1 = list(set(attributes))
+        attributes2 = list(set([ws_constants.DEFAULT_CASE_INDEX_KEY] + attributes))
+
+        df2 = self.dataframe[attributes2].dropna()
+        df2_len = len(df2)
+        number_partitions = math.ceil(float(df2_len)/float(ws_constants.MAX_NO_EVENTS_PER_DOTTED))
+        if number_partitions > 1:
+            df2["@@dotted_grouped"] = df2.groupby(ws_constants.DEFAULT_CASE_INDEX_KEY).ngroup()
+            df2["@@partition"] = df2["@@dotted_grouped"] % number_partitions
+            df2 = df2[df2["@@partition"] == 0]
+        df2 = df2[attributes1]
         stream = df2.to_dict('r')
         stream = sorted(stream, key=lambda x: (x[attributes[2]], x[attributes[1]], x[attributes[0]]))
         third_unique_values = []
