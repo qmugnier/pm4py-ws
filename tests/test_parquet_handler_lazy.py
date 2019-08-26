@@ -4,7 +4,7 @@ import unittest
 from pm4pyws.handlers.parquet.parquet import ParquetHandler
 
 
-def basic_test(path):
+def basic_test_lazy(path):
     handler = ParquetHandler(is_lazy=True)
     handler.build_from_path(path)
     handler.get_schema(variant="dfg_freq")
@@ -22,10 +22,10 @@ def basic_test(path):
     handler.get_sna(variant="subcontracting")
     handler.get_sna(variant="jointactivities")
     handler.get_transient(86400)
-    handler.get_events_for_dotted()
+    handler.get_events_for_dotted(["time:timestamp", "@@case_index", "concept:name"])
 
 
-def process_quantities_test(path):
+def process_quantities_test_lazy(path):
     handler = ParquetHandler(is_lazy=True)
     handler.build_from_path(path)
     handler.get_start_activities()
@@ -39,14 +39,14 @@ def process_quantities_test(path):
     handler.get_events(case_id_0)
 
 
-class ParquetTests(unittest.TestCase):
+class ParquetTestsLazy(unittest.TestCase):
     def test_parquets_basic(self):
-        basic_test("files/event_logs/running-example.parquet")
-        basic_test("files/event_logs/receipt.parquet")
+        basic_test_lazy("files/event_logs/running-example.parquet")
+        basic_test_lazy("files/event_logs/receipt.parquet")
 
     def test_parquets_process_quantities(self):
-        process_quantities_test("files/event_logs/running-example.parquet")
-        process_quantities_test("files/event_logs/receipt.parquet")
+        process_quantities_test_lazy("files/event_logs/running-example.parquet")
+        process_quantities_test_lazy("files/event_logs/receipt.parquet")
 
     def test_ru_filtering(self):
         handler = ParquetHandler(is_lazy=True)

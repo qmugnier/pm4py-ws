@@ -22,7 +22,7 @@ def basic_test(path):
     handler.get_sna(variant="subcontracting")
     handler.get_sna(variant="jointactivities")
     handler.get_transient(86400)
-    handler.get_events_for_dotted()
+    handler.get_events_for_dotted(["time:timestamp", "@@case_index", "concept:name"])
 
 
 def process_quantities_test(path):
