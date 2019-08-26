@@ -5,7 +5,7 @@ from pm4pyws.handlers.parquet.parquet import ParquetHandler
 
 
 def basic_test(path):
-    handler = ParquetHandler()
+    handler = ParquetHandler(is_lazy=True)
     handler.build_from_path(path)
     handler.get_schema(variant="dfg_freq")
     handler.get_schema(variant="dfg_perf")
@@ -26,7 +26,7 @@ def basic_test(path):
 
 
 def process_quantities_test(path):
-    handler = ParquetHandler()
+    handler = ParquetHandler(is_lazy=True)
     handler.build_from_path(path)
     handler.get_start_activities()
     handler.get_end_activities()
@@ -49,7 +49,7 @@ class ParquetTests(unittest.TestCase):
         process_quantities_test("files/event_logs/receipt.parquet")
 
     def test_ru_filtering(self):
-        handler = ParquetHandler()
+        handler = ParquetHandler(is_lazy=True)
         handler.build_from_path("files/event_logs/running-example.parquet")
         handler = handler.add_filter(['timestamp_trace_intersecting', '1293703320@@@1294667760'],
                                      ['timestamp_trace_intersecting', '1293703320@@@1294667760'])
