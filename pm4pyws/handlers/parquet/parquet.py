@@ -125,11 +125,10 @@ class ParquetHandler(object):
         if not str(self.dataframe[CASE_CONCEPT_NAME].dtype) == "object":
             self.dataframe[CASE_CONCEPT_NAME] = self.dataframe[CASE_CONCEPT_NAME].astype(str)
         self.postloading_processing_dataframe()
-        self.sort_dataframe_basilar()
-        self.build_grouped_dataframe()
-        if not ws_constants.DEFAULT_CASE_INDEX_KEY in self.dataframe:
-            self.dataframe[ws_constants.DEFAULT_CASE_INDEX_KEY] = self.grouped_dataframe.ngroup()
         if not self.is_lazy:
+            self.sort_dataframe_basilar()
+            self.build_grouped_dataframe()
+            self.insert_case_number_in_grouped_df()
             self.sort_dataframe_by_case_id()
             self.build_reduced_dataframe()
             self.build_variants_df()
@@ -180,11 +179,10 @@ class ParquetHandler(object):
         if not str(self.dataframe[CASE_CONCEPT_NAME].dtype) == "object":
             self.dataframe[CASE_CONCEPT_NAME] = self.dataframe[CASE_CONCEPT_NAME].astype(str)
         self.postloading_processing_dataframe()
-        self.sort_dataframe_basilar()
-        self.build_grouped_dataframe()
-        if not ws_constants.DEFAULT_CASE_INDEX_KEY in self.dataframe:
-            self.dataframe[ws_constants.DEFAULT_CASE_INDEX_KEY] = self.grouped_dataframe.ngroup()
         if not self.is_lazy:
+            self.sort_dataframe_basilar()
+            self.build_grouped_dataframe()
+            self.insert_case_number_in_grouped_df()
             self.sort_dataframe_by_case_id()
             self.build_reduced_dataframe()
             self.build_variants_df()
@@ -234,12 +232,15 @@ class ParquetHandler(object):
         Sort the dataframe by case ID
         """
         self.sort_dataframe_basilar()
+        self.insert_case_number_in_grouped_df()
         if not self.sorted_dataframe_by_case_id:
             if xes.DEFAULT_TIMESTAMP_KEY in self.dataframe:
                 self.dataframe = self.dataframe.sort_values(
-                    [CASE_CONCEPT_NAME, xes.DEFAULT_TIMESTAMP_KEY, ws_constants.DEFAULT_EVENT_INDEX_KEY])
+                    [ws_constants.DEFAULT_CASE_INDEX_KEY, xes.DEFAULT_TIMESTAMP_KEY,
+                     ws_constants.DEFAULT_EVENT_INDEX_KEY])
             else:
-                self.dataframe = self.dataframe.sort_values([CASE_CONCEPT_NAME, ws_constants.DEFAULT_EVENT_INDEX_KEY])
+                self.dataframe = self.dataframe.sort_values(
+                    [ws_constants.DEFAULT_CASE_INDEX_KEY, ws_constants.DEFAULT_EVENT_INDEX_KEY])
             self.sorted_dataframe_by_case_id = True
 
     def remove_filter(self, filter, all_filters):
@@ -268,9 +269,9 @@ class ParquetHandler(object):
             new_handler.variants_number = -1
 
             if not self.is_lazy:
+                new_handler.build_grouped_dataframe()
                 new_handler.build_reduced_dataframe()
                 new_handler.build_variants_df()
-                new_handler.build_grouped_dataframe()
                 new_handler.build_reduced_grouped_dataframe()
                 new_handler.calculate_cases_number()
                 new_handler.calculate_variants_number()
@@ -303,9 +304,9 @@ class ParquetHandler(object):
         new_handler.variants_number = -1
 
         if not self.is_lazy:
+            new_handler.build_grouped_dataframe()
             new_handler.build_reduced_dataframe()
             new_handler.build_variants_df()
-            new_handler.build_grouped_dataframe()
             new_handler.build_reduced_grouped_dataframe()
             new_handler.calculate_cases_number()
             new_handler.calculate_variants_number()
@@ -392,6 +393,15 @@ class ParquetHandler(object):
         """
         if self.grouped_dataframe is None:
             self.grouped_dataframe = self.dataframe.groupby(CASE_CONCEPT_NAME, sort=False)
+
+    def insert_case_number_in_grouped_df(self):
+        """
+        Inserts the case number in the grouped dataframe
+        :return:
+        """
+        self.build_grouped_dataframe()
+        if not ws_constants.DEFAULT_CASE_INDEX_KEY in self.dataframe:
+            self.dataframe[ws_constants.DEFAULT_CASE_INDEX_KEY] = self.grouped_dataframe.ngroup()
 
     def get_grouped_dataframe(self):
         """
@@ -897,6 +907,9 @@ class ParquetHandler(object):
         attributes
             List of attributes
         """
+        self.sort_dataframe_basilar()
+        self.insert_case_number_in_grouped_df()
+
         attributes = [ws_constants.DEFAULT_EVENT_INDEX_KEY] + attributes
         df2 = self.dataframe[attributes].dropna()
         stream = df2.to_dict('r')
@@ -917,7 +930,7 @@ class ParquetHandler(object):
             for index, v in enumerate(third_unique_values):
                 traces.append({})
                 for index2, attr in enumerate(attributes):
-                    if index2 < len(attributes)-1:
+                    if index2 < len(attributes) - 1:
                         traces[-1][attr] = [s[attr] for s in stream if s[attributes[3]] == v]
         else:
             third_unique_values.append("UNIQUE")
