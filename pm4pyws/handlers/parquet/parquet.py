@@ -126,6 +126,10 @@ class ParquetHandler(object):
         if not str(self.dataframe[CASE_CONCEPT_NAME].dtype) == "object":
             self.dataframe[CASE_CONCEPT_NAME] = self.dataframe[CASE_CONCEPT_NAME].astype(str)
         self.postloading_processing_dataframe()
+
+        print(self.dataframe)
+        print(path)
+
         if not self.is_lazy:
             self.sort_dataframe_basilar()
             self.build_grouped_dataframe()
