@@ -10,6 +10,8 @@ from pm4pyws.entrypoint import PM4PyServices
 from pm4pywsconfiguration import configuration as Configuration
 import os
 
+pm4pyamazon.bucket = Configuration.amazon_bucket
+
 app = PM4PyServices.app
 
 import sqlite3
