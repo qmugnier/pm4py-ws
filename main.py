@@ -3,6 +3,8 @@ try:
 except:
     pass
 
+import pm4pyamazon
+
 
 from pm4pyws.entrypoint import PM4PyServices
 from pm4pywsconfiguration import configuration as Configuration
