@@ -26,6 +26,13 @@ def apply(wrapper, parameters=None):
 
     activities = list(activities_count.keys())
 
+    dfg = clean_dfg_based_on_noise_thresh(dfg, activities, decreasingFactor * constants.DEFAULT_DFG_CLEAN_MULTIPLIER,
+                                          parameters=parameters)
+    max_acti_count = max(activities_count.values())
+    activities_count = {x: y for x, y in activities_count.items() if y >= decreasingFactor * constants.DEFAULT_DFG_CLEAN_MULTIPLIER * max_acti_count}
+    activities = list(activities_count.keys())
+    dfg = {x: y for x, y in dfg.items() if x[0] in activities and x[1] in activities}
+
     gviz = dfg_vis_factory.apply(dfg, activities_count=activities_count, parameters={"format": "svg", "start_activities": start_activities, "end_activities": end_activities})
 
     gviz_base64 = base64.b64encode(str(gviz).encode('utf-8'))
