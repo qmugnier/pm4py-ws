@@ -11,6 +11,8 @@ class DistributedHandler(object):
         # classifier
         self.activity_key = xes.DEFAULT_NAME_KEY
 
+        self.first_ancestor = self
+
     def get_filters_chain_repr(self):
         """
         Gets the representation of the current filters chain
@@ -29,13 +31,15 @@ class DistributedHandler(object):
         raise Exception("not implemented")
 
     def get_variants_number(self):
-        raise Exception("not implemented")
+        return -1
 
     def get_cases_number(self):
-        raise Exception("not implemented")
+        summary = self.wrapper.get_log_summary()
+        return summary["cases"]
 
     def get_events_number(self):
-        raise Exception("not implemented")
+        summary = self.wrapper.get_log_summary()
+        return summary["events"]
 
     def get_schema(self, variant=process_schema_factory.DFG_FREQ, parameters=None):
         raise Exception("not implemented")
