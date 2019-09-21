@@ -42,7 +42,7 @@ class DistributedHandler(object):
         return summary["events"]
 
     def get_schema(self, variant=process_schema_factory.DFG_FREQ, parameters=None):
-        raise Exception("not implemented")
+        return process_schema_factory.apply(self.wrapper, variant=variant, parameters=parameters)
 
     def get_numeric_attribute_svg(self, attribute, parameters=None):
         pass
