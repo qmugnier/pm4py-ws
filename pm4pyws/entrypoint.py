@@ -766,20 +766,7 @@ def get_log_summary():
     if check_session_validity(session):
         user = get_user_from_session(session)
         if lh.check_user_log_visibility(user, process):
-            this_variants_number = lh.get_handler_for_process_and_session(process, session).get_variants_number()
-            this_cases_number = lh.get_handler_for_process_and_session(process, session).get_cases_number()
-            this_events_number = lh.get_handler_for_process_and_session(process, session).get_events_number()
-
-            ancestor_variants_number = lh.get_handler_for_process_and_session(process,
-                                                                              session).first_ancestor.get_variants_number()
-            ancestor_cases_number = lh.get_handler_for_process_and_session(process,
-                                                                           session).first_ancestor.get_cases_number()
-            ancestor_events_number = lh.get_handler_for_process_and_session(process,
-                                                                            session).first_ancestor.get_events_number()
-
-            dictio = {"this_variants_number": this_variants_number, "this_cases_number": this_cases_number,
-                      "this_events_number": this_events_number, "ancestor_variants_number": ancestor_variants_number,
-                      "ancestor_cases_number": ancestor_cases_number, "ancestor_events_number": ancestor_events_number}
+            dictio = lh.get_handler_for_process_and_session(process, session).get_log_summary_dictio()
 
         logging.info(
             "get_log_summary complete session=" + str(session) + " process=" + str(process) + " user=" + str(user))

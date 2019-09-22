@@ -971,3 +971,17 @@ class ParquetHandler(object):
             if str(ret[key]).lower() == "nan" or str(ret[key]).lower() == "nat":
                 del ret[key]
         return ret
+
+    def get_log_summary_dictio(self):
+        this_variants_number = self.get_variants_number()
+        this_cases_number = self.get_cases_number()
+        this_events_number = self.get_events_number()
+        ancestor_variants_number = self.first_ancestor.get_variants_number()
+        ancestor_cases_number = self.first_ancestor.get_cases_number()
+        ancestor_events_number = self.first_ancestor.get_events_number()
+
+        dictio = {"this_variants_number": this_variants_number, "this_cases_number": this_cases_number,
+                  "this_events_number": this_events_number, "ancestor_variants_number": ancestor_variants_number,
+                  "ancestor_cases_number": ancestor_cases_number, "ancestor_events_number": ancestor_events_number}
+
+        return dictio
