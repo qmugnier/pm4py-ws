@@ -25,12 +25,15 @@ class DistributedHandler(object):
         return str(self.filters_chain)
 
     def remove_filter(self, filter, all_filters):
-        raise Exception("not implemented")
+        self.wrapper.set_filters(all_filters)
+        return self
 
     def add_filter(self, filter, all_filters):
-        raise Exception("not implemented")
+        self.wrapper.set_filters(all_filters)
+        return self
 
     def get_variants_number(self):
+        # the number is not implemented
         return -1
 
     def get_cases_number(self):
@@ -75,16 +78,16 @@ class DistributedHandler(object):
         pass
 
     def get_start_activities(self, parameters=None):
-        pass
+        return self.wrapper.get_start_activities()
 
     def get_end_activities(self, parameters=None):
-        pass
+        return self.wrapper.get_end_activities()
 
     def get_attributes_list(self, parameters=None):
-        pass
+        return self.wrapper.get_attribute_names()
 
     def get_attribute_values(self, attribute_key, parameters=None):
-        pass
+        return self.wrapper.get_attribute_values(attribute_key)
 
     def get_paths(self, attribute_key, parameters=None):
         pass
