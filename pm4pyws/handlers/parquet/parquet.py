@@ -550,7 +550,7 @@ class ParquetHandler(object):
         if self.variants_df is not None:
             parameters["variants_df"] = self.variants_df
 
-        return process_schema_factory.apply(self.get_reduced_dataframe(), variant=variant, parameters=parameters)
+        return list(process_schema_factory.apply(self.get_reduced_dataframe(), variant=variant, parameters=parameters)) + [self.get_log_summary_dictio()]
 
     def get_numeric_attribute_svg(self, attribute, parameters=None):
         """
@@ -645,7 +645,7 @@ class ParquetHandler(object):
         variants_stats = variants.get_statistics(self.get_reduced_dataframe(), parameters=parameters)
         variants_stats = variants_stats[0:min(len(variants_stats), max_no_variants)]
 
-        return variants_stats
+        return [variants_stats] + [self.get_log_summary_dictio()]
 
     def get_sna(self, variant="handover", parameters=None):
         """
@@ -733,11 +733,11 @@ class ParquetHandler(object):
 
             filtered_dataframe = variants_filter.apply(self.get_reduced_dataframe(), [var_to_filter],
                                                        parameters=parameters)
-            return casestats.include_key_in_value_list(
-                case_statistics.get_cases_description(filtered_dataframe, parameters=parameters))
+            return [casestats.include_key_in_value_list(
+                case_statistics.get_cases_description(filtered_dataframe, parameters=parameters))] + [self.get_log_summary_dictio()]
         else:
-            return casestats.include_key_in_value_list(
-                case_statistics.get_cases_description(self.get_reduced_dataframe(), parameters=parameters))
+            return [casestats.include_key_in_value_list(
+                case_statistics.get_cases_description(self.get_reduced_dataframe(), parameters=parameters))] + [self.get_log_summary_dictio()]
 
     def get_events(self, caseid, parameters=None):
         """

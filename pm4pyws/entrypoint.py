@@ -187,21 +187,25 @@ def get_process_schema():
                     second_model = saved_obj[11]
                     second_format = saved_obj[12]
                     activity_key = saved_obj[13]
+                    log_summary = saved_obj[14]
                 else:
-                    base64, model, format, this_handler, activities, start_activities, end_activities, gviz_base64, graph_rep, type_of_model, decoration, second_model, second_format, activity_key = handler.get_schema(
+                    base64, model, format, this_handler, activities, start_activities, end_activities, gviz_base64, graph_rep, type_of_model, decoration, second_model, second_format, activity_key, log_summary = handler.get_schema(
                         variant=variant,
                         parameters=parameters)
                     lh.save_object_memory(ps_repr, [base64, model, format, this_handler, activities, start_activities,
                                                     end_activities, gviz_base64, graph_rep, type_of_model, decoration,
-                                                    second_model, second_format, activity_key])
+                                                    second_model, second_format, activity_key, log_summary])
                 if model is not None:
                     model = model.decode('utf-8')
+
                 dictio = {"base64": base64.decode('utf-8'), "model": model, "format": format, "handler": this_handler,
                           "activities": activities,
                           "start_activities": start_activities, "end_activities": end_activities,
                           "gviz_base64": gviz_base64.decode('utf-8'), "graph_rep": graph_rep,
                           "type_of_model": type_of_model, "decoration": decoration,
                           "second_model": second_model, "second_format": second_format, "activity_key": activity_key}
+                for key in log_summary:
+                    dictio[key] = log_summary[key]
             except:
                 logging.error(traceback.format_exc())
             Commons.semaphore_matplot.release()
@@ -425,10 +429,11 @@ def get_all_variants():
             parameters = {}
             parameters["max_no_variants"] = int(max_no_variants)
 
-            variants = lh.get_handler_for_process_and_session(process, session).get_variant_statistics(
+            variants, log_summary = lh.get_handler_for_process_and_session(process, session).get_variant_statistics(
                 parameters=parameters)
             dictio = {"variants": variants}
-
+            for key in log_summary:
+                dictio[key] = log_summary[key]
         logging.info(
             "get_all_variants complete session=" + str(session) + " process=" + str(process) + " user=" + str(user))
 
@@ -467,10 +472,11 @@ def get_all_cases():
                 parameters["variant"] = variant
             parameters["max_ret_cases"] = int(max_no_cases)
 
-            cases_list = lh.get_handler_for_process_and_session(process, session).get_case_statistics(
+            cases_list, log_summary = lh.get_handler_for_process_and_session(process, session).get_case_statistics(
                 parameters=parameters)
             dictio = {"cases": cases_list}
-
+            for key in log_summary:
+                dictio[key] = log_summary[key]
         logging.info(
             "get_events complete session=" + str(session) + " process=" + str(process) + " variant=" + str(
                 variant) + " user=" + str(user))
