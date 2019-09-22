@@ -1,5 +1,7 @@
 from pm4py.objects.log.util import xes
 from pm4pyws.handlers.distributed.process_schema import factory as process_schema_factory
+from pm4py.util import constants
+
 
 class DistributedHandler(object):
     def __init__(self, wrapper, parameters=None):
@@ -90,7 +92,7 @@ class DistributedHandler(object):
         return self.wrapper.get_attribute_values(attribute_key)
 
     def get_paths(self, attribute_key, parameters=None):
-        pass
+        return self.wrapper.calculate_dfg(parameters={constants.PARAMETER_CONSTANT_ATTRIBUTE_KEY: attribute_key})
 
     def get_alignments(self, petri_string, parameters=None):
         pass
