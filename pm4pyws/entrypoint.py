@@ -460,7 +460,7 @@ def get_all_cases():
     variant = request.args.get('variant', type=str)
     max_no_cases = request.args.get('max_no_cases', default=constants.MAX_NO_CASES_TO_RETURN, type=int)
 
-    logging.info("get_events start session=" + str(session) + " process=" + str(process) + " variant=" + str(variant))
+    logging.info("get_all_cases start session=" + str(session) + " process=" + str(process) + " variant=" + str(variant))
 
     dictio = {}
 
@@ -478,10 +478,53 @@ def get_all_cases():
             for key in log_summary:
                 dictio[key] = log_summary[key]
         logging.info(
-            "get_events complete session=" + str(session) + " process=" + str(process) + " variant=" + str(
+            "get_all_cases complete session=" + str(session) + " process=" + str(process) + " variant=" + str(
                 variant) + " user=" + str(user))
 
     ret = jsonify(dictio)
+    return ret
+
+@PM4PyServices.app.route("/getAllVariantsAndCases", methods=["GET"])
+def get_all_variants_and_cases():
+    """
+    Gets all the variants from the event log
+
+    Returns
+    ------------
+    dictio
+        JSONified dictionary that contains in the 'variants' entry the list of variants
+    """
+    clean_expired_sessions()
+
+    # reads the session
+    session = request.args.get('session', type=str)
+    # reads the requested process name
+    process = request.args.get('process', default='receipt', type=str)
+    # reads the maximum number of variants to return
+    max_no_variants = request.args.get('max_no_variants', default=constants.MAX_NO_VARIANTS_TO_RETURN, type=int)
+
+    logging.info("get_all_variants_and_cases start session=" + str(session) + " process=" + str(process))
+
+    dictio = {}
+
+    if check_session_validity(session):
+        user = get_user_from_session(session)
+        if lh.check_user_log_visibility(user, process):
+            parameters = {}
+            parameters["max_no_variants"] = int(max_no_variants)
+
+            handler = lh.get_handler_for_process_and_session(process, session)
+            variants, log_summary = handler.get_variant_statistics(parameters=parameters)
+            cases_list, log_summary = handler.get_case_statistics(parameters=parameters)
+
+            dictio = {"variants": variants, "cases": cases_list}
+            for key in log_summary:
+                dictio[key] = log_summary[key]
+        logging.info(
+            "get_all_variants_and_cases complete session=" + str(session) + " process=" + str(process) + " user=" + str(user))
+
+    ret = jsonify(dictio)
+
     return ret
 
 
