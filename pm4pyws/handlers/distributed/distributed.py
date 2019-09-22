@@ -42,7 +42,7 @@ class DistributedHandler(object):
         return summary["events"]
 
     def get_schema(self, variant=process_schema_factory.DFG_FREQ, parameters=None):
-        return process_schema_factory.apply(self.wrapper, variant=variant, parameters=parameters)
+        return list(process_schema_factory.apply(self.wrapper, variant=variant, parameters=parameters)) + [self.get_log_summary_dictio()]
 
     def get_numeric_attribute_svg(self, attribute, parameters=None):
         pass
@@ -97,3 +97,18 @@ class DistributedHandler(object):
 
     def get_spec_event_by_idx(self, ev_idx):
         pass
+
+    def get_log_summary_dictio(self):
+        summary = self.wrapper.get_log_summary()
+        this_variants_number = -1
+        this_cases_number = summary["cases"]
+        this_events_number = summary["events"]
+        ancestor_variants_number = -1
+        ancestor_cases_number = summary["cases"]
+        ancestor_events_number = summary["events"]
+
+        dictio = {"this_variants_number": this_variants_number, "this_cases_number": this_cases_number,
+                  "this_events_number": this_events_number, "ancestor_variants_number": ancestor_variants_number,
+                  "ancestor_cases_number": ancestor_cases_number, "ancestor_events_number": ancestor_events_number}
+
+        return dictio
