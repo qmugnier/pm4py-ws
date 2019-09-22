@@ -45,4 +45,4 @@ def apply(wrapper, parameters=None):
 
     net, im, fm = dfg_conv_factory.apply(dfg, parameters={"start_activities": start_activities, "end_activities": end_activities})
 
-    return get_base64_from_gviz(gviz), export_petri_as_string(net, im, fm), ".pnml", "parquet", activities, start_activities, end_activities, gviz_base64, ret_graph, "dfg", "perf", None, "", xes.DEFAULT_NAME_KEY, {"this_events_number": events, "this_cases_number": cases, "this_variants_number": -1}
+    return get_base64_from_gviz(gviz), export_petri_as_string(net, im, fm), ".pnml", "parquet", activities, start_activities, end_activities, gviz_base64, ret_graph, "dfg", "perf", None, "", xes.DEFAULT_NAME_KEY, {"this_events_number": events, "this_cases_number": cases, "this_variants_number": -1, "ancestor_events_number": events, "ancestor_cases_number": cases, "ancestor_variants_number": -1}

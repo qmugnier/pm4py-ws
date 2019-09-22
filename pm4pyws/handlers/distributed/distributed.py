@@ -62,7 +62,7 @@ class DistributedHandler(object):
     def get_variant_statistics(self, parameters=None):
         dictio = self.wrapper.get_variants()
 
-        return [dictio["variants"], {"this_events_number": dictio["events"], "this_cases_number": dictio["cases"], "this_variants_number": -1}]
+        return [dictio["variants"], {"this_events_number": dictio["events"], "this_cases_number": dictio["cases"], "this_variants_number": -1, "ancestor_events_number": dictio["events"], "ancestor_cases_number": dictio["cases"], "ancestor_variants_number": -1}]
 
     def get_sna(self, variant="handover", parameters=None):
         pass
@@ -90,7 +90,7 @@ class DistributedHandler(object):
         else:
             dictio = self.wrapper.get_cases()
 
-        return [dictio["cases_list"], {"this_events_number": dictio["events"], "this_cases_number": dictio["cases"], "this_variants_number": -1}]
+        return [dictio["cases_list"], {"this_events_number": dictio["events"], "this_cases_number": dictio["cases"], "this_variants_number": -1, "ancestor_events_number": dictio["events"], "ancestor_cases_number": dictio["cases"], "ancestor_variants_number": -1}]
 
     def get_events(self, caseid, parameters=None):
         return self.wrapper.get_events(caseid)
