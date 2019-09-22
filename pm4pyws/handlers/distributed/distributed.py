@@ -75,7 +75,7 @@ class DistributedHandler(object):
         return [dictio["cases_list"], {"this_events_number": dictio["events"], "this_cases_number": dictio["cases"], "this_variants_number": -1}]
 
     def get_events(self, caseid, parameters=None):
-        pass
+        return self.wrapper.get_events(caseid)
 
     def download_xes_log(self):
         pass
