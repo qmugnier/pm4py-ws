@@ -1,6 +1,7 @@
 from pm4py.objects.log.util import xes
 from pm4pyws.handlers.distributed.process_schema import factory as process_schema_factory
 from pm4py.util import constants
+from copy import deepcopy
 
 
 class DistributedHandler(object):
@@ -70,7 +71,24 @@ class DistributedHandler(object):
         pass
 
     def get_case_statistics(self, parameters=None):
-        dictio = self.wrapper.get_cases()
+        if parameters is None:
+            parameters = {}
+
+        if "variant" in parameters:
+            var_to_filter = parameters["variant"]
+            # TODO: TECHNICAL DEBT
+            # quick turnaround for bug
+            var_to_filter = var_to_filter.replace(" start", "+start")
+            var_to_filter = var_to_filter.replace(" START", "+START")
+            var_to_filter = var_to_filter.replace(" complete", "+complete")
+            var_to_filter = var_to_filter.replace(" COMPLETE", "+COMPLETE")
+
+            old_filters = deepcopy(self.wrapper.filters)
+            self.wrapper.set_filters(old_filters + [["variants", [var_to_filter]]])
+            dictio = self.wrapper.get_cases()
+            self.wrapper.set_filters(old_filters)
+        else:
+            dictio = self.wrapper.get_cases()
 
         return [dictio["cases_list"], {"this_events_number": dictio["events"], "this_cases_number": dictio["cases"], "this_variants_number": -1}]
 
