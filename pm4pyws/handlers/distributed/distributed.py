@@ -125,7 +125,8 @@ class DistributedHandler(object):
             dictio = self.wrapper.get_events_per_dotted(attributes[0], attributes[1], attributes[2])
         else:
             dictio = self.wrapper.get_events_per_dotted(attributes[0], attributes[1])
-        return dictio
+
+        return dictio["traces"], dictio["types"], dictio["attributes"], dictio["third_unique_values"]
 
     def get_spec_event_by_idx(self, ev_idx):
         pass
