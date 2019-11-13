@@ -1,4 +1,5 @@
 ====================================================
+
 IMPORTANT NOTE
 
 As of Q4 2019, further public development of the PM4Py Web-services
@@ -9,7 +10,7 @@ by means of an academic licensing scheme.
 Relicensing of the project, i.e., for commercial/proprietary
 use of the library is possible as well.
 For more information: http://pm4py.org
-or send an email to: sebastiaan.van.zelst<at>fit.fraunhofer.de
+or send an email to: sebastiaan.van.zelst'at'fit.fraunhofer.de
 ====================================================
 
 
