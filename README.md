@@ -1,3 +1,19 @@
+====================================================
+IMPORTANT NOTE
+
+As of Q4 2019, further public development of the PM4Py Web-services
+will be ceased. The PM4Py development team will keep on
+developing the project in a proprietary fashion.
+Academic use of the webservices will remain free of charge
+by means of an academic licensing scheme.
+Relicensing of the project, i.e., for commercial/proprietary
+use of the library is possible as well.
+For more information: http://pm4py.org
+or send an email to: sebastiaan.van.zelst<at>fit.fraunhofer.de
+====================================================
+
+
+
 A demo is publicly available at address (be careful!):
 http://80.211.142.26/index.html
 using the username 'admin01' and the password 'admin01'
